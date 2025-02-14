@@ -1,0 +1,62 @@
+# Clinerules for Mesmeric Commerce
+
+## General
+
+*   **Purpose:** Describe the *intent* of the code change, not just the mechanics.  What problem are you solving? What feature are you adding?
+*   **Context:** Briefly explain the surrounding code and how your changes fit in.
+*   **Conciseness:** Keep explanations short and to the point.  Avoid unnecessary details.
+*   **Clarity:** Use clear and simple language. Avoid jargon or overly technical terms if possible.
+*   **Focus:** Address the specific lines of code being changed. Don't explain the entire file.
+* **Before & After:** If helpful, briefly show the state *before* and *after* the change, especially for complex logic.
+* **Progress Tracking:** After completing any task, update the corresponding item in `TODO.md` and reference the section.
+
+## PHP
+
+*   **Type Hints:** Explain the reasoning behind type hints (and return types) for functions and methods. Update progress in `TODO.md` under "Code Docs".
+    ```php:includes/class-mc-loader.php
+    startLine: 58
+    endLine: 60
+    ```
+*   **Logic Changes:** Explain any changes to conditional logic, loops, or algorithm flow. Track in `TODO.md` under relevant module section.
+*   **Error Handling:** Describe how errors are handled, especially if using custom exceptions. Reference `MC_Logger`. Update "Error Handling & Logging" in `TODO.md`.
+    ```php:includes/class-mc-logger.php
+    startLine: 89
+    endLine: 102
+    ```
+*   **WooCommerce Hooks:** When using `add_action` or `add_filter`, explain *why* the hook is being used and what the callback function does. Reference `MC_Loader`. Track in "WooCommerce Integration" section of `TODO.md`.
+    ```php:includes/class-mc-loader.php
+    startLine: 36
+    endLine: 47
+    ```
+    ```php:includes/class-mc-loader.php
+    startLine: 49
+    endLine: 60
+    ```
+*   **Dependencies:** If adding or modifying dependencies, explain the purpose of the new dependency. Update relevant module section in `TODO.md`.
+    ```php:includes/class-mc-plugin.php
+    startLine: 47
+    endLine: 62
+    ```
+* **Database Interactions:** If a change involves database queries, explain the purpose of the query and ensure it adheres to security best practices (prepared statements, escaping). Reference the table creation in `MC_Activator`. Update "Database Security" in `TODO.md`.
+    ```php:includes/class-mc-activator.php
+    startLine: 50
+    endLine: 79
+    ```
+* **New Files:** When adding a new file, briefly describe its purpose and how it relates to the rest of the plugin. Update relevant module section in `TODO.md`.
+    ```markdown:project-structure.md
+    startLine: 8
+    endLine: 75
+    ```
+
+## JavaScript / TypeScript (Vue.js, Alpine.js, HTMX)
+
+*   **Component Changes:** Explain the purpose of changes to Vue.js components, including props, data, and methods. Track in "Admin Interface" section of `TODO.md`.
+*   **HTMX Attributes:** Explain the use of `hx-*` attributes, including the trigger, target, and any data being sent. Update "Frontend Enhancements" in `TODO.md`.
+*   **Alpine.js Directives:** Explain the use of `x-*` directives and the reactive data being managed. Track in "Frontend Enhancements" section.
+*   **Event Handling:** Describe any event listeners and the actions they trigger. Update relevant section in `TODO.md`.
+
+## CSS (Tailwind CSS)
+
+*   **Styling Changes:** Briefly explain the visual changes and the Tailwind CSS classes used to achieve them. If introducing new DaisyUI components, mention them. Update "Styling" section in `TODO.md`.
+
+## Example (Hypothetical)

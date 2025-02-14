@@ -1,0 +1,25 @@
+parameters:
+    level: 8
+    paths:
+        - .
+    excludePaths:
+        - vendor/*
+        - node_modules/*
+        - tests/*
+        - build/*
+        - dist/*
+    bootstrapFiles:
+        - vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
+        - vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
+    scanDirectories:
+        - ../../../wp-includes
+        - ../../../wp-admin
+    ignoreErrors:
+        - '#Call to static method [a-zA-Z0-9\\_]+\(\) on an unknown class [a-zA-Z0-9\\_]+#'
+        - '#Function [a-zA-Z0-9\\_]+ not found#'
+        - '#Constant [A-Z0-9\\_]+ not found#'
+    checkMissingIterableValueType: false
+    treatPhpDocTypesAsCertain: false
+
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon

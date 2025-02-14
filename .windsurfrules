@@ -1,0 +1,56 @@
+# Contextual Coding Guidelines for Mesmeric Commerce
+
+See CONVENTIONS.md for complete documentation of coding standards and practices.
+
+## Quick Reference:
+
+### 1. Code Organization
+
+*   Extract responsibilities into separate functions, files, and tests
+*   One file = one responsibility
+*   No duplicate code—reuse across modules
+
+### 2. Code Quality
+
+*   Write type-safe PHP 8+ code with strict declarations
+*   Follow WordPress/WooCommerce standards
+*   Use HTMX/Alpine.js/Tailwind CSS for frontend, Vue.js for admin
+*   Document complex flows only
+
+### 3. Function Guidelines
+
+*   Use requirement-based names (get_cart_total vs calculatePrice)
+*   Single responsibility principle
+*   Clear variable names, no abbreviations
+*   Use WooCommerce filters/actions for modifications
+
+### 4. File Structure
+
+*   `modules/` for plugin features
+*   `woocommerce/` for core extensions
+*   `admin/vue-backend/` for admin UI
+*   Keep template overrides in `woocommerce/templates/`
+*   `src/css/` for Tailwind CSS files
+
+### 5. Frontend Development
+
+*   Use HTMX for dynamic content loading
+*   Utilize Alpine.js for reactive components
+*   Apply Tailwind CSS classes for styling
+*   Implement DaisyUI components for rapid UI development
+
+### 6. Testing Requirements
+
+*   Focus on behavior over implementation
+*   Test modules individually and integrated
+*   Use PHPUnit and WP test suites
+*   Ensure large-scale store compatibility
+
+### 7. Development Process
+
+*   Verify code manually before deployment
+*   Update documentation when behavior changes
+*   Always ask before adding new packages
+*   Maintain future WooCommerce compatibility
+
+For detailed conventions, tools configuration, and complete guidelines, refer to CONVENTIONS.md

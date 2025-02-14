@@ -1,0 +1,124 @@
+# Cursor Rules for Mesmeric Commerce
+
+## General Guidance
+
+*   Prioritize understanding the existing code structure and functionality before making changes.
+*   Follow the coding conventions outlined in `CONVENTIONS.md`.
+*   Use existing classes and functions whenever possible. Avoid code duplication.
+*   Maintain type safety (strict types) in PHP.
+*   Ensure all changes are thoroughly tested.
+*   Document any new or modified code.
+
+## Specific Instructions
+
+### Adding New Features
+
+1.  **Create a new module:**  If the feature is substantial, create a new module within the `modules/` directory. Follow the existing module structure.
+    ```
+    modules/
+    └── new-feature/
+        ├── assets/
+        │   ├── css/
+        │   └── js/
+        ├── views/
+        ├── class-mc-module-newfeature.php
+        └── README.md
+    ```
+2.  **Use the Loader:** Register all actions and filters using the `MC_Loader` class (`includes/class-mc-loader.php`).
+3.  **WooCommerce Integration:**  Use WooCommerce hooks and functions for interacting with WooCommerce.  Place WooCommerce-specific code in `woocommerce/class-mc-woocommerce.php`.
+4.  **Frontend:** Use HTMX and Alpine.js for dynamic frontend interactions.  Use Vue.js for complex admin interfaces.
+5.  **Error Handling:** Use the `MC_Logger` class (`includes/class-mc-logger.php`) for logging errors.  Throw custom exceptions where appropriate.
+
+### Modifying Existing Code
+
+1.  **Understand the Context:**  Carefully review the surrounding code and any related files before making changes.
+2.  **Maintain Compatibility:**  Ensure that changes do not break existing functionality or introduce regressions.
+3.  **Update Tests:**  Modify or add unit/integration tests to cover the changes.
+4.  **Follow Conventions:** Adhere to the coding style and conventions.
+
+### File-Specific Guidance
+
+*   **`mesmeric-commerce.php`:**  Main plugin file.  Keep this file clean and focused on initialization.
+*   **`includes/`:**  Core plugin classes.  Maintain separation of concerns.
+*   **`admin/`:**  Admin-specific functionality.  Use Vue.js for the admin interface.
+*   **`public/`:**  Public-facing functionality.  Use HTMX and Alpine.js.
+*   **`woocommerce/`:**  WooCommerce integration.  Use WooCommerce hooks and functions.
+*   **`modules/`:**  Individual plugin features.  Follow the established module structure.
+* **`.php-cs-fixer.php`**: For making changes to the php-cs-fixer rules.
+    ```php:.php-cs-fixer.php
+    startLine: 14
+    endLine: 33
+    ```
+*   **`phpcs.xml`**: For making changes to the phpcs rules.
+    ```xml:phpcs.xml
+    startLine: 12
+    endLine: 29
+    ```
+*   **`phpstan.neon`**: For making changes to the phpstan rules.
+    ```phpstan.neon
+    startLine: 1
+    endLine: 26
+    ```
+*   **`.eslintrc.js`**: For making changes to the eslint rules.
+    ```.eslintrc.js
+    startLine: 1
+    endLine: 30
+    ```
+*   **`.prettierrc`**: For making changes to the prettier rules.
+    ```.prettierrc
+    startLine: 1
+    endLine: 12
+    ```
+*   **`TODO.md`**:  Development roadmap and task list.
+    *   Organized by priority and functional area.
+    *   Use Markdown checkboxes (`- [ ]`) to track task completion.
+    *   Prioritize tasks in the "Critical Tasks" section.
+    *   Refer to this file for the current development focus.
+
+### Key Files and Classes
+
+*   **`MC_Plugin` (`includes/class-mc-plugin.php`):**  Core plugin class.  Handles initialization, loading dependencies, and setting up hooks.
+    ```php:includes/class-mc-plugin.php
+    startLine: 15
+    endLine: 183
+    ```
+*   **`MC_Loader` (`includes/class-mc-loader.php`):**  Manages actions and filters.
+    ```php:includes/class-mc-loader.php
+    startLine: 12
+    endLine: 109
+    ```
+*   **`MC_Logger` (`includes/class-mc-logger.php`):**  Handles error logging.
+    ```php:includes/class-mc-logger.php
+    startLine: 18
+    endLine: 123
+    ```
+*   **`MC_Admin` (`admin/class-mc-admin.php`):**  Admin-specific functionality.
+    ```php:admin/class-mc-admin.php
+    startLine: 14
+    endLine: 255
+    ```
+*   **`MC_Public` (`public/class-mc-public.php`):**  Public-facing functionality.
+    ```php:public/class-mc-public.php
+    startLine: 12
+    endLine: 139
+    ```
+*   **`MC_WooCommerce` (`woocommerce/class-mc-woocommerce.php`):** WooCommerce integration.
+    ```php:woocommerce/class-mc-woocommerce.php
+    startLine: 12
+    endLine: 254
+    ```
+*   **`MC_Activator` (`includes/class-mc-activator.php`):** Plugin activation logic.
+    ```php:includes/class-mc-activator.php
+    startLine: 14
+    endLine: 149
+    ```
+*   **`MC_Deactivator` (`includes/class-mc-deactivator.php`):** Plugin deactivation logic.
+    ```php:includes/class-mc-deactivator.php
+    startLine: 14
+    endLine: 45
+    ```
+* **`MC_i18n` (`includes/class-mc-i18n.php`):** Plugin i18n
+    ```php:includes/class-mc-i18n.php
+    startLine: 15
+    endLine: 27
+    ```
