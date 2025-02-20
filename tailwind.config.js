@@ -6,6 +6,7 @@ module.exports = {
     './modules/**/*.php',
     './woocommerce/templates/**/*.php',
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -51,31 +52,10 @@ module.exports = {
   plugins: [
     require('@tailwindcss/typography'),
     require('@tailwindcss/forms'),
-    require('daisyui'),
+    require('daisyui')
   ],
   daisyui: {
-    themes: [
-      {
-        light: {
-          ...require('daisyui/src/theming/themes')['light'],
-          primary: '#0ea5e9',
-          'primary-focus': '#0284c7',
-          'primary-content': '#ffffff',
-          secondary: '#d946ef',
-          'secondary-focus': '#c026d3',
-          'secondary-content': '#ffffff',
-        },
-        dark: {
-          ...require('daisyui/src/theming/themes')['dark'],
-          primary: '#0ea5e9',
-          'primary-focus': '#0284c7',
-          'primary-content': '#ffffff',
-          secondary: '#d946ef',
-          'secondary-focus': '#c026d3',
-          'secondary-content': '#ffffff',
-        },
-      },
-    ],
+    themes: ['light', 'dark'],
     darkTheme: 'dark',
     base: true,
     styled: true,

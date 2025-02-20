@@ -32,6 +32,10 @@ define( 'MC_VENDOR_PATH', __DIR__ . '/vendor/autoload.php' );
 
 use MesmericCommerce\Includes\MC_Activator;
 use MesmericCommerce\Includes\MC_Deactivator;
+
+// Initialize security features
+$security = MC_Security::get_instance();
+$security->setup_hooks();
 use MesmericCommerce\Includes\MC_ErrorHandler;
 use MesmericCommerce\Includes\MC_Plugin;
 use MesmericCommerce\Admin\MC_Admin;

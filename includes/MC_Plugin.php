@@ -6,13 +6,13 @@ namespace MesmericCommerce\Includes;
 use MesmericCommerce\Admin\MC_Admin;
 use MesmericCommerce\Frontend\MC_Public;
 use MesmericCommerce\Includes\Interfaces\MC_ModuleInterface;
+use MesmericCommerce\Includes\MC_LogsRestController;
+use MesmericCommerce\Includes\MC_WooCommerceLogger;
 use MesmericCommerce\Modules\BreakdanceAdminMenu\Mc_BreakdanceAdminMenuModule;
 use MesmericCommerce\Modules\Inventory\Mc_InventoryModule;
 use MesmericCommerce\Modules\QuickView\Mc_QuickViewModule;
 use MesmericCommerce\Modules\Wishlist\Mc_WishlistModule;
 use MesmericCommerce\WooCommerce\MC_WooCommerce;
-use MesmericCommerce\Includes\MC_WooCommerceLogger;
-use MesmericCommerce\Includes\MC_LogsRestController;
 use Throwable;
 
 /**
@@ -92,29 +92,7 @@ class MC_Plugin {
 	 * @throws \RuntimeException If required files cannot be loaded
 	 */
 	private function load_dependencies(): void {
-		$required_files = array(
-			'includes/class-mc-loader.php',
-			'includes/class-mc-i18n.php',
-			'includes/class-mc-logger.php',
-			'includes/MC_TwigService.php',
-			'includes/MC_Media.php',
-			'includes/MC_WooCommerceLogger.php',
-			'includes/MC_LogsRestController.php',
-			'includes/Interfaces/MC_ModuleInterface.php',
-			'includes/Abstract/MC_AbstractModule.php',
-			'admin/class-mc-admin.php',
-			'public/class-mc-public.php',
-			'woocommerce/class-mc-woocommerce.php',
-		);
-
-		foreach ( $required_files as $file ) {
-			$path = MC_PLUGIN_DIR . $file;
-			if ( ! file_exists( $path ) ) {
-				throw new \RuntimeException( "Required file not found: {$file}" );
-			}
-			require_once $path;
-		}
-
+		// Initialize core components
 		$this->loader = new MC_Loader();
 		$this->logger = new MC_Logger();
 		$this->i18n = new MC_I18n();

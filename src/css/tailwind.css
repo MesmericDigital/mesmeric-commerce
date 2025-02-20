@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --color-primary: 14 165 233;
+        --color-secondary: 217 70 239;
+    }
+}
+
+@layer components {
+    .mc-btn {
+        @apply daisy-btn;
+    }
+
+    .mc-btn-primary {
+        @apply daisy-btn daisy-btn-primary;
+    }
+
+    .mc-btn-secondary {
+        @apply daisy-btn daisy-btn-secondary;
+    }
+
+    .mc-card {
+        @apply daisy-card bg-base-100 shadow-xl;
+    }
+
+    .mc-input {
+        @apply daisy-input daisy-input-bordered w-full;
+    }
+
+    .mc-select {
+        @apply daisy-select daisy-select-bordered w-full;
+    }
+}
+
+@layer utilities {
+    .mc-prose {
+        @apply prose prose-slate max-w-none;
+    }
+}

@@ -8,7 +8,11 @@ use MesmericCommerce\Abstract\MC_AbstractModule;
 
 /**
  * Class MC_PerformanceModule
- * Handles performance monitoring and optimization for WooCommerce
+ * Handles general site performance monitoring and optimization.
+ * All WooCommerce performance monitoring is handled in the MC_WooCommercePerformanceModule class.
+ *
+ * @since 1.0.0
+ * @package MesmericCommerce\Modules\Performance
  */
 class MC_PerformanceModule extends MC_AbstractModule {
 
