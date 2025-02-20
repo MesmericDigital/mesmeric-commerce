@@ -1,0 +1,21 @@
+{% extends "wordpress.twig" %}
+
+{% block header %}
+	<div class="mc-header">
+		<nav class="mc-navigation">
+			{% block navigation %}{% endblock %}
+		</nav>
+	</div>
+{% endblock %}
+
+{% block content %}
+	<div class="mc-content">
+		{% block main_content %}{% endblock %}
+	</div>
+{% endblock %}
+
+{% block footer %}
+	<div class="mc-footer">
+		{% block footer_content %}{% endblock %}
+	</div>
+{% endblock %}

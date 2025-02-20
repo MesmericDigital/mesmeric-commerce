@@ -87,6 +87,7 @@
         "*.war",
         "*.ear",
         "*.zip",
+        "vendor",
         "*.tar",
         "*.tar.gz",
         "*.tgz",

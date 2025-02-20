@@ -1,0 +1,294 @@
+/* Wishlist Button */
+.mc-wishlist-button-wrapper {
+    @apply relative inline-block;
+}
+
+.mc-wishlist-button {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary-focus focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary rounded-btn;
+}
+
+.mc-wishlist-button__icon {
+    @apply w-5 h-5 mr-2;
+}
+
+.mc-wishlist-button__icon svg {
+    @apply w-full h-full;
+}
+
+/* Dropdown */
+.mc-wishlist-dropdown {
+    @apply absolute right-0 mt-2 w-64 bg-base-100 rounded-box shadow-lg z-50;
+}
+
+.mc-wishlist-dropdown__login-prompt {
+    @apply p-4 text-center;
+}
+
+.mc-wishlist-dropdown__login-link {
+    @apply btn btn-primary btn-sm mt-2;
+}
+
+.mc-wishlist-dropdown__lists {
+    @apply divide-y divide-base-300;
+}
+
+.mc-wishlist-dropdown__list-button {
+    @apply w-full px-4 py-2 text-left hover:bg-base-200 focus:outline-none focus:bg-base-200 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.mc-wishlist-dropdown__new {
+    @apply p-4 border-t border-base-300;
+}
+
+.mc-wishlist-dropdown__new-button {
+    @apply btn btn-ghost btn-sm w-full;
+}
+
+.mc-wishlist-dropdown__new-form {
+    @apply space-y-4;
+}
+
+.mc-wishlist-dropdown__form-group {
+    @apply space-y-1;
+}
+
+.mc-wishlist-dropdown__label {
+    @apply block text-sm font-medium;
+}
+
+.mc-wishlist-dropdown__input,
+.mc-wishlist-dropdown__textarea {
+    @apply input input-bordered w-full;
+}
+
+.mc-wishlist-dropdown__textarea {
+    @apply h-20;
+}
+
+.mc-wishlist-dropdown__form-actions {
+    @apply flex justify-end space-x-2;
+}
+
+.mc-wishlist-dropdown__cancel-button {
+    @apply btn btn-ghost btn-sm;
+}
+
+.mc-wishlist-dropdown__submit-button {
+    @apply btn btn-primary btn-sm;
+}
+
+/* Wishlists List */
+.mc-wishlists {
+    @apply container mx-auto px-4 py-8;
+}
+
+.mc-wishlists__header {
+    @apply flex justify-between items-center mb-8;
+}
+
+.mc-wishlists__title {
+    @apply text-2xl font-bold;
+}
+
+.mc-wishlists__new-button {
+    @apply btn btn-primary;
+}
+
+.mc-wishlists__new-form {
+    @apply bg-base-200 rounded-box p-6 mb-8;
+}
+
+.mc-wishlists__grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+.mc-wishlists__item {
+    @apply bg-base-100 rounded-box shadow-lg p-6;
+}
+
+.mc-wishlists__item-header {
+    @apply flex justify-between items-start mb-4;
+}
+
+.mc-wishlists__item-title {
+    @apply text-lg font-semibold;
+}
+
+.mc-wishlists__item-title a {
+    @apply hover:text-primary focus:outline-none focus:text-primary;
+}
+
+.mc-wishlists__item-actions {
+    @apply flex space-x-2;
+}
+
+.mc-wishlists__share-button,
+.mc-wishlists__delete-button {
+    @apply btn btn-ghost btn-square btn-sm;
+}
+
+.mc-wishlists__item-desc {
+    @apply text-sm text-base-content-secondary mb-4;
+}
+
+.mc-wishlists__item-meta {
+    @apply flex justify-between text-sm text-base-content-secondary;
+}
+
+/* Wishlist View */
+.mc-wishlist-view {
+    @apply container mx-auto px-4 py-8;
+}
+
+.mc-wishlist-view__header {
+    @apply flex justify-between items-start mb-8;
+}
+
+.mc-wishlist-view__title {
+    @apply text-2xl font-bold;
+}
+
+.mc-wishlist-view__description {
+    @apply text-base-content-secondary mt-2;
+}
+
+.mc-wishlist-view__share-button {
+    @apply btn btn-primary;
+}
+
+.mc-wishlist-view__items {
+    @apply space-y-6;
+}
+
+.mc-wishlist-view__item {
+    @apply flex flex-col md:flex-row items-start gap-6 bg-base-100 rounded-box shadow p-6;
+}
+
+.mc-wishlist-view__item-image {
+    @apply w-full md:w-48 flex-shrink-0;
+}
+
+.mc-wishlist-view__item-image img {
+    @apply w-full h-auto rounded-box;
+}
+
+.mc-wishlist-view__item-details {
+    @apply flex-grow space-y-4;
+}
+
+.mc-wishlist-view__item-title {
+    @apply text-lg font-semibold;
+}
+
+.mc-wishlist-view__item-title a {
+    @apply hover:text-primary focus:outline-none focus:text-primary;
+}
+
+.mc-wishlist-view__item-variations {
+    @apply space-y-2;
+}
+
+.mc-wishlist-view__item-variation {
+    @apply inline-block bg-base-200 rounded-full px-3 py-1 text-sm mr-2;
+}
+
+.mc-wishlist-view__item-price {
+    @apply text-lg font-semibold text-primary;
+}
+
+.mc-wishlist-view__item-stock {
+    @apply text-sm font-medium;
+}
+
+.mc-wishlist-view__item-stock--in {
+    @apply text-success;
+}
+
+.mc-wishlist-view__item-stock--out {
+    @apply text-error;
+}
+
+.mc-wishlist-view__item-actions {
+    @apply flex flex-col md:flex-row items-center gap-4 mt-4 md:mt-0;
+}
+
+.mc-wishlist-view__item-quantity {
+    @apply flex items-center space-x-2;
+}
+
+.mc-wishlist-view__quantity-input {
+    @apply input input-bordered w-20;
+}
+
+.mc-wishlist-view__add-to-cart-button {
+    @apply btn btn-primary;
+}
+
+.mc-wishlist-view__remove-button {
+    @apply btn btn-ghost btn-square;
+}
+
+.mc-wishlist-view__remove-button svg {
+    @apply w-5 h-5;
+}
+
+/* Share Modal */
+.mc-wishlist-view__share-modal,
+.mc-wishlists__share-modal {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50;
+}
+
+.mc-wishlist-view__share-content,
+.mc-wishlists__share-content {
+    @apply bg-base-100 rounded-box p-6 max-w-md w-full;
+}
+
+.mc-wishlist-view__share-title,
+.mc-wishlists__share-title {
+    @apply text-lg font-semibold mb-4;
+}
+
+.mc-wishlist-view__share-url,
+.mc-wishlists__share-url {
+    @apply flex space-x-2 mb-4;
+}
+
+.mc-wishlist-view__share-input,
+.mc-wishlists__share-input {
+    @apply input input-bordered flex-grow;
+}
+
+.mc-wishlist-view__copy-button,
+.mc-wishlists__copy-button {
+    @apply btn btn-primary;
+}
+
+.mc-wishlist-view__close-button,
+.mc-wishlists__close-button {
+    @apply btn btn-ghost w-full;
+}
+
+/* Animations */
+.mc-wishlist-dropdown--enter {
+    @apply transition ease-out duration-200;
+}
+
+.mc-wishlist-dropdown--enter-start {
+    @apply transform opacity-0 scale-95;
+}
+
+.mc-wishlist-dropdown--enter-end {
+    @apply transform opacity-100 scale-100;
+}
+
+.mc-wishlist-dropdown--leave {
+    @apply transition ease-in duration-150;
+}
+
+.mc-wishlist-dropdown--leave-start {
+    @apply transform opacity-100 scale-100;
+}
+
+.mc-wishlist-dropdown--leave-end {
+    @apply transform opacity-0 scale-95;
+}

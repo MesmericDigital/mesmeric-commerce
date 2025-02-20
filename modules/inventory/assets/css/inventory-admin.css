@@ -1,0 +1,187 @@
+/* Tabs */
+.mc-inventory-tabs .nav-tab-wrapper {
+    margin-bottom: 20px;
+}
+
+/* Stats */
+.mc-inventory-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.mc-inventory-stat {
+    background: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.mc-inventory-stat h3 {
+    margin: 0 0 10px;
+    font-size: 14px;
+    color: #23282d;
+}
+
+.mc-inventory-stat span {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+/* Tables */
+.mc-inventory-recent,
+.mc-inventory-low-stock,
+.mc-inventory-reorder {
+    background: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.mc-inventory-recent h3,
+.mc-inventory-low-stock h3,
+.mc-inventory-reorder h3 {
+    margin: 0 0 20px;
+    font-size: 16px;
+    color: #23282d;
+}
+
+.widefat {
+    border: none;
+    box-shadow: none;
+}
+
+.widefat th {
+    font-weight: 600;
+    color: #23282d;
+    padding: 12px;
+}
+
+.widefat td {
+    padding: 12px;
+    vertical-align: middle;
+}
+
+.widefat tr:nth-child(odd) {
+    background: #f9f9f9;
+}
+
+/* Settings */
+.mc-inventory-settings {
+    background: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+}
+
+.form-table th {
+    width: 200px;
+    padding: 20px 10px 20px 0;
+}
+
+.form-table td {
+    padding: 15px 10px;
+}
+
+.form-table input[type="number"],
+.form-table input[type="email"] {
+    width: 250px;
+}
+
+.description {
+    color: #666;
+    font-style: italic;
+    margin-top: 5px;
+}
+
+/* Modal */
+.mc-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 160000;
+    display: none;
+}
+
+.mc-modal-content {
+    position: relative;
+    width: 500px;
+    margin: 100px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.mc-modal h3 {
+    margin: 0 0 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+    color: #23282d;
+}
+
+/* Forms */
+.form-field {
+    margin-bottom: 15px;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.form-field input[type="number"],
+.form-field textarea {
+    width: 100%;
+    max-width: 100%;
+}
+
+.form-field textarea {
+    height: 100px;
+}
+
+/* Actions */
+.form-actions {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+}
+
+.form-actions .button {
+    margin-left: 10px;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+    .mc-modal-content {
+        width: calc(100% - 40px);
+        margin: 20px;
+    }
+
+    .form-table th {
+        width: auto;
+        display: block;
+        padding-bottom: 0;
+    }
+
+    .form-table td {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .form-table input[type="number"],
+    .form-table input[type="email"] {
+        width: 100%;
+    }
+}

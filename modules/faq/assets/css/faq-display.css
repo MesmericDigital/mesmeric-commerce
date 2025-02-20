@@ -1,0 +1,229 @@
+/* FAQ Wrapper */
+.mc-faq-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Categories */
+.mc-faq-categories {
+    margin-bottom: 40px;
+}
+
+.mc-faq-categories h3 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #1e1e1e;
+}
+
+.mc-faq-categories ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.mc-faq-categories li a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #1e1e1e;
+    transition: all 0.2s ease;
+}
+
+.mc-faq-categories li a:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+}
+
+.mc-faq-categories .count {
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+/* Category/Product Header */
+.mc-faq-category-header,
+.mc-faq-product-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.mc-faq-category-header h2,
+.mc-faq-product-header h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+    color: #1e1e1e;
+}
+
+.mc-faq-category-header .description,
+.mc-faq-product-header .description {
+    color: #6c757d;
+    font-size: 1.1em;
+    line-height: 1.5;
+}
+
+/* FAQ Items */
+.mc-faq-items {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.mc-faq-item {
+    margin-bottom: 15px;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.mc-faq-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mc-faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.mc-faq-question:hover {
+    background: #f8f9fa;
+}
+
+.mc-faq-question.active {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.mc-faq-question h3 {
+    margin: 0;
+    font-size: 1.1em;
+    color: #1e1e1e;
+    flex: 1;
+    padding-right: 20px;
+}
+
+.mc-faq-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease;
+}
+
+.mc-faq-toggle.active {
+    transform: rotate(45deg);
+}
+
+.mc-faq-toggle svg {
+    width: 20px;
+    height: 20px;
+    stroke: #6c757d;
+}
+
+.mc-faq-answer {
+    padding: 20px;
+    background: #fff;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+.mc-faq-answer p:last-child {
+    margin-bottom: 0;
+}
+
+/* Empty State */
+.mc-faq-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6c757d;
+    font-size: 1.1em;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+/* Animations */
+.mc-faq-item {
+    transform: translateY(0);
+    opacity: 1;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.mc-faq-item:hover {
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .mc-faq-wrapper {
+        padding: 15px;
+    }
+
+    .mc-faq-categories ul {
+        grid-template-columns: 1fr;
+    }
+
+    .mc-faq-category-header h2,
+    .mc-faq-product-header h2 {
+        font-size: 1.5em;
+    }
+
+    .mc-faq-question {
+        padding: 12px 15px;
+    }
+
+    .mc-faq-question h3 {
+        font-size: 1em;
+    }
+
+    .mc-faq-answer {
+        padding: 15px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .mc-faq-wrapper {
+        max-width: 100%;
+        padding: 0;
+    }
+
+    .mc-faq-toggle {
+        display: none;
+    }
+
+    .mc-faq-answer {
+        display: block !important;
+        opacity: 1 !important;
+        height: auto !important;
+        visibility: visible !important;
+    }
+
+    .mc-faq-item {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        border: none;
+        margin-bottom: 20px;
+    }
+
+    .mc-faq-question {
+        background: none;
+        padding: 0 0 10px;
+        border-bottom: 1px solid #000;
+    }
+
+    .mc-faq-answer {
+        padding: 10px 0;
+    }
+}

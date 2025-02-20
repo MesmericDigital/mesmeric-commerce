@@ -1,0 +1,168 @@
+/* Tabs */
+.mc-shipping-tabs .nav-tab-wrapper {
+    margin-bottom: 20px;
+}
+
+/* Tables */
+.mc-shipping-zones-table,
+.mc-shipping-rules-table {
+    margin-top: 20px;
+}
+
+.mc-shipping-zones-table th,
+.mc-shipping-rules-table th {
+    font-weight: 600;
+}
+
+.mc-shipping-zones-table tr,
+.mc-shipping-rules-table tr {
+    cursor: move;
+}
+
+.mc-shipping-zones-table td,
+.mc-shipping-rules-table td {
+    vertical-align: middle;
+}
+
+.mc-shipping-zones-table .button,
+.mc-shipping-rules-table .button {
+    margin-right: 5px;
+}
+
+/* Headers */
+.mc-shipping-zones-header,
+.mc-shipping-rules-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.mc-shipping-zones-header h2,
+.mc-shipping-rules-header h2 {
+    margin: 0;
+}
+
+/* Modal */
+.mc-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 160000;
+}
+
+.mc-modal-content {
+    position: relative;
+    width: 500px;
+    margin: 100px auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.mc-modal h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Forms */
+.form-field {
+    margin-bottom: 15px;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.form-field input[type="text"],
+.form-field input[type="number"],
+.form-field select {
+    width: 100%;
+    max-width: 100%;
+}
+
+.form-field select[multiple] {
+    height: 150px;
+}
+
+/* Conditions */
+.condition-list {
+    margin-bottom: 10px;
+}
+
+.condition {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.condition select {
+    width: auto;
+    flex: 1;
+}
+
+.condition input[type="number"] {
+    width: 100px;
+}
+
+.condition .remove-condition {
+    padding: 0 8px;
+    line-height: 28px;
+}
+
+/* Actions */
+.form-actions {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+}
+
+.form-actions .button {
+    margin-left: 10px;
+}
+
+/* Settings */
+.mc-shipping-settings {
+    max-width: 600px;
+}
+
+/* Sortable */
+.ui-sortable-helper {
+    display: table;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.ui-sortable-placeholder {
+    visibility: visible !important;
+    background: #f9f9f9;
+    border: 1px dashed #ddd;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+    .mc-modal-content {
+        width: calc(100% - 40px);
+        margin: 20px;
+    }
+
+    .condition {
+        flex-wrap: wrap;
+    }
+
+    .condition select,
+    .condition input[type="number"] {
+        width: 100%;
+        flex: none;
+    }
+}

@@ -1,0 +1,68 @@
+{% extends "base.twig" %}
+
+{% block main_content %}
+	<div class="mc-faq-wrapper" x-data="{ activeItem: null }">
+		{% if not category_id and not product_id %}
+			<div class="mc-faq-categories">
+				<h3>{{ __('FAQ Categories', 'mesmeric-commerce') }}</h3>
+				<ul>
+					{% for category in categories %}
+						<li>
+							<a href="{{ add_query_arg('faq_category', category.term_id)|esc_url }}">
+								{{ category.name|esc_html }}
+								<span class="count">({{ category.count|esc_html }})</span>
+							</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+
+		{% if category_id %}
+			{% if category %}
+				<div class="mc-faq-category-header">
+					<h2>{{ category.name|esc_html }}</h2>
+					{% if category.description %}
+						<p class="description">{{ category.description|esc_html }}</p>
+					{% endif %}
+				</div>
+			{% endif %}
+		{% endif %}
+
+		{% if product_id %}
+			<div class="mc-faq-product-header">
+				<h2>{{ __('Product FAQs', 'mesmeric-commerce') }}</h2>
+				<p class="description">
+					{% if product %}
+						{{ __('Frequently asked questions about %s', 'mesmeric-commerce')|format(product.get_name()|esc_html) }}
+					{% endif %}
+				</p>
+			</div>
+		{% endif %}
+
+		{% if faqs %}
+			<div class="mc-faq-items">
+				{% for faq in faqs %}
+					<div class="mc-faq-item" x-data="{ open: false }">
+						<div class="mc-faq-question" @click="open = !open" :class="{ 'active': open }">
+							<h3>{{ faq.post_title|esc_html }}</h3>
+							<span class="mc-faq-toggle" :class="{ 'active': open }">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<line x1="12" y1="5" x2="12" y2="19"></line>
+									<line x1="5" y1="12" x2="19" y2="12"></line>
+								</svg>
+							</span>
+						</div>
+						<div class="mc-faq-answer" x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2">
+							{{ faq.post_content|raw }}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		{% else %}
+			<p class="mc-faq-empty">
+				{{ __('No FAQs found.', 'mesmeric-commerce') }}
+			</p>
+		{% endif %}
+	</div>
+{% endblock %}

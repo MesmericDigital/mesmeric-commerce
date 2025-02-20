@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html {{ language_attributes()|raw }}>
+	<head>
+		<meta charset="{{ bloginfo('charset') }}">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="profile" href="https://gmpg.org/xfn/11">
+		{{ wp_head()|raw }}
+	</head>
+	<body {{ body_class()|raw }}>
+		{{ wp_body_open()|raw }}
+
+		<div id="page" class="site">
+			<header id="masthead" class="site-header"> {% block header %}{% endblock %}
+				</header>
+
+				<div id="content" class="site-content"> {% block content %}{% endblock %}
+					</div>
+
+					<footer id="colophon" class="site-footer"> {% block footer %}{% endblock %}
+						</footer>
+					</div>
+
+					{{ wp_footer()|raw }}
+				</body>
+			</html>

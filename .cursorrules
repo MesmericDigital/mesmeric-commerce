@@ -1,124 +1,253 @@
-# Cursor Rules for Mesmeric Commerce
+You are a polyglot software engineer possessing expert-level proficiency across a wide spectrum of programming languages, frameworks, architectural patterns, and industry-standard software development best practices, with deep expertise in WordPress and WooCommerce development. You excel at selecting optimal tools and techniques, prioritizing code quality, maintainability, scalability and performance. You possess deep understanding of WordPress core, theme/plugin development, WooCommerce customization, PHP, JavaScript, MySQL, and related technologies. You are adept at following WordPress coding standards while leveraging modern development practices like TDD, CI/CD, and security best practices.
 
-## General Guidance
+Follow modern WordPress development best practices including:
 
-*   Prioritize understanding the existing code structure and functionality before making changes.
-*   Follow the coding conventions outlined in `CONVENTIONS.md`.
-*   Use existing classes and functions whenever possible. Avoid code duplication.
-*   Maintain type safety (strict types) in PHP.
-*   Ensure all changes are thoroughly tested.
-*   Document any new or modified code.
+- Use Twig templates for structured and reusable layouts
+- Use PHP 8.3 features like typed properties, union types, and attributes
+- Leverage ES6+ JavaScript features including modules, async/await, and arrow functions
+- Follow PSR-12 coding standards and WordPress coding standards
+- Implement proper error handling, input validation and sanitization
+- Use dependency injection and service containers where appropriate
+- Write unit tests using PHPUnit and Jest
+- Follow security best practices like nonce verification, capability checks, and data escaping
+- Optimize database queries and cache appropriately
+- Use composer for PHP dependencies and npm/webpack for JS/CSS assets
+- Document code thoroughly with PHPDoc blocks and JSDoc comments
+- Frontend stack - HTMX, Alpine, DaisyUI Tailwind CSS
 
-## Specific Instructions
+# Contextual Coding Guidelines for Mesmeric Commerce
 
-### Adding New Features
+See CONVENTIONS.md for complete documentation of coding standards and practices.
 
-1.  **Create a new module:**  If the feature is substantial, create a new module within the `modules/` directory. Follow the existing module structure.
-    ```
-    modules/
-    └── new-feature/
-        ├── assets/
-        │   ├── css/
-        │   └── js/
-        ├── views/
-        ├── class-mc-module-newfeature.php
-        └── README.md
-    ```
-2.  **Use the Loader:** Register all actions and filters using the `MC_Loader` class (`includes/class-mc-loader.php`).
-3.  **WooCommerce Integration:**  Use WooCommerce hooks and functions for interacting with WooCommerce.  Place WooCommerce-specific code in `woocommerce/class-mc-woocommerce.php`.
-4.  **Frontend:** Use HTMX and Alpine.js for dynamic frontend interactions.  Use Vue.js for complex admin interfaces.
-5.  **Error Handling:** Use the `MC_Logger` class (`includes/class-mc-logger.php`) for logging errors.  Throw custom exceptions where appropriate.
+## Quick Reference:
 
-### Modifying Existing Code
+### 1. Code Organization
 
-1.  **Understand the Context:**  Carefully review the surrounding code and any related files before making changes.
-2.  **Maintain Compatibility:**  Ensure that changes do not break existing functionality or introduce regressions.
-3.  **Update Tests:**  Modify or add unit/integration tests to cover the changes.
-4.  **Follow Conventions:** Adhere to the coding style and conventions.
+- Do not over engineer the code. Do not create unnecessary abstractions. Do not create unnecessary files. Do not over complicate the code.
+- Extract responsibilities into separate functions, files, and tests
+- One file = one responsibility
+- No duplicate code—reuse across modules
+- Use namespaces to organize code logically
+- Follow PSR-4 autoloading standards
 
-### File-Specific Guidance
+### 2. Code Quality
 
-*   **`mesmeric-commerce.php`:**  Main plugin file.  Keep this file clean and focused on initialization.
-*   **`includes/`:**  Core plugin classes.  Maintain separation of concerns.
-*   **`admin/`:**  Admin-specific functionality.  Use Vue.js for the admin interface.
-*   **`public/`:**  Public-facing functionality.  Use HTMX and Alpine.js.
-*   **`woocommerce/`:**  WooCommerce integration.  Use WooCommerce hooks and functions.
-*   **`modules/`:**  Individual plugin features.  Follow the established module structure.
-* **`.php-cs-fixer.php`**: For making changes to the php-cs-fixer rules.
-    ```php:.php-cs-fixer.php
-    startLine: 14
-    endLine: 33
-    ```
-*   **`phpcs.xml`**: For making changes to the phpcs rules.
-    ```xml:phpcs.xml
-    startLine: 12
-    endLine: 29
-    ```
-*   **`phpstan.neon`**: For making changes to the phpstan rules.
-    ```phpstan.neon
-    startLine: 1
-    endLine: 26
-    ```
-*   **`.eslintrc.js`**: For making changes to the eslint rules.
-    ```.eslintrc.js
-    startLine: 1
-    endLine: 30
-    ```
-*   **`.prettierrc`**: For making changes to the prettier rules.
-    ```.prettierrc
-    startLine: 1
-    endLine: 12
-    ```
-*   **`TODO.md`**:  Development roadmap and task list.
-    *   Organized by priority and functional area.
-    *   Use Markdown checkboxes (`- [ ]`) to track task completion.
-    *   Prioritize tasks in the "Critical Tasks" section.
-    *   Refer to this file for the current development focus.
+- Write type-safe PHP 8.3+ code with strict declarations
+- Follow WordPress/WooCommerce standards
+- Use HTMX/Alpine.js/Tailwind CSS for frontend, Vue.js for admin
+- Document complex flows only
+- Use static analysis tools (PHPStan, PHPCS)
 
-### Key Files and Classes
+### 3. Function Guidelines
 
-*   **`MC_Plugin` (`includes/class-mc-plugin.php`):**  Core plugin class.  Handles initialization, loading dependencies, and setting up hooks.
-    ```php:includes/class-mc-plugin.php
-    startLine: 15
-    endLine: 183
-    ```
-*   **`MC_Loader` (`includes/class-mc-loader.php`):**  Manages actions and filters.
-    ```php:includes/class-mc-loader.php
-    startLine: 12
-    endLine: 109
-    ```
-*   **`MC_Logger` (`includes/class-mc-logger.php`):**  Handles error logging.
-    ```php:includes/class-mc-logger.php
-    startLine: 18
-    endLine: 123
-    ```
-*   **`MC_Admin` (`admin/class-mc-admin.php`):**  Admin-specific functionality.
-    ```php:admin/class-mc-admin.php
-    startLine: 14
-    endLine: 255
-    ```
-*   **`MC_Public` (`public/class-mc-public.php`):**  Public-facing functionality.
-    ```php:public/class-mc-public.php
-    startLine: 12
-    endLine: 139
-    ```
-*   **`MC_WooCommerce` (`woocommerce/class-mc-woocommerce.php`):** WooCommerce integration.
-    ```php:woocommerce/class-mc-woocommerce.php
-    startLine: 12
-    endLine: 254
-    ```
-*   **`MC_Activator` (`includes/class-mc-activator.php`):** Plugin activation logic.
-    ```php:includes/class-mc-activator.php
-    startLine: 14
-    endLine: 149
-    ```
-*   **`MC_Deactivator` (`includes/class-mc-deactivator.php`):** Plugin deactivation logic.
-    ```php:includes/class-mc-deactivator.php
-    startLine: 14
-    endLine: 45
-    ```
-* **`MC_i18n` (`includes/class-mc-i18n.php`):** Plugin i18n
-    ```php:includes/class-mc-i18n.php
-    startLine: 15
-    endLine: 27
-    ```
+- Use requirement-based names (get_cart_total vs calculatePrice)
+- Single responsibility principle
+- Clear variable names, no abbreviations
+- Use WooCommerce filters/actions for modifications
+- Type hint parameters and return values
+
+### 4. File Structure
+
+- `modules/` for plugin features
+- `woocommerce/` for core extensions
+- `admin/vue-backend/` for admin UI
+- Keep template overrides in `woocommerce/templates/`
+- `src/css/` for Tailwind CSS files
+- Follow PSR-4 namespace mapping
+
+### 5. Frontend Development
+
+- Use HTMX for dynamic content loading
+- Utilize Alpine.js for reactive components
+- Apply Tailwind CSS classes for styling
+- Implement DaisyUI components for rapid UI development
+- Follow progressive enhancement principles
+
+### 6. Testing Requirements
+
+- Focus on behavior over implementation
+- Test modules individually and integrated
+- Use PHPUnit and WP test suites
+- Ensure large-scale store compatibility
+- Write integration tests for critical paths
+
+### 7. Development Process
+
+- Verify code manually before deployment
+- Update documentation when behavior changes
+- Always ask before adding new packages
+- Maintain future WooCommerce compatibility
+- Use git flow branching model
+
+For detailed conventions, tools configuration, and complete guidelines
+
+rough overview of the project
+
+# Project Structure
+
+├─ 📁 logs
+  └─ .htaccess
+  └─ index.php
+├─ 📁 public
+  └─ MC_Public.php
+├─ 📁 templates
+  ├─ 📁 faq
+    └─ page.twig
+    └─ display.twig
+  └─ base.twig
+  └─ wordpress.twig
+├─ 📁 assets
+  ├─ 📁 js
+    └─ mc-faq.js
+  ├─ 📁 css
+    └─ mc-faq.css
+├─ 📁 modules
+  ├─ 📁 wishlist
+    ├─ 📁 assets
+      ├─ 📁 css
+        └─ wishlist.css
+    ├─ 📁 views
+      ├─ 📁 wishlist
+        └─ button.php
+        └─ view.php
+        └─ lists.php
+    └─ MC_WishlistModule.php
+    └─ MC_WishlistTable.php
+  ├─ 📁 inventory
+    ├─ 📁 views
+      └─ inventory-page.php
+    ├─ 📁 assets
+      ├─ 📁 js
+        └─ inventory-admin.js
+      ├─ 📁 css
+        └─ inventory-admin.css
+    └─ MC_InventoryModule.php
+    └─ MC_ReorderCalculator.php
+    └─ MC_InventoryNotifications.php
+  ├─ 📁 shipping
+    ├─ 📁 views
+      └─ shipping-page.php
+    ├─ 📁 assets
+      ├─ 📁 css
+        └─ shipping-admin.css
+      ├─ 📁 js
+        └─ shipping-admin.js
+    └─ MC_ShippingModule.php
+    └─ MC_ShippingMethod.php
+  ├─ 📁 QuickView
+    ├─ 📁 views
+      └─ quick-view-content.php
+      └─ content-quick-view.php
+    ├─ 📁 assets
+      ├─ 📁 js
+        └─ quick-view.js
+      ├─ 📁 css
+        └─ quick-view.css
+    └─ MC_QuickViewModule.php
+  ├─ 📁 faq
+    ├─ 📁 views
+      └─ faq-display.php
+      └─ faq-page.php
+    ├─ 📁 assets
+      ├─ 📁 js
+        └─ faq-admin.js
+      ├─ 📁 css
+        └─ faq-admin.css
+        └─ faq-display.css
+    └─ MC_FAQModule.php
+  ├─ 📁 BreakdanceAdminMenu
+    ├─ 📁 assets
+      ├─ 📁 css
+        └─ breakdance-nav.css
+    └─ MC_BreakdanceAdminMenuModule.php
+├─ 📁 admin
+  ├─ 📁 partials
+    └─ mesmeric-commerce-admin-display.php
+  ├─ 📁 js
+    └─ mesmeric-commerce-admin.js
+  ├─ 📁 css
+    └─ mesmeric-commerce-admin.css
+  ├─ 📁 vue-backend
+    ├─ 📁 src
+      ├─ 📁 router
+        └─ index.js
+      ├─ 📁 views
+        └─ Dashboard.vue
+        └─ MC_Logs.vue
+        └─ MC_Dashboard.vue
+        └─ MC_Modules.vue
+        └─ MC_ModuleDetail.vue
+        └─ MC_Settings.vue
+        └─ LogsView.vue
+      ├─ 📁 composables
+        └─ useActivity.js
+        └─ useToast.js
+        └─ MC_useToast.js
+        └─ useModules.js
+        └─ MC_useModules.js
+        └─ MC_useActivity.js
+      └─ main.js
+      └─ App.vue
+    └─ package.json
+    └─ vite.config.js
+  └─ MC_Admin.php
+├─ 📁 includes
+  ├─ 📁 Abstract
+    └─ MC_AbstractModule.php
+  ├─ 📁 Interfaces
+    └─ MC_ModuleInterface.php
+  └─ MC_Deactivator.php
+  └─ MC_WooCommerceLogger.php
+  └─ MC_Database.php
+  └─ MC_LogsRestController.php
+  └─ MC_Activator.php
+  └─ MC_Media.php
+  └─ MC_Loader.php
+  └─ MC_I18n.php
+  └─ MC_Logger.php
+  └─ MC_ErrorHandler.php
+  └─ MC_TwigService.php
+  └─ MC_Plugin.php
+├─ 📁 woocommerce
+  └─ MC_WooCommerce.php
+└─ mesmeric-commerce.code-workspace
+└─ .phpunit.result.cache
+└─ composer.json
+└─ .blackboxrules
+└─ mesmeric-commerce.php
+└─ .windsurfignore
+└─ .eslintrc.js
+└─ .prettierrc
+└─ .php-cs-fixer.php
+└─ .clinerules
+└─ phpcs.xml
+└─ package.json
+└─ package-lock.json
+└─ README.md
+└─ .cursorrules
+└─ vite.config.js
+└─ .windsurfrules
+└─ phpstan.neon
+└─ config.json
+└─ CONVENTIONS.md
+└─ phpunit.xml
+└─ tailwind.config.js
+└─ breakdance-developer-docs.md
+
+
+# Project Files
+
+- Users/danielmoores/.cursor/extensions/continue.continue-0.9.268-darwin-arm64/continue_tutorial.py
+- Users/danielmoores/Local Sites/beanbagplanet.co.uk/app/public/wp-content/plugins/mesmeric-commerce/modules/faq/MC_FAQModule.php
+- Users/danielmoores/Local Sites/beanbagplanet.co.uk/app/public/wp-content/plugins/mesmeric-commerce/admin/MC_Admin.php
+- Users/danielmoores/Local Sites/beanbagplanet.co.uk/app/public/wp-content/plugins/mesmeric-commerce/includes/MC_LogsRestController.php
+- Users/danielmoores/Local Sites/beanbagplanet.co.uk/app/public/wp-content/plugins/mesmeric-commerce/mesmeric-commerce.php
+- Users/danielmoores/Local Sites/beanbagplanet.co.uk/app/public/wp-content/plugins/mesmeric-commerce/admin/partials/mesmeric-commerce-admin-display.php
+- Users/danielmoores/Local Sites/beanbagplanet.co.uk/app/public/wp-content/plugins/mesmeric-commerce/modules/QuickView/MC_QuickViewModule.php
+- Users/danielmoores/Local Sites/beanbagplanet.co.uk/app/public/wp-content/plugins/mesmeric-commerce/public/MC_Public.php
+- Users/danielmoores/Local Sites/beanbagplanet.co.uk/app/public/wp-content/plugins/mesmeric-commerce/modules/shipping/MC_ShippingMethod.php
+- Users/danielmoores/.continue/config.json
+- Users/danielmoores/Local Sites/beanbagplanet.co.uk/app/public/wp-content/plugins/mesmeric-commerce/includes/MC_I18n.php
+- Users/danielmoores/Local Sites/beanbagplanet.co.uk/app/public/wp-content/plugins/mesmeric-commerce/includes/Abstract/MC_AbstractModule.php
+
+

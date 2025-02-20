@@ -1,0 +1,104 @@
+{% extends "base.twig" %}
+
+{% block main_content %}
+	<div class="wrap">
+		<h1>{{ __('FAQ Management', 'mesmeric-commerce') }}</h1>
+
+		<div class="mc-faq-admin-wrapper">
+			<div class="mc-faq-categories">
+				<h2>{{ __('Categories', 'mesmeric-commerce') }}</h2>
+				{% if categories %}
+					<ul>
+						{% for category in categories %}
+							<li>
+								<a href="#" data-category="{{ category.term_id }}">
+									{{ category.name|esc_html }}
+									<span class="count">({{ category.count|esc_html }})</span>
+								</a>
+							</li>
+						{% endfor %}
+					</ul>
+				{% else %}
+					<p>{{ __('No categories found.', 'mesmeric-commerce') }}</p>
+				{% endif %}
+
+				<button class="button" id="add-category">
+					{{ __('Add Category', 'mesmeric-commerce') }}
+				</button>
+			</div>
+
+			<div class="mc-faq-items">
+				<h2>{{ __('FAQs', 'mesmeric-commerce') }}</h2>
+				{% if faqs %}
+					<div class="mc-faq-list">
+						{% for faq in faqs %}
+							<div class="mc-faq-item" data-id="{{ faq.ID }}">
+								<div class="mc-faq-header">
+									<h3>{{ faq.post_title|esc_html }}</h3>
+									<div class="mc-faq-actions">
+										<button class="button edit-faq">
+											{{ __('Edit', 'mesmeric-commerce') }}
+										</button>
+										<button class="button delete-faq">
+											{{ __('Delete', 'mesmeric-commerce') }}
+										</button>
+									</div>
+								</div>
+								<div class="mc-faq-content">
+									{{ faq.post_content|raw }}
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				{% else %}
+					<p>{{ __('No FAQs found.', 'mesmeric-commerce') }}</p>
+				{% endif %}
+
+				<button class="button button-primary" id="add-faq">
+					{{ __('Add FAQ', 'mesmeric-commerce') }}
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- FAQ Edit Modal -->
+	<div id="mc-faq-modal" class="mc-modal" style="display: none;">
+		<div class="mc-modal-content">
+			<span class="mc-modal-close">&times;</span>
+			<h2>{{ __('Edit FAQ', 'mesmeric-commerce') }}</h2>
+			<form id="mc-faq-form">
+				{{ wp_nonce_field('mc-faq-edit', '_wpnonce', true, false)|raw }}
+				<input type="hidden" name="faq_id" id="faq-id" value="">
+
+				<div class="form-field">
+					<label for="faq-title">{{ __('Question', 'mesmeric-commerce') }}</label>
+					<input type="text" id="faq-title" name="faq_title" required>
+				</div>
+
+				<div class="form-field">
+					<label for="faq-content">{{ __('Answer', 'mesmeric-commerce') }}</label>
+					<textarea id="faq-content" name="faq_content" rows="5" required></textarea>
+				</div>
+
+				<div class="form-field">
+					<label for="faq-category">{{ __('Category', 'mesmeric-commerce') }}</label>
+					<select id="faq-category" name="faq_category">
+						<option value="">{{ __('Select Category', 'mesmeric-commerce') }}</option>
+						{% for category in categories %}
+							<option value="{{ category.term_id }}">{{ category.name|esc_html }}</option>
+						{% endfor %}
+					</select>
+				</div>
+
+				<div class="form-actions">
+					<button type="submit" class="button button-primary">
+						{{ __('Save FAQ', 'mesmeric-commerce') }}
+					</button>
+					<button type="button" class="button mc-modal-cancel">
+						{{ __('Cancel', 'mesmeric-commerce') }}
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endblock %}

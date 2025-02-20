@@ -1,0 +1,78 @@
+/* Breakdance Navigator Styles */
+#wp-admin-bar-mc-breakdance-nav {
+    position: relative;
+}
+
+#wp-admin-bar-mc-breakdance-nav .ab-icon {
+    margin-right: 5px !important;
+}
+
+#wp-admin-bar-mc-breakdance-nav .ab-sub-wrapper {
+    background: #2c3338 !important;
+    border: 1px solid #1d2327;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+#wp-admin-bar-mc-breakdance-nav .ab-submenu {
+    padding: 6px 0 !important;
+}
+
+#wp-admin-bar-mc-breakdance-nav .ab-submenu .ab-item {
+    padding: 6px 12px !important;
+    color: #c3c4c7 !important;
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+    transition: all 0.2s ease;
+}
+
+#wp-admin-bar-mc-breakdance-nav .ab-submenu .ab-item:hover {
+    color: #72aee6 !important;
+    background: #32373c !important;
+}
+
+/* Section Headers */
+#wp-admin-bar-mc-breakdance-templates>.ab-item,
+#wp-admin-bar-mc-breakdance-headers>.ab-item,
+#wp-admin-bar-mc-breakdance-footers>.ab-item,
+#wp-admin-bar-mc-breakdance-blocks>.ab-item,
+#wp-admin-bar-mc-breakdance-popups>.ab-item,
+#wp-admin-bar-mc-breakdance-settings>.ab-item {
+    font-weight: 600 !important;
+    color: #e2e2e2 !important;
+    border-bottom: 1px solid #3c434a;
+}
+
+/* Item Count */
+.mc-breakdance-count {
+    display: inline-block;
+    background: #4f94d4;
+    color: #fff;
+    border-radius: 10px;
+    padding: 0 6px;
+    font-size: 11px;
+    line-height: 1.6;
+    margin-left: 5px;
+}
+
+/* Hover Effects */
+#wp-admin-bar-mc-breakdance-nav .ab-submenu .ab-item:hover .mc-breakdance-count {
+    background: #72aee6;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 782px) {
+    #wp-admin-bar-mc-breakdance-nav {
+        display: none;
+    }
+}
+
+/* RTL Support */
+.rtl #wp-admin-bar-mc-breakdance-nav .ab-icon {
+    margin-right: 0 !important;
+    margin-left: 5px !important;
+}
+
+.rtl .mc-breakdance-count {
+    margin-left: 0;
+    margin-right: 5px;
+}

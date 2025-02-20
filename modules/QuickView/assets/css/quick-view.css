@@ -1,0 +1,253 @@
+/**
+ * Quick View Module Styles
+ *
+ * @package    Mesmeric_Commerce
+ * @subpackage Mesmeric_Commerce/modules/quickview/assets/css
+ */
+
+/* Quick View Modal */
+.mc-quickview-modal {
+    @apply fixed inset-0 z-50 overflow-y-auto;
+}
+
+.mc-quickview-backdrop {
+    @apply fixed inset-0 bg-black bg-opacity-50 transition-opacity;
+}
+
+.mc-quickview-dialog {
+    @apply relative min-h-screen flex items-center justify-center p-4;
+}
+
+.mc-quickview-content {
+    @apply relative bg-white rounded-lg shadow-xl max-w-4xl w-full mx-auto;
+    @apply transform transition-all;
+}
+
+/* Quick View Button */
+.mc-quick-view-button {
+    @apply btn btn-sm btn-ghost absolute top-2 right-2;
+    @apply opacity-0 group-hover:opacity-100 transition-opacity duration-200;
+}
+
+/* Product Gallery */
+.mc-quickview-gallery {
+    @apply relative;
+}
+
+.mc-quickview-gallery img {
+    @apply w-full h-full object-cover;
+}
+
+/* Product Details */
+.mc-quickview-details {
+    @apply p-6;
+}
+
+/* Quantity Input */
+.mc-quickview-quantity {
+    @apply flex items-center space-x-2;
+}
+
+.mc-quickview-quantity input {
+    @apply w-16 text-center;
+}
+
+/* Notifications */
+.mc-notification {
+    @apply fixed bottom-4 right-4 p-4 rounded-lg shadow-lg text-white;
+    @apply transform transition-transform duration-300 z-50;
+}
+
+.mc-notification-success {
+    @apply bg-success;
+}
+
+.mc-notification-error {
+    @apply bg-error;
+}
+
+/* Loading States */
+.mc-quickview-loading {
+    @apply absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center;
+}
+
+.mc-quickview-spinner {
+    @apply loading loading-spinner text-primary w-8 h-8;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .mc-quickview-content {
+        @apply max-w-full mx-4;
+    }
+
+    .mc-quickview-grid {
+        @apply grid-cols-1;
+    }
+}
+
+/* Animations */
+@keyframes mcSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes mcFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.mc-quickview-enter {
+    animation: mcSlideIn 0.2s ease-out;
+}
+
+.mc-quickview-backdrop-enter {
+    animation: mcFadeIn 0.2s ease-out;
+}
+
+/* Additional Styles */
+.mc-quickview-details h2 {
+    @apply text-2xl font-bold mb-4;
+}
+
+.mc-quickview-price {
+    @apply text-xl mb-6;
+}
+
+.mc-quickview-description {
+    @apply prose prose-sm mb-6;
+}
+
+.mc-quickview-meta {
+    @apply grid grid-cols-2 gap-4 text-sm;
+}
+
+.mc-quickview-meta dt {
+    @apply font-medium;
+}
+
+.mc-quickview-actions {
+    @apply flex space-x-4 mt-6;
+}
+
+.mc-quickview-stock {
+    @apply text-sm mb-4;
+}
+
+.mc-quickview-stock.in-stock {
+    @apply text-success;
+}
+
+.mc-quickview-stock.out-of-stock {
+    @apply text-error;
+}
+
+/* Gallery Navigation */
+.mc-quickview-nav-button {
+    @apply absolute top-1/2 -translate-y-1/2;
+    @apply bg-white/80 rounded-full p-2 hover:bg-white focus:outline-none;
+    @apply transition-opacity duration-200;
+}
+
+.mc-quickview-nav-button:disabled {
+    @apply opacity-50 cursor-not-allowed;
+}
+
+.mc-quickview-nav-prev {
+    @apply left-4;
+}
+
+.mc-quickview-nav-next {
+    @apply right-4;
+}
+
+/* Thumbnails */
+.mc-quickview-thumbnails {
+    @apply mt-4 grid grid-cols-4 gap-4;
+}
+
+.mc-quickview-thumbnail {
+    @apply aspect-square rounded-lg overflow-hidden focus:outline-none;
+    @apply transition-all duration-200;
+}
+
+.mc-quickview-thumbnail.active {
+    @apply ring-2 ring-primary;
+}
+
+/* Additional Features */
+.mc-quickview-zoom {
+    @apply cursor-zoom-in;
+}
+
+.mc-quickview-zoom.zoomed {
+    @apply cursor-zoom-out;
+}
+
+.mc-quickview-share {
+    @apply mt-6 pt-6 border-t;
+}
+
+.mc-quickview-share-title {
+    @apply text-lg font-medium mb-4;
+}
+
+.mc-quickview-share-buttons {
+    @apply flex space-x-4;
+}
+
+.mc-quickview-share-button {
+    @apply btn btn-sm btn-outline;
+}
+
+/* Wishlist Integration */
+.mc-quickview-wishlist {
+    @apply relative;
+}
+
+.mc-quickview-wishlist-tooltip {
+    @apply absolute bottom-full left-1/2 -translate-x-1/2 mb-2;
+    @apply bg-gray-900 text-white text-xs rounded py-1 px-2;
+    @apply opacity-0 transition-opacity duration-200;
+}
+
+.mc-quickview-wishlist:hover .mc-quickview-wishlist-tooltip {
+    @apply opacity-100;
+}
+
+/* Accessibility */
+.mc-quickview-close {
+    @apply sr-only focus:not-sr-only;
+    @apply focus:absolute focus:top-4 focus:right-4;
+    @apply focus:bg-white focus:p-2 focus:rounded;
+}
+
+/* Print Styles */
+@media print {
+    .mc-quickview-modal {
+        @apply static overflow-visible;
+    }
+
+    .mc-quickview-backdrop {
+        @apply hidden;
+    }
+
+    .mc-quickview-close,
+    .mc-quickview-nav-button,
+    .mc-quickview-wishlist,
+    .mc-quickview-share {
+        @apply hidden;
+    }
+}

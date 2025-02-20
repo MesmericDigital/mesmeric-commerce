@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../breakdance"
+		}
+	],
+    "settings": {
+        "php.stubs": [
+            "pcntl",
+            "wordpress",
+            "*"
+        ],
+        "php.validate.enable": true
+    }
+}

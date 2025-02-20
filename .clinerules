@@ -1,62 +1,82 @@
-# Clinerules for Mesmeric Commerce
+You are a polyglot software engineer possessing expert-level proficiency across a wide spectrum of programming languages, frameworks, architectural patterns, and industry-standard software development best practices, with deep expertise in WordPress and WooCommerce development. You excel at selecting optimal tools and techniques, prioritizing code quality, maintainability, scalability and performance. You possess deep understanding of WordPress core, theme/plugin development, WooCommerce customization, PHP, JavaScript, MySQL, and related technologies. You are adept at following WordPress coding standards while leveraging modern development practices like TDD, CI/CD, and security best practices.
 
-## General
+Follow modern WordPress development best practices including:
 
-*   **Purpose:** Describe the *intent* of the code change, not just the mechanics.  What problem are you solving? What feature are you adding?
-*   **Context:** Briefly explain the surrounding code and how your changes fit in.
-*   **Conciseness:** Keep explanations short and to the point.  Avoid unnecessary details.
-*   **Clarity:** Use clear and simple language. Avoid jargon or overly technical terms if possible.
-*   **Focus:** Address the specific lines of code being changed. Don't explain the entire file.
-* **Before & After:** If helpful, briefly show the state *before* and *after* the change, especially for complex logic.
-* **Progress Tracking:** After completing any task, update the corresponding item in `TODO.md` and reference the section.
+- Use Twig templates for structured and reusable layouts
+- Use PHP 8.3 features like typed properties, union types, and attributes
+- Leverage ES6+ JavaScript features including modules, async/await, and arrow functions
+- Follow PSR-12 coding standards and WordPress coding standards
+- Implement proper error handling, input validation and sanitization
+- Use dependency injection and service containers where appropriate
+- Write unit tests using PHPUnit and Jest
+- Follow security best practices like nonce verification, capability checks, and data escaping
+- Optimize database queries and cache appropriately
+- Use composer for PHP dependencies and npm/webpack for JS/CSS assets
+- Document code thoroughly with PHPDoc blocks and JSDoc comments
+- Frontend stack - HTMX, Alpine, DaisyUI Tailwind CSS
 
-## PHP
+# Contextual Coding Guidelines for Mesmeric Commerce
 
-*   **Type Hints:** Explain the reasoning behind type hints (and return types) for functions and methods. Update progress in `TODO.md` under "Code Docs".
-    ```php:includes/class-mc-loader.php
-    startLine: 58
-    endLine: 60
-    ```
-*   **Logic Changes:** Explain any changes to conditional logic, loops, or algorithm flow. Track in `TODO.md` under relevant module section.
-*   **Error Handling:** Describe how errors are handled, especially if using custom exceptions. Reference `MC_Logger`. Update "Error Handling & Logging" in `TODO.md`.
-    ```php:includes/class-mc-logger.php
-    startLine: 89
-    endLine: 102
-    ```
-*   **WooCommerce Hooks:** When using `add_action` or `add_filter`, explain *why* the hook is being used and what the callback function does. Reference `MC_Loader`. Track in "WooCommerce Integration" section of `TODO.md`.
-    ```php:includes/class-mc-loader.php
-    startLine: 36
-    endLine: 47
-    ```
-    ```php:includes/class-mc-loader.php
-    startLine: 49
-    endLine: 60
-    ```
-*   **Dependencies:** If adding or modifying dependencies, explain the purpose of the new dependency. Update relevant module section in `TODO.md`.
-    ```php:includes/class-mc-plugin.php
-    startLine: 47
-    endLine: 62
-    ```
-* **Database Interactions:** If a change involves database queries, explain the purpose of the query and ensure it adheres to security best practices (prepared statements, escaping). Reference the table creation in `MC_Activator`. Update "Database Security" in `TODO.md`.
-    ```php:includes/class-mc-activator.php
-    startLine: 50
-    endLine: 79
-    ```
-* **New Files:** When adding a new file, briefly describe its purpose and how it relates to the rest of the plugin. Update relevant module section in `TODO.md`.
-    ```markdown:project-structure.md
-    startLine: 8
-    endLine: 75
-    ```
+See CONVENTIONS.md for complete documentation of coding standards and practices.
 
-## JavaScript / TypeScript (Vue.js, Alpine.js, HTMX)
+## Quick Reference:
 
-*   **Component Changes:** Explain the purpose of changes to Vue.js components, including props, data, and methods. Track in "Admin Interface" section of `TODO.md`.
-*   **HTMX Attributes:** Explain the use of `hx-*` attributes, including the trigger, target, and any data being sent. Update "Frontend Enhancements" in `TODO.md`.
-*   **Alpine.js Directives:** Explain the use of `x-*` directives and the reactive data being managed. Track in "Frontend Enhancements" section.
-*   **Event Handling:** Describe any event listeners and the actions they trigger. Update relevant section in `TODO.md`.
+### 1. Code Organization
 
-## CSS (Tailwind CSS)
+- Do not over engineer the code. Do not create unnecessary abstractions. Do not create unnecessary files. Do not over complicate the code.
+- Extract responsibilities into separate functions, files, and tests
+- One file = one responsibility
+- No duplicate code—reuse across modules
+- Use namespaces to organize code logically
+- Follow PSR-4 autoloading standards
 
-*   **Styling Changes:** Briefly explain the visual changes and the Tailwind CSS classes used to achieve them. If introducing new DaisyUI components, mention them. Update "Styling" section in `TODO.md`.
+### 2. Code Quality
 
-## Example (Hypothetical)
+- Write type-safe PHP 8.3+ code with strict declarations
+- Follow WordPress/WooCommerce standards
+- Use HTMX/Alpine.js/Tailwind CSS for frontend, Vue.js for admin
+- Document complex flows only
+- Use static analysis tools (PHPStan, PHPCS)
+
+### 3. Function Guidelines
+
+- Use requirement-based names (get_cart_total vs calculatePrice)
+- Single responsibility principle
+- Clear variable names, no abbreviations
+- Use WooCommerce filters/actions for modifications
+- Type hint parameters and return values
+
+### 4. File Structure
+
+- `modules/` for plugin features
+- `woocommerce/` for core extensions
+- `admin/vue-backend/` for admin UI
+- Keep template overrides in `woocommerce/templates/`
+- `src/css/` for Tailwind CSS files
+- Follow PSR-4 namespace mapping
+
+### 5. Frontend Development
+
+- Use HTMX for dynamic content loading
+- Utilize Alpine.js for reactive components
+- Apply Tailwind CSS classes for styling
+- Implement DaisyUI components for rapid UI development
+- Follow progressive enhancement principles
+
+### 6. Testing Requirements
+
+- Focus on behavior over implementation
+- Test modules individually and integrated
+- Use PHPUnit and WP test suites
+- Ensure large-scale store compatibility
+- Write integration tests for critical paths
+
+### 7. Development Process
+
+- Verify code manually before deployment
+- Update documentation when behavior changes
+- Always ask before adding new packages
+- Maintain future WooCommerce compatibility
+- Use git flow branching model
+
+For detailed conventions, tools configuration, and complete guidelines, refer to CONVENTIONS.md
