@@ -1,0 +1,156 @@
+/**
+ * Shipping Admin Styles
+ */
+
+/* Settings Page */
+.mc-settings-container {
+    max-width: 960px;
+    margin: 20px 0;
+}
+
+.mc-settings-section {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.mc-settings-section h2 {
+    margin-top: 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Custom Rates Table */
+#mc-custom-rates {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#mc-custom-rates th {
+    background: #f8f9fa;
+    padding: 10px;
+    text-align: left;
+    font-weight: 600;
+}
+
+#mc-custom-rates td {
+    padding: 10px;
+    vertical-align: middle;
+}
+
+#mc-custom-rates input[type="number"] {
+    width: 100px;
+}
+
+#mc-custom-rates .button {
+    margin: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Meta Box Styles */
+.mc-shipping-info {
+    margin: -6px -12px -12px;
+}
+
+.mc-shipping-info p {
+    margin: 0;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.mc-shipping-info p:last-child {
+    border-bottom: none;
+}
+
+.mc-shipping-info label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.mc-shipping-info .button {
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* Status Messages */
+.mc-shipping-status {
+    margin-top: 10px;
+}
+
+.mc-shipping-status .loading {
+    color: #666;
+    font-style: italic;
+}
+
+.mc-shipping-status .error {
+    color: #d63638;
+}
+
+.mc-shipping-status .success {
+    color: #00a32a;
+}
+
+/* Tracking Information */
+.tracking-info {
+    margin-top: 15px;
+}
+
+.tracking-info h4 {
+    margin: 0 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.tracking-info ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.tracking-info li {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.tracking-info li:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+/* Form Elements */
+.form-table td .description {
+    margin-top: 5px;
+    color: #666;
+}
+
+.form-table input[type="text"],
+.form-table input[type="password"] {
+    width: 25em;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 782px) {
+
+    .form-table input[type="text"],
+    .form-table input[type="password"] {
+        width: 100%;
+    }
+
+    #mc-custom-rates input[type="number"] {
+        width: 100%;
+    }
+
+    .mc-settings-section {
+        padding: 15px;
+    }
+}

@@ -57,6 +57,7 @@ See CONVENTIONS.md for complete documentation of coding standards and practices.
 
 ### 5. Frontend Development
 
+- DO NOT USE JQUERY - USE HIGHLY PERFORMANT HTMX/ALPINE.JS AND ES6+ JAVASCRIPT
 - Use HTMX for dynamic content loading
 - Utilize Alpine.js for reactive components
 - Apply Tailwind CSS classes for styling

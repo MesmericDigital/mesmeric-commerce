@@ -45,6 +45,9 @@ class MC_Public {
 	public function __construct( string $plugin_name, string $version ) {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+
+		// Add favicon hook
+		add_action('wp_head', [$this, 'add_favicon'], 100);
 	}
 
 	/**
@@ -78,5 +81,18 @@ class MC_Public {
 		}
 
 		return is_woocommerce() || is_cart() || is_checkout() || is_account_page();
+	}
+
+	/**
+	 * Add default favicon for the plugin
+	 *
+	 * @return void
+	 */
+	public function add_favicon(): void {
+		// Only add favicon if one isn't already set
+		if (!has_site_icon()) {
+			$favicon_url = plugin_dir_url(dirname(__FILE__)) . 'assets/images/favicon.ico';
+			echo '<link rel="icon" type="image/x-icon" href="' . esc_url($favicon_url) . '">';
+		}
 	}
 }

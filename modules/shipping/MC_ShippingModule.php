@@ -580,4 +580,76 @@ class MC_ShippingModule {
     public function render_shipping_page(): void {
         require_once plugin_dir_path(__FILE__) . 'views/shipping-page.php';
     }
+
+    /**
+     * Initialize the module.
+     *
+     * @since 1.0.0
+     * @return void
+     */
+    public function init(): void {
+        parent::init();
+
+        // Register shipping methods
+        add_filter('woocommerce_shipping_methods', [$this, 'register_shipping_methods']);
+
+        // Order status hooks
+        add_action('mc_tracking_number_added', [$this, 'update_order_status_on_tracking'], 10, 2);
+
+        // Admin hooks
+        if (is_admin()) {
+            $this->init_admin();
+        }
+    }
+
+    /**
+     * Register shipping methods.
+     *
+     * @since 1.0.0
+     * @param array<string, string> $methods Shipping methods
+     * @return array<string, string>
+     */
+    public function register_shipping_methods(array $methods): array {
+        // Register Evri shipping if enabled
+        if ($this->get_setting('enable_evri', true)) {
+            $methods['evri'] = MC_Evri_Shipping_Method::class;
+        }
+
+        return $methods;
+    }
+
+    /**
+     * Update order status when tracking number is added.
+     *
+     * @since 1.0.0
+     * @param int    $order_id       Order ID
+     * @param string $tracking_number Tracking number
+     * @return void
+     */
+    public function update_order_status_on_tracking(int $order_id, string $tracking_number): void {
+        $order = wc_get_order($order_id);
+        if (!$order || $order->get_status() === 'completed') {
+            return;
+        }
+
+        // Update order status and add note
+        $order->update_status(
+            'completed',
+            sprintf(
+                /* translators: %s: tracking number */
+                __('Order shipped. Tracking number: %s', 'mesmeric-commerce'),
+                $tracking_number
+            )
+        );
+
+        // Log the status change
+        $this->log(
+            sprintf(
+                /* translators: 1: order ID, 2: tracking number */
+                __('Order #%1$s status updated to completed. Tracking number: %2$s', 'mesmeric-commerce'),
+                $order_id,
+                $tracking_number
+            )
+        );
+    }
 }
