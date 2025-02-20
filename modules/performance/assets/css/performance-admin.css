@@ -1,0 +1,23 @@
+.performance-metric {
+    @apply bg-white rounded-lg shadow p-4;
+}
+
+.performance-metric-value {
+    @apply text-3xl font-bold;
+}
+
+.performance-chart {
+    @apply bg-white rounded-lg shadow p-4 mt-8;
+}
+
+.performance-table {
+    @apply min-w-full divide-y divide-gray-200;
+}
+
+.performance-table th {
+    @apply px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+}
+
+.performance-table td {
+    @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900;
+}

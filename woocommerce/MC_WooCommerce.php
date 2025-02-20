@@ -8,6 +8,7 @@ use MesmericCommerce\WooCommerce\Includes\MC_WC_Performance;
 use MesmericCommerce\WooCommerce\Services\MC_Cart_Service;
 use MesmericCommerce\WooCommerce\Services\MC_Product_Service;
 use MesmericCommerce\WooCommerce\Services\MC_Order_Service;
+use MesmericCommerce\WooCommerce\Shipping\MC_ShippingHandler;
 
 /**
  * WooCommerce Integration Class
@@ -53,15 +54,24 @@ class MC_WooCommerce {
     private MC_Order_Service $order_service;
 
     /**
+     * The shipping handler instance.
+     *
+     * @since 1.0.0
+     * @var MC_ShippingHandler
+     */
+    private MC_ShippingHandler $shipping_handler;
+
+    /**
      * Initialize the class and set its properties.
      *
      * @since 1.0.0
      */
-    public function __construct() {
+    public function __construct(MC_Plugin $plugin) {
         $this->performance = new MC_WC_Performance();
         $this->cart_service = new MC_Cart_Service();
         $this->product_service = new MC_Product_Service();
         $this->order_service = new MC_Order_Service();
+        $this->shipping_handler = new MC_ShippingHandler($plugin);
     }
 
     /**

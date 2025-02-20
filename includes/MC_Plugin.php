@@ -9,7 +9,6 @@ use MesmericCommerce\Includes\Interfaces\MC_ModuleInterface;
 use MesmericCommerce\Modules\BreakdanceAdminMenu\Mc_BreakdanceAdminMenuModule;
 use MesmericCommerce\Modules\Inventory\Mc_InventoryModule;
 use MesmericCommerce\Modules\QuickView\Mc_QuickViewModule;
-use MesmericCommerce\Modules\Shipping\Mc_ShippingModule;
 use MesmericCommerce\Modules\Wishlist\Mc_WishlistModule;
 use MesmericCommerce\WooCommerce\MC_WooCommerce;
 use MesmericCommerce\Includes\MC_WooCommerceLogger;
@@ -50,12 +49,6 @@ class MC_Plugin {
 			'path' => 'modules/Wishlist/MC_WishlistModule.php',
 			'class' => MC_WishlistModule::class,
 			'dependencies' => [ 'quickview' ],
-		),
-		'shipping' => array(
-			'option' => 'mc_enable_shipping',
-			'path' => 'modules/Shipping/MC_ShippingModule.php',
-			'class' => MC_ShippingModule::class,
-			'dependencies' => [],
 		),
 		'inventory' => array(
 			'option' => 'mc_enable_inventory',

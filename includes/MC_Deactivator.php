@@ -30,6 +30,8 @@ class MC_Deactivator
 
         // Flush rewrite rules
         flush_rewrite_rules();
+
+        self::cleanup_old_data();
     }
 
     /**
@@ -46,5 +48,20 @@ class MC_Deactivator
                 $wpdb->esc_like('_transient_timeout_mc_') . '%'
             )
         );
+    }
+
+    /**
+     * Clean up old data when deactivating
+     */
+    private static function cleanup_old_data(): void
+    {
+        // Clean up old shipping module options
+        delete_option('mc_enable_shipping');
+        delete_option('mc_shipping_rules');
+        delete_option('mc_shipping_handling_fee');
+        delete_option('mc_shipping_settings');
+
+        // Clean up other old data as needed
+        // ... existing code ...
     }
 }
