@@ -54,17 +54,17 @@ class MC_Public {
 	 */
 	public function enqueue_styles(): void {
 		// Enqueue Vite assets
-		Vite::enqueue_asset( plugin_dir_path( __FILE__ ) . 'vite.config.js', 'main' );
+		Vite::enqueue_asset( MC_PLUGIN_DIR . 'vite.config.js', 'main' );
 	}
 
 	/**
-	 * Register the JavaScript for the public-facing side of the site.
-	 *
-	 * @return void
-	 */
+		* Register the JavaScript for the public-facing side of the site.
+		*
+		* @return void
+		*/
 	public function enqueue_scripts(): void {
-		// Enqueue Vite assets
-		Vite::enqueue_asset( plugin_dir_path( __FILE__ ) . 'vite.config.js', 'main' );
+	// Enqueue Vite assets
+	Vite::enqueue_asset( MC_PLUGIN_DIR . 'vite.config.js', 'main' );
 	}
 
 	/**

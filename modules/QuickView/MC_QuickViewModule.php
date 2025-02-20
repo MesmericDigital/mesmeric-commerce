@@ -180,13 +180,7 @@ class MC_QuickViewModule extends MC_AbstractModule {
 				)
 			);
 		} catch (\Exception $e) {
-			$this->get_logger()->error(
-				'Quick view load error: ' . $e->getMessage(),
-				array(
-					'product_id' => $product_id,
-					'error' => $e,
-				)
-			);
+			$this->get_logger()->error('Quick view load error: ' . $e->getMessage());
 			wp_send_json_error( $e->getMessage() );
 		}
 	}
@@ -228,14 +222,13 @@ class MC_QuickViewModule extends MC_AbstractModule {
 
 			WC_AJAX::get_refreshed_fragments();
 		} catch (\Exception $e) {
-			$this->get_logger()->error(
-				'Add to cart error: ' . $e->getMessage(),
-				array(
-					'product_id' => $product_id,
-					'quantity' => $quantity,
-					'error' => $e,
-				)
-			);
+		$this->get_logger()->error( sprintf(
+		 'Add to cart error: %s (product_id: %d, quantity: %d, error: %s)',
+		 $e->getMessage(),
+		 $product_id,
+		 $quantity,
+		 $e
+		) );
 			wp_send_json_error( $e->getMessage() );
 		}
 	}
@@ -271,9 +264,13 @@ class MC_QuickViewModule extends MC_AbstractModule {
 			}
 
 			// Add to default wishlist
+			if ( method_exists( $wishlist_module, 'add_to_default_wishlist' ) ) {
 			$result = $wishlist_module->add_to_default_wishlist( $product_id );
 			if ( is_wp_error( $result ) ) {
-				throw new \Exception( $result->get_error_message() );
+			throw new \Exception( $result->get_error_message() );
+			}
+			} else {
+			$this->get_logger()->error( sprintf( 'Wishlist module does not implement add_to_default_wishlist method.' ) );
 			}
 
 			wp_send_json_success(
@@ -282,16 +279,15 @@ class MC_QuickViewModule extends MC_AbstractModule {
 				)
 			);
 		} catch (\Exception $e) {
-			$this->get_logger()->error(
-				'Save for later error: ' . $e->getMessage(),
-				array(
-					'product_id' => $product_id,
-					'error' => $e,
-				)
-			);
-			wp_send_json_error( $e->getMessage() );
+		$this->get_logger()->error( sprintf(
+			'Save for later error: %s (product_id: %d, error: %s)',
+			$e->getMessage(),
+			$product_id,
+			$e
+		) );
+		wp_send_json_error( $e->getMessage() );
 		}
-	}
+		}
 
 	/**
 	 * Add product classes

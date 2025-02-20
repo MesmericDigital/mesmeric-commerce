@@ -125,11 +125,7 @@ abstract class MC_AbstractModule implements MC_ModuleInterface {
             $this->save_settings();
             return true;
         } catch (\Exception $e) {
-            $this->logger->error('Failed to update module settings: ' . $e->getMessage(), [
-                'module' => $this->get_module_id(),
-                'settings' => $settings,
-                'error' => $e,
-            ]);
+            $this->logger->error('Failed to update module settings: ' . $e->getMessage());
             return false;
         }
     }
@@ -190,16 +186,11 @@ abstract class MC_AbstractModule implements MC_ModuleInterface {
             update_option('mc_module_' . $this->get_module_id() . '_active', true);
 
             // Log activation
-            $this->logger->info('Module activated successfully.', [
-                'module' => $this->get_module_id(),
-            ]);
+            $this->logger->info(sprintf('Module activated successfully. (module: %s)', $this->get_module_id()));
 
             return true;
         } catch (\Exception $e) {
-            $this->logger->error('Failed to activate module: ' . $e->getMessage(), [
-                'module' => $this->get_module_id(),
-                'error' => $e,
-            ]);
+            $this->logger->error(sprintf('Failed to activate module: %s (module: %s, error: %s)', $e->getMessage(), $this->get_module_id(), $e));
             return false;
         }
     }
@@ -227,16 +218,11 @@ abstract class MC_AbstractModule implements MC_ModuleInterface {
             update_option('mc_module_' . $this->get_module_id() . '_active', false);
 
             // Log deactivation
-            $this->logger->info('Module deactivated successfully.', [
-                'module' => $this->get_module_id(),
-            ]);
+            $this->logger->info(sprintf('Module deactivated successfully. (module: %s)', $this->get_module_id()));
 
             return true;
         } catch (\Exception $e) {
-            $this->logger->error('Failed to deactivate module: ' . $e->getMessage(), [
-                'module' => $this->get_module_id(),
-                'error' => $e,
-            ]);
+            $this->logger->error(sprintf('Failed to deactivate module: %s (module: %s, error: %s)', $e->getMessage(), $this->get_module_id(), $e));
             return false;
         }
     }

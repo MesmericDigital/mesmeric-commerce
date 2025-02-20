@@ -69,17 +69,17 @@ class MC_Admin {
 	 */
 	public function enqueue_styles(): void {
 		// Enqueue Vite assets
-		Vite::enqueue_asset( plugin_dir_path( __FILE__ ) . 'vite.config.js', 'admin' );
+		Vite::enqueue_asset( MC_PLUGIN_DIR . 'vite.config.js', 'admin' );
 	}
 
 	/**
-	 * Register the JavaScript for the admin area.
-	 *
-	 * @return void
-	 */
+		* Register the JavaScript for the admin area.
+		*
+		* @return void
+		*/
 	public function enqueue_scripts(): void {
-		// Enqueue Vite assets
-		Vite::enqueue_asset( plugin_dir_path( __FILE__ ) . 'vite.config.js', 'admin' );
+	// Enqueue Vite assets
+		Vite::enqueue_asset( MC_PLUGIN_DIR . 'vite.config.js', 'admin' );
 	}
 
 	/**

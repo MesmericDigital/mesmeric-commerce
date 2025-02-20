@@ -113,7 +113,7 @@ class MC_WooCommerceLogger {
         $this->logger->log_system_event(
             'shipping_method_change',
             sprintf(
-                'Shipping method %s %s in zone %s',
+                'Shipping method %s (ID: %d) modified in zone %s',
                 $type,
                 $instance_id,
                 $zone->get_zone_name()

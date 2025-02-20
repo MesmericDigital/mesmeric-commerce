@@ -140,6 +140,16 @@ class MC_Logger {
     }
 
     /**
+     * Log a system event
+     *
+     * @param string $message Event message.
+     * @return void
+     */
+    public function log_system_event(string $message): void {
+        $this->logger->info($message, ['context' => 'system_event']);
+    }
+
+    /**
      * Log an error message
      *
      * @param string  $message Error message.

@@ -13,6 +13,7 @@ namespace MesmericCommerce\Modules\FAQ;
 use MesmericCommerce\Includes\Abstract\MC_AbstractModule;
 use MesmericCommerce\Includes\MC_Logger;
 use MesmericCommerce\Includes\MC_TwigService;
+use MesmericCommerce\Includes\MC_Plugin;
 
 /**
  * Class MC_FAQModule
@@ -20,6 +21,13 @@ use MesmericCommerce\Includes\MC_TwigService;
  * Handles FAQ functionality for products and categories
  */
 class MC_FAQModule extends MC_AbstractModule {
+    /**
+     * Error handling codes
+     */
+    private const ERROR_INITIALIZATION = 'initialization_error';
+    private const ERROR_REGISTRATION = 'registration_error';
+    private const ERROR_RENDER = 'render_error';
+
     /**
      * The Twig service instance.
      *
@@ -33,8 +41,19 @@ class MC_FAQModule extends MC_AbstractModule {
      * @param MC_Plugin $plugin The plugin instance.
      */
     public function __construct(MC_Plugin $plugin) {
-        parent::__construct($plugin);
-        $this->twig = new MC_TwigService(plugin_dir_path(MC_PLUGIN_FILE) . 'templates');
+        try {
+            parent::__construct($plugin);
+            $this->twig = new MC_TwigService(plugin_dir_path(MC_PLUGIN_FILE) . 'templates');
+        } catch (\Throwable $e) {
+            $this->logger->error(
+                sprintf('Error initializing FAQ module: %s', $e->getMessage()),
+                [
+                    'error_code' => self::ERROR_INITIALIZATION,
+                    'exception' => $e
+                ]
+            );
+            throw $e; // Re-throw to prevent partial initialization
+        }
     }
 
     /**
@@ -139,13 +158,23 @@ class MC_FAQModule extends MC_AbstractModule {
 			);
 
 			register_post_type( 'mc_faq', $args );
-			$this->logger->log_error( 'FAQ post type registered', 'info' );
-		} catch (\Throwable $e) {
-			$this->logger->log_error(
-				sprintf( 'Error registering FAQ post type: %s', $e->getMessage() ),
-				'error',
-				true
+			$this->logger->info(
+				'FAQ post type registered successfully',
+				[
+					'post_type' => 'mc_faq',
+					'args' => $args
+				]
 			);
+		} catch (\Throwable $e) {
+			$this->logger->error(
+				sprintf('Error registering FAQ post type: %s', $e->getMessage()),
+				[
+					'error_code' => self::ERROR_REGISTRATION,
+					'post_type' => 'mc_faq',
+					'exception' => $e
+				]
+			);
+			throw $e;
 		}
 	}
 
@@ -180,13 +209,9 @@ class MC_FAQModule extends MC_AbstractModule {
 			);
 
 			register_taxonomy( 'mc_faq_category', array( 'mc_faq' ), $args );
-			$this->logger->log_error( 'FAQ taxonomy registered', 'info' );
+			$this->logger->info(sprintf('FAQ taxonomy registered (taxonomy: %s)', 'mc_faq_category'));
 		} catch (\Throwable $e) {
-			$this->logger->log_error(
-				sprintf( 'Error registering FAQ taxonomy: %s', $e->getMessage() ),
-				'error',
-				true
-			);
+			$this->logger->error(sprintf('Error registering FAQ taxonomy: %s', $e->getMessage()));
 		}
 	}
 
@@ -214,11 +239,7 @@ class MC_FAQModule extends MC_AbstractModule {
 
 			return $tabs;
 		} catch (\Throwable $e) {
-			$this->logger->log_error(
-				sprintf( 'Error adding FAQ product tab: %s', $e->getMessage() ),
-				'error',
-				true
-			);
+			$this->logger->error(sprintf('Error adding FAQ product tab: %s', $e->getMessage()));
 			return $tabs;
 		}
 	}
@@ -246,10 +267,9 @@ class MC_FAQModule extends MC_AbstractModule {
 				'product' => $product
 			] );
 		} catch (\Throwable $e) {
-			$this->logger->log_error(
-				sprintf( 'Error rendering FAQ tab: %s', $e->getMessage() ),
-				'error',
-				true
+			$this->logger->error(
+				sprintf('Error rendering FAQ tab: %s', $e->getMessage()),
+				['exception' => $e]
 			);
 		}
 	}
@@ -280,10 +300,12 @@ class MC_FAQModule extends MC_AbstractModule {
 
 			return array_unique( $faqs, SORT_REGULAR );
 		} catch (\Throwable $e) {
-			$this->logger->log_error(
+			$this->logger->error(
 				sprintf( 'Error getting product FAQs: %s', $e->getMessage() ),
-				'error',
-				true
+				[
+					'product_id' => $product_id,
+					'exception' => $e
+				]
 			);
 			return array();
 		}
@@ -408,4 +430,95 @@ class MC_FAQModule extends MC_AbstractModule {
 			] )
 		] );
 	}
+
+    /**
+     * Handle AJAX load FAQs request
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function handle_load_faqs(): void {
+        try {
+            check_ajax_referer('mc-faq', 'nonce');
+
+            $product_id = filter_input(INPUT_POST, 'product_id', FILTER_VALIDATE_INT);
+            if (!$product_id) {
+                throw new \InvalidArgumentException('Invalid product ID');
+            }
+
+            $faqs = $this->get_product_faqs($product_id);
+
+            wp_send_json_success(['faqs' => $faqs]);
+        } catch (\Throwable $e) {
+            $this->logger->error(
+                sprintf('Error loading FAQs: %s', $e->getMessage()),
+                [
+                    'error_code' => self::ERROR_RENDER,
+                    'product_id' => $product_id ?? null,
+                    'exception' => $e
+                ]
+            );
+            wp_send_json_error(['message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Handle AJAX save FAQ request
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function handle_save_faq(): void {
+        try {
+            check_ajax_referer('mc-faq-admin', 'nonce');
+
+            if (!current_user_can('manage_woocommerce')) {
+                throw new \Exception('Permission denied');
+            }
+
+            // Validate and sanitize input
+            $faq_data = $this->validate_faq_data($_POST);
+
+            // Save FAQ
+            $faq_id = wp_insert_post($faq_data);
+            if (is_wp_error($faq_id)) {
+                throw new \Exception($faq_id->get_error_message());
+            }
+
+            wp_send_json_success(['faq_id' => $faq_id]);
+        } catch (\Throwable $e) {
+            $this->logger->error(
+                sprintf('Error saving FAQ: %s', $e->getMessage()),
+                [
+                    'error_code' => self::ERROR_RENDER,
+                    'data' => $_POST,
+                    'exception' => $e
+                ]
+            );
+            wp_send_json_error(['message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Validate FAQ form data
+     *
+     * @param array $data Raw form data
+     * @return array Sanitized FAQ data
+     * @throws \InvalidArgumentException
+     */
+    private function validate_faq_data(array $data): array {
+        $sanitized = [];
+
+        // Required fields
+        if (empty($data['question'])) {
+            throw new \InvalidArgumentException('Question is required');
+        }
+
+        $sanitized['post_title'] = sanitize_text_field($data['question']);
+        $sanitized['post_content'] = wp_kses_post($data['answer'] ?? '');
+        $sanitized['post_type'] = 'mc_faq';
+        $sanitized['post_status'] = 'publish';
+
+        return $sanitized;
+    }
 }
