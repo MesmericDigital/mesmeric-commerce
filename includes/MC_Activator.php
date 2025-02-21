@@ -28,6 +28,11 @@ class MC_Activator {
 		self::create_pages();
 		self::schedule_cron_jobs();
 		flush_rewrite_rules();
+
+		// Enable Breakdance Admin Menu module by default
+		if (false === get_option('mc_enable_breakdance_admin_menu')) {
+			add_option('mc_enable_breakdance_admin_menu', 'yes');
+		}
 	}
 
 	/**

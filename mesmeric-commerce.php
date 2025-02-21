@@ -30,16 +30,49 @@ define( 'MC_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 define( 'MC_PLUGIN_FILE', __FILE__ );
 define( 'MC_VENDOR_PATH', __DIR__ . '/vendor/autoload.php' );
 
+// Load Composer autoloader
+if ( file_exists( MC_VENDOR_PATH ) ) {
+    try {
+        require_once MC_VENDOR_PATH;
+    } catch ( Throwable $e ) {
+        error_log( sprintf( '[Mesmeric Commerce] Error loading autoloader: %s', $e->getMessage() ) );
+        return;
+    }
+} else {
+    // If no autoloader, manually require core files
+    $core_files = array(
+        'includes/MC_Loader.php',
+        'includes/MC_Logger.php',
+        'includes/MC_I18n.php',
+        'includes/MC_Database.php',
+        'includes/MC_Media.php',
+        'includes/MC_Security.php',
+        'includes/MC_Plugin.php',
+        'includes/MC_TwigService.php',
+        'includes/MC_WooCommerceLogger.php',
+        'includes/MC_LogsRestController.php',
+    );
+
+    foreach ( $core_files as $file ) {
+        $file_path = MC_PLUGIN_DIR . $file;
+        if ( ! file_exists( $file_path ) ) {
+            throw new \RuntimeException( sprintf( 'Required file not found: %s', $file ) );
+        }
+        require_once $file_path;
+    }
+}
+
 use MesmericCommerce\Includes\MC_Activator;
 use MesmericCommerce\Includes\MC_Deactivator;
-
-// Initialize security features
-$security = MC_Security::get_instance();
-$security->setup_hooks();
+use MesmericCommerce\Includes\MC_Security;
 use MesmericCommerce\Includes\MC_ErrorHandler;
 use MesmericCommerce\Includes\MC_Plugin;
 use MesmericCommerce\Admin\MC_Admin;
 use MesmericCommerce\Frontend\MC_Public;
+
+// Initialize security features
+$security = MC_Security::get_instance();
+$security->setup_hooks();
 
 /**
  * Check if WooCommerce is active and meets version requirements
@@ -60,19 +93,6 @@ function mc_check_dependencies(): bool {
 	}
 
 	return true;
-}
-
-// Load Composer autoloader
-if ( file_exists( MC_VENDOR_PATH ) ) {
-	try {
-		require_once MC_VENDOR_PATH;
-	} catch (\Exception $e) {
-		error_log( 'Mesmeric Commerce: Composer autoloader failed to load: ' . $e->getMessage() );
-		return;
-	}
-} elseif ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-	trigger_error( 'Mesmeric Commerce: Composer dependencies not installed. Run composer install', E_USER_WARNING );
-	return;
 }
 
 // Initialize error handler

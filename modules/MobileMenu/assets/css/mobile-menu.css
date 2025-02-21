@@ -1,0 +1,66 @@
+/* Mobile Menu Styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* Mobile Menu Base Styles */
+.mc-mobile-menu {
+    transition: transform 300ms;
+    position: fixed;
+    z-index: 50;
+    background-color: white;
+    padding: 1rem;
+    padding-bottom: env(safe-area-inset-bottom);
+    transform: translateX(100%);
+}
+
+.mc-mobile-menu.active {
+    transform: translateX(0);
+}
+
+.mc-mobile-menu.dark {
+    background-color: var(--neutral);
+    color: var(--neutral-content);
+}
+
+.mc-mobile-menu .menu {
+    min-height: 4rem;
+}
+
+.mc-mobile-menu .menu-item {
+    flex: 1;
+    text-align: center;
+}
+
+.mc-mobile-menu .menu-item a {
+    background-color: transparent !important;
+}
+
+.mc-mobile-menu .icon {
+    transition: color 200ms;
+}
+
+.mc-mobile-menu .menu-item a:hover .icon,
+.mc-mobile-menu .menu-item a:focus .icon {
+    color: var(--primary);
+}
+
+/* Cart badge animation */
+.mc-mobile-menu .badge {
+    transition: transform 300ms;
+    transform: scale(1);
+}
+
+.mc-mobile-menu .badge:hover {
+    transform: scale(1.1);
+}
+
+.mc-mobile-menu .badge[x-cloak] {
+    transform: scale(0);
+}
+
+/* Bottom safe area padding for mobile devices */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .mc-mobile-menu.bottom-0 {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}

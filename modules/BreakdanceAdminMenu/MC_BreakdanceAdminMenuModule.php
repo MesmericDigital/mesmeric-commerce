@@ -41,6 +41,9 @@ class MC_BreakdanceAdminMenuModule {
         $this->plugin = $mesmeric_commerce;
         $this->logger = $this->plugin->get_logger();
 
+        // Add debugging
+        error_log('Breakdance Admin Menu Module initialized');
+
         $this->register_hooks();
     }
 
@@ -50,9 +53,15 @@ class MC_BreakdanceAdminMenuModule {
      * @return void
      */
     private function register_hooks(): void {
+        // Add debugging
+        error_log('Registering Breakdance Admin Menu hooks');
+
+        // Use a later priority to ensure our menu appears after other items
         add_action('admin_bar_menu', array($this, 'add_breakdance_nav'), 999);
-        add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
-        add_action('wp_enqueue_scripts', array($this, 'enqueue_admin_assets')); // For front-end
+        add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'), 100);
+        add_action('wp_enqueue_scripts', array($this, 'enqueue_admin_assets'), 100); // For front-end
+
+        error_log('Breakdance Admin Menu hooks registered');
     }
 
     /**
@@ -62,7 +71,11 @@ class MC_BreakdanceAdminMenuModule {
      * @return void
      */
     public function add_breakdance_nav(\WP_Admin_Bar $admin_bar): void {
+        // Add debugging
+        error_log('Adding Breakdance nav to admin bar');
+
         if (!current_user_can('edit_posts')) {
+            error_log('User cannot edit posts, not adding Breakdance nav');
             return;
         }
 

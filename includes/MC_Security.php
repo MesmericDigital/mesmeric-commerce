@@ -1,4 +1,6 @@
 <?php
+namespace MesmericCommerce\Includes;
+
 /**
  * Security handler for Mesmeric Commerce
  */
@@ -20,7 +22,7 @@ class MC_Security {
 	public function setup_hooks() {
 		add_action( 'template_redirect', [ $this, 'enforce_frontend_ssl' ] );
 		add_action( 'admin_init', [ $this, 'enforce_admin_ssl' ] );
-		register_activation_hook( MESMERIC_COMMERCE_FILE, [ $this, 'update_site_urls_to_https' ] );
+		register_activation_hook( MC_PLUGIN_FILE, [ $this, 'update_site_urls_to_https' ] );
 	}
 
 	public function enforce_frontend_ssl() {

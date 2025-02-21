@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace MesmericCommerce\WooCommerce\Includes;
 
-use MesmericCommerce\WooCommerce\Traits\MC_WC_Caching;
+use MesmericCommerce\WooCommerce\Includes\Traits\MC_WC_Caching;
 
 /**
  * WooCommerce Performance Optimization Class

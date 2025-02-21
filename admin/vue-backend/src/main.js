@@ -6,6 +6,7 @@ import MC_Dashboard from './views/MC_Dashboard.vue'
 import MC_Logs from './views/MC_Logs.vue'
 import MC_Modules from './views/MC_Modules.vue'
 import MC_Settings from './views/MC_Settings.vue'
+import './css/tailwind.css'
 
 // Create router
 const router = createRouter({

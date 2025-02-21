@@ -1,0 +1,35 @@
+{# Mobile Menu Template #}
+<nav
+    x-data="{ cartCount: window.mcMobileMenu?.cart_count || 0 }"
+    x-init="
+        document.addEventListener('wc_fragments_refreshed', () => {
+            cartCount = window.mcMobileMenu?.cart_count || 0;
+        });
+    "
+    class="mc-mobile-menu fixed {{ settings.position == 'bottom' ? 'bottom-0' : 'top-0' }} left-0 w-full bg-base-100 shadow-lg border-t border-base-300 z-50 {{ settings.theme == 'dark' ? 'dark' : '' }}"
+    :class="{ 'hidden': window.innerWidth >= parseInt(getComputedStyle(document.documentElement).getPropertyValue('--breakpoint-{{ settings.breakpoint }}')) }"
+>
+    <div class="container mx-auto px-4">
+        <ul class="menu menu-horizontal w-full justify-between items-center py-2">
+            {% for item in menu_items %}
+                <li>
+                    <a
+                        href="{{ item.url }}"
+                        class="flex flex-col items-center gap-1 {{ item.type == 'cart' ? 'relative' : '' }}"
+                        hx-boost="true"
+                    >
+                        <i class="icon icon-{{ item.icon }} text-xl"></i>
+                        <span class="text-xs">{{ item.label }}</span>
+                        {% if item.type == 'cart' %}
+                            <span
+                                x-show="cartCount > 0"
+                                x-text="cartCount"
+                                class="absolute -top-1 -right-1 badge badge-sm badge-primary"
+                            ></span>
+                        {% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</nav>

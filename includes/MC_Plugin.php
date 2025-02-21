@@ -10,6 +10,7 @@ use MesmericCommerce\Includes\MC_LogsRestController;
 use MesmericCommerce\Includes\MC_WooCommerceLogger;
 use MesmericCommerce\Modules\BreakdanceAdminMenu\Mc_BreakdanceAdminMenuModule;
 use MesmericCommerce\Modules\Inventory\Mc_InventoryModule;
+use MesmericCommerce\Modules\MobileMenu\MC_MobileMenuModule;
 use MesmericCommerce\Modules\QuickView\Mc_QuickViewModule;
 use MesmericCommerce\Modules\Wishlist\Mc_WishlistModule;
 use MesmericCommerce\WooCommerce\MC_WooCommerce;
@@ -56,6 +57,12 @@ class MC_Plugin {
 			'class' => MC_InventoryModule::class,
 			'dependencies' => [],
 		),
+		'mobile_menu' => array(
+			'option' => 'mc_enable_mobile_menu',
+			'path' => 'modules/MobileMenu/MC_MobileMenuModule.php',
+			'class' => MC_MobileMenuModule::class,
+			'dependencies' => [],
+		),
 	);
 
 	/**
@@ -94,7 +101,7 @@ class MC_Plugin {
 	private function load_dependencies(): void {
 		// Initialize core components
 		$this->loader = new MC_Loader();
-		$this->logger = new MC_Logger();
+		$this->logger = MC_Logger::get_instance();
 		$this->i18n = new MC_I18n();
 		$this->db = new MC_Database();
 		$this->media = new MC_Media();
@@ -118,7 +125,7 @@ class MC_Plugin {
 	 * Setup the logger instance with improved error handling
 	 */
 	private function setup_logger(): void {
-		$this->logger = new MC_Logger();
+		$this->logger = MC_Logger::get_instance();
 
 		set_error_handler(
 			function (int $errno, string $errstr, string $errfile, int $errline): bool {
@@ -195,7 +202,7 @@ class MC_Plugin {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
-		$woocommerce = new MC_WooCommerce();
+		$woocommerce = new MC_WooCommerce($this);
 		$this->loader->add_action( 'init', $woocommerce, 'init' );
 	}
 

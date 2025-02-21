@@ -1,67 +1,34 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './admin/**/*.{php,vue,js}',
-    './public/**/*.php',
-    './modules/**/*.php',
-    './woocommerce/templates/**/*.php',
-  ],
-  darkMode: 'class',
-  theme: {
-    extend: {
-      colors: {
-        primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
-          950: '#082f49',
+    content: [
+        "./**/*.php",
+        "./**/*.twig",
+        "./assets/js/*.js",
+        "./modules/**/*.js",
+        "./modules/**/*.css",
+        "./admin/vue-backend/src/**/*.vue",
+        "./admin/vue-backend/src/**/*.js",
+    ],
+    theme: {
+        extend: {
+            colors: {
+                primary: '#570df8',
+                'primary-focus': '#4506cb',
+                secondary: '#f000b8',
+                'secondary-focus': '#bd0091',
+                accent: '#37cdbe',
+                'accent-focus': '#2aa79b',
+                neutral: '#3d4451',
+                'base-100': '#ffffff',
+                info: '#3abff8',
+                success: '#36d399',
+                warning: '#fbbd23',
+                error: '#f87272',
+            },
         },
-        secondary: {
-          50: '#fdf4ff',
-          100: '#fae8ff',
-          200: '#f5d0fe',
-          300: '#f0abfc',
-          400: '#e879f9',
-          500: '#d946ef',
-          600: '#c026d3',
-          700: '#a21caf',
-          800: '#86198f',
-          900: '#701a75',
-          950: '#4a044e',
-        },
-      },
-      fontFamily: {
-        sans: ['Inter var', 'system-ui', 'sans-serif'],
-      },
-      spacing: {
-        '128': '32rem',
-        '144': '36rem',
-      },
-      borderRadius: {
-        '4xl': '2rem',
-      },
     },
-  },
-  plugins: [
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/forms'),
-    require('daisyui')
-  ],
-  daisyui: {
-    themes: ['light', 'dark'],
-    darkTheme: 'dark',
-    base: true,
-    styled: true,
-    utils: true,
-    prefix: 'daisy-',
-    logs: false,
-    themeRoot: ':root',
-  },
+    plugins: [
+        require('daisyui'),
+        require('@tailwindcss/typography'),
+    ],
 }

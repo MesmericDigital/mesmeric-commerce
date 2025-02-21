@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace MesmericCommerce\WooCommerce\Traits;
+namespace MesmericCommerce\WooCommerce\Includes\Traits;
 
 /**
  * WooCommerce Caching Trait

@@ -1,0 +1,39 @@
+{
+  "src/css/tailwind.css": {
+    "file": "css/tailwind.94e33688.css",
+    "isEntry": true,
+    "src": "src/css/tailwind.css"
+  },
+  "src/main.css": {
+    "file": "css/main.d71dff0d.css",
+    "src": "src/main.css"
+  },
+  "src/main.js": {
+    "css": [
+      "css/main.d71dff0d.css",
+      "css/tailwind.94e33688.css"
+    ],
+    "dynamicImports": [
+      "src/views/MC_ModuleDetail.vue"
+    ],
+    "file": "js/main.6d673937.js",
+    "isEntry": true,
+    "src": "src/main.js"
+  },
+  "src/views/MC_ModuleDetail.css": {
+    "file": "css/MC_ModuleDetail.b849cc1e.css",
+    "src": "src/views/MC_ModuleDetail.css"
+  },
+  "src/views/MC_ModuleDetail.vue": {
+    "css": [
+      "css/MC_ModuleDetail.b849cc1e.css",
+      "css/tailwind.94e33688.css"
+    ],
+    "file": "js/MC_ModuleDetail.c4c70ba8.js",
+    "imports": [
+      "src/main.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "src/views/MC_ModuleDetail.vue"
+  }
+}
