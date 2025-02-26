@@ -1,0 +1,80 @@
+{# Registration Form Template #}
+<div class="mc-register-form" id="mc-register-form" style="display: none;">
+    <div class="mc-register-form__header">
+        <button type="button" class="mc-register-form__tab-switch" data-target="login">
+            {{ __('Login', 'mesmeric-commerce') }}
+        </button>
+        <h3 class="mc-register-form__title">{{ __('Register', 'mesmeric-commerce') }}</h3>
+    </div>
+
+    {% if error_message %}
+        <div class="mc-register-form__error">
+            {{ error_message }}
+        </div>
+    {% endif %}
+
+    <form action="{{ ajax_url }}" method="post" class="mc-register-form__form">
+        <input type="hidden" name="action" value="mc_login_popup_register">
+        <input type="hidden" name="security" value="{{ nonce }}">
+        <input type="hidden" name="redirect_to" value="{{ redirect_url }}">
+
+        <div class="mc-register-form__field">
+            <label for="mc-register-username" class="mc-register-form__label">{{ __('Username', 'mesmeric-commerce') }}</label>
+            <input type="text" name="username" id="mc-register-username" class="mc-register-form__input" required>
+        </div>
+
+        <div class="mc-register-form__field">
+            <label for="mc-register-email" class="mc-register-form__label">{{ __('Email', 'mesmeric-commerce') }}</label>
+            <input type="email" name="email" id="mc-register-email" class="mc-register-form__input" required>
+        </div>
+
+        <div class="mc-register-form__field">
+            <label for="mc-register-password" class="mc-register-form__label">{{ __('Password', 'mesmeric-commerce') }}</label>
+            <input type="password" name="password" id="mc-register-password" class="mc-register-form__input" required>
+            <div class="mc-register-form__password-strength">
+                <div class="mc-register-form__password-strength-meter"></div>
+                <span class="mc-register-form__password-strength-text"></span>
+            </div>
+        </div>
+
+        <div class="mc-register-form__field">
+            <label for="mc-register-password-confirm" class="mc-register-form__label">{{ __('Confirm Password', 'mesmeric-commerce') }}</label>
+            <input type="password" name="password_confirm" id="mc-register-password-confirm" class="mc-register-form__input" required>
+        </div>
+
+        {% if privacy_policy_page %}
+            <div class="mc-register-form__field mc-register-form__field--checkbox">
+                <input type="checkbox" name="privacy_policy" id="mc-register-privacy-policy" class="mc-register-form__checkbox" required>
+                <label for="mc-register-privacy-policy" class="mc-register-form__checkbox-label">
+                    {{ privacy_policy_text|raw }}
+                </label>
+            </div>
+        {% endif %}
+
+        {% if settings.enable_recaptcha %}
+            <div class="mc-register-form__recaptcha g-recaptcha" data-sitekey="{{ settings.recaptcha_site_key }}"></div>
+        {% endif %}
+
+        <div class="mc-register-form__actions">
+            <button type="submit" class="mc-register-form__submit">
+                {{ __('Register', 'mesmeric-commerce') }}
+            </button>
+        </div>
+    </form>
+
+    {% if settings.show_social_login and social_login_providers %}
+        <div class="mc-register-form__social">
+            <div class="mc-register-form__social-divider">
+                <span>{{ __('Or register with', 'mesmeric-commerce') }}</span>
+            </div>
+            <div class="mc-register-form__social-buttons">
+                {% for provider in social_login_providers %}
+                    <a href="{{ provider.url }}" class="mc-register-form__social-button mc-register-form__social-button--{{ provider.id }}">
+                        <span class="mc-register-form__social-icon">{{ provider.icon|raw }}</span>
+                        <span class="mc-register-form__social-text">{{ provider.name }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>

@@ -1,0 +1,82 @@
+{#
+ # Quick View Suggested Products Partial Template
+ #
+ # @var product WC_Product Product object
+ # @var module string Suggested products module to use
+ #
+ # @since 1.0.0
+ #}
+
+<div class="suggested-products"
+     x-data="quickViewSuggestedProducts"
+     x-init="loadSuggestedProducts">
+    {# Loading State #}
+    <div class="loading-state"
+         x-show="loading"
+         x-cloak>
+        <div class="loading-spinner">
+            <svg class="animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span class="sr-only">{{ 'Loading suggested products...'|translate }}</span>
+        </div>
+    </div>
+
+    {# Error State #}
+    <div class="error-state"
+         x-show="error"
+         x-text="errorMessage"
+         x-cloak></div>
+
+    {# Products List #}
+    <div class="products-list"
+         x-show="!loading && !error && products.length > 0"
+         x-transition:enter="transition-opacity ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-cloak>
+        {# Section Title #}
+        <h3 class="section-title">
+            <template x-if="module === 'bulk_discounts'">
+                {{ 'Buy More & Save'|translate }}
+            </template>
+            <template x-if="module === 'buy_x_get_y'">
+                {{ 'Add These & Save'|translate }}
+            </template>
+            <template x-if="module === 'frequently_bought_together'">
+                {{ 'Frequently Bought Together'|translate }}
+            </template>
+        </h3>
+
+        {# Products Grid #}
+        <div class="products-grid">
+            <template x-for="product in products" :key="product.id">
+                <div class="product-card">
+                    {# Product Image #}
+                    <div class="product-image">
+                        <img x-bind:src="product.image"
+                             x-bind:alt="product.name"
+                             loading="lazy">
+                    </div>
+
+                    {# Product Info #}
+                    <div class="product-info">
+                        <h4 class="product-title" x-text="product.name"></h4>
+                        <div class="product-price" x-html="product.price_html"></div>
+                    </div>
+
+                    {# Add to Cart #}
+                    <div class="product-actions">
+                        <button type="button"
+                                class="btn btn-primary btn-sm"
+                                x-on:click="addToCart(product.id)"
+                                x-bind:disabled="loading">
+                            {{ 'Add'|translate }}
+                        </button>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+{#
+ # Product Navigation Links template
+ #
+ # @package    Mesmeric_Commerce
+ # @subpackage Mesmeric_Commerce/modules/ProductNavigationLinks
+ #}
+
+<div class="mc-product-navigation {{ text_type }}">
+    {% if prev_product %}
+        <a href="{{ prev_product.url }}" class="mc-previous-product">
+            {% if text_type == 'titles' %}
+                <span>← {{ prev_product.title }}</span>
+            {% else %}
+                <span>{{ '← Previous'|trans }}</span>
+            {% endif %}
+        </a>
+    {% endif %}
+
+    {% if next_product %}
+        <a href="{{ next_product.url }}" class="mc-next-product">
+            {% if text_type == 'titles' %}
+                <span>{{ next_product.title }} →</span>
+            {% else %}
+                <span>{{ 'Next →'|trans }}</span>
+            {% endif %}
+        </a>
+    {% endif %}
+</div>

@@ -1,0 +1,91 @@
+@layer components {
+    .cart-reserved-timer {
+        @apply mb-6;
+
+        .alert {
+            @apply p-4 shadow-md;
+            background-color: var(--mesmeric-bg-color, theme('colors.warning' / 0.1));
+        }
+
+        .timer-icon {
+            @apply flex-shrink-0;
+
+            img {
+                @apply w-6 h-6;
+                filter: var(--mesmeric-icon-filter);
+            }
+        }
+
+        .timer-content {
+            @apply flex-grow;
+
+            .timer-message {
+                @apply text-base;
+                color: var(--mesmeric-text-color, theme('colors.warning.800'));
+            }
+
+            .timer-countdown {
+                @apply mt-1;
+                color: var(--mesmeric-text-color, theme('colors.warning.700'));
+
+                span {
+                    @apply font-mono font-medium;
+                }
+            }
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            @apply mt-3 h-1 w-full bg-base-200 rounded-full overflow-hidden;
+
+            .progress-fill {
+                @apply h-full bg-warning transition-all duration-1000 ease-linear;
+            }
+        }
+
+        /* Dark mode adjustments */
+        &[data-theme="dark"] {
+            .alert {
+                background-color: var(--mesmeric-bg-color-dark, theme('colors.warning' / 0.2));
+            }
+
+            .timer-content {
+                .timer-message {
+                    color: var(--mesmeric-text-color-dark, theme('colors.warning.200'));
+                }
+
+                .timer-countdown {
+                    color: var(--mesmeric-text-color-dark, theme('colors.warning.300'));
+                }
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            display: none !important;
+        }
+
+        /* Responsive adjustments */
+        @screen sm {
+            .alert {
+                @apply p-5;
+            }
+
+            .timer-content {
+                .timer-message {
+                    @apply text-lg;
+                }
+
+                .timer-countdown {
+                    @apply text-base;
+                }
+            }
+        }
+
+        @screen lg {
+            .alert {
+                @apply p-6;
+            }
+        }
+    }
+}

@@ -1,0 +1,28 @@
+{#
+ # Template for added to cart popup layout 3.
+ #
+ # @var args array template args
+ #
+ # @since 1.0.0
+ #}
+
+<div class="popup layout-3" x-data="addedToCartPopup">
+    {# Popup header #}
+    {{ do_action('mesmeric_added_to_cart_popup_header', args)|raw }}
+
+    <div class="popup-body">
+        <div class="top-area grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="product-component">
+                {# Product info #}
+                {{ do_action('mesmeric_added_to_cart_popup_product_info', args)|raw }}
+            </div>
+            <div class="actions-component">
+                {# Action buttons #}
+                {{ do_action('mesmeric_added_to_cart_popup_action_buttons', args)|raw }}
+            </div>
+        </div>
+
+        {# Modules content #}
+        {{ do_action('mesmeric_added_to_cart_popup_modules_content', args)|raw }}
+    </div>
+</div>

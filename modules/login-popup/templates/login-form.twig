@@ -1,0 +1,70 @@
+{# Login Form Template #}
+<div class="mc-login-form" id="mc-login-form">
+    <div class="mc-login-form__header">
+        <h3 class="mc-login-form__title">{{ __('Login', 'mesmeric-commerce') }}</h3>
+        {% if settings.show_registration %}
+            <button type="button" class="mc-login-form__tab-switch" data-target="register">
+                {{ __('Register', 'mesmeric-commerce') }}
+            </button>
+        {% endif %}
+    </div>
+
+    {% if error_message %}
+        <div class="mc-login-form__error">
+            {{ error_message }}
+        </div>
+    {% endif %}
+
+    <form action="{{ ajax_url }}" method="post" class="mc-login-form__form">
+        <input type="hidden" name="action" value="mc_login_popup_login">
+        <input type="hidden" name="security" value="{{ nonce }}">
+        <input type="hidden" name="redirect_to" value="{{ redirect_url }}">
+
+        <div class="mc-login-form__field">
+            <label for="mc-login-username" class="mc-login-form__label">{{ __('Username or Email', 'mesmeric-commerce') }}</label>
+            <input type="text" name="username" id="mc-login-username" class="mc-login-form__input" required>
+        </div>
+
+        <div class="mc-login-form__field">
+            <label for="mc-login-password" class="mc-login-form__label">{{ __('Password', 'mesmeric-commerce') }}</label>
+            <input type="password" name="password" id="mc-login-password" class="mc-login-form__input" required>
+        </div>
+
+        <div class="mc-login-form__field mc-login-form__field--checkbox">
+            <input type="checkbox" name="remember" id="mc-login-remember" class="mc-login-form__checkbox">
+            <label for="mc-login-remember" class="mc-login-form__checkbox-label">{{ __('Remember me', 'mesmeric-commerce') }}</label>
+        </div>
+
+        {% if settings.enable_recaptcha %}
+            <div class="mc-login-form__recaptcha g-recaptcha" data-sitekey="{{ settings.recaptcha_site_key }}"></div>
+        {% endif %}
+
+        <div class="mc-login-form__actions">
+            <button type="submit" class="mc-login-form__submit">
+                {{ __('Login', 'mesmeric-commerce') }}
+            </button>
+
+            {% if settings.show_password_reset %}
+                <button type="button" class="mc-login-form__forgot-password" data-target="reset">
+                    {{ __('Forgot Password?', 'mesmeric-commerce') }}
+                </button>
+            {% endif %}
+        </div>
+    </form>
+
+    {% if settings.show_social_login and social_login_providers %}
+        <div class="mc-login-form__social">
+            <div class="mc-login-form__social-divider">
+                <span>{{ __('Or login with', 'mesmeric-commerce') }}</span>
+            </div>
+            <div class="mc-login-form__social-buttons">
+                {% for provider in social_login_providers %}
+                    <a href="{{ provider.url }}" class="mc-login-form__social-button mc-login-form__social-button--{{ provider.id }}">
+                        <span class="mc-login-form__social-icon">{{ provider.icon|raw }}</span>
+                        <span class="mc-login-form__social-text">{{ provider.name }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>

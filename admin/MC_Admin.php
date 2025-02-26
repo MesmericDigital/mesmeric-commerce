@@ -68,18 +68,107 @@ class MC_Admin {
 	 * @return void
 	 */
 	public function enqueue_styles(): void {
-		// Enqueue Vite assets
-		Vite::enqueue_asset( MC_PLUGIN_DIR . 'vite.config.js', 'admin' );
+		// Only load on plugin admin pages
+		if (!$this->is_plugin_admin_page()) {
+			return;
+		}
+
+		// We'll handle CSS loading in enqueue_scripts since Vite bundles CSS with JS
 	}
 
 	/**
-		* Register the JavaScript for the admin area.
-		*
-		* @return void
-		*/
+	 * Register the JavaScript for the admin area.
+	 *
+	 * @return void
+	 */
 	public function enqueue_scripts(): void {
-	// Enqueue Vite assets
-		Vite::enqueue_asset( MC_PLUGIN_DIR . 'vite.config.js', 'admin' );
+		// Only load on plugin admin pages
+		if (!$this->is_plugin_admin_page()) {
+			return;
+		}
+
+		// Check if we're in development or production mode
+		$is_development = defined('WP_DEBUG') && WP_DEBUG;
+
+		if ($is_development) {
+			// Development mode - use Vite's dev server
+			Vite::enqueue_asset(
+				MC_PLUGIN_DIR . 'admin/js/src/main.js',
+				['handle' => 'mesmeric-commerce-admin']
+			);
+		} else {
+			// Production mode - use built assets
+			$manifest_path = MC_PLUGIN_DIR . 'admin/dist/manifest.json';
+
+			if (file_exists($manifest_path)) {
+				$manifest = json_decode(file_get_contents($manifest_path), true);
+
+				if (isset($manifest['admin/js/src/main.js'])) {
+					$entry = $manifest['admin/js/src/main.js'];
+
+					// Enqueue main JS file
+					if (isset($entry['file'])) {
+						wp_enqueue_script(
+							'mesmeric-commerce-admin',
+							MC_PLUGIN_URL . 'admin/dist/' . $entry['file'],
+							['wp-api', 'wp-i18n', 'wp-components', 'wp-element'],
+							MC_VERSION,
+							true
+						);
+					}
+
+					// Enqueue CSS files
+					if (isset($entry['css']) && is_array($entry['css'])) {
+						foreach ($entry['css'] as $index => $css_file) {
+							wp_enqueue_style(
+								'mesmeric-commerce-admin-' . $index,
+								MC_PLUGIN_URL . 'admin/dist/' . $css_file,
+								[],
+								MC_VERSION
+							);
+						}
+					}
+
+					// Localize script
+					wp_localize_script(
+						'mesmeric-commerce-admin',
+						'mesmeticCommerceAdmin',
+						[
+							'apiUrl' => rest_url('mesmeric-commerce/v1'),
+							'nonce' => wp_create_nonce('wp_rest'),
+							'version' => MC_VERSION
+						]
+					);
+				}
+			} else {
+				// Fallback if manifest doesn't exist
+				wp_enqueue_script(
+					'mesmeric-commerce-admin',
+					MC_PLUGIN_URL . 'admin/dist/main.js',
+					['wp-api', 'wp-i18n', 'wp-components', 'wp-element'],
+					MC_VERSION,
+					true
+				);
+
+				wp_enqueue_style(
+					'mesmeric-commerce-admin',
+					MC_PLUGIN_URL . 'admin/dist/main.css',
+					[],
+					MC_VERSION
+				);
+
+				// Localize script
+				wp_localize_script(
+					'mesmeric-commerce-admin',
+					'mesmeticCommerceAdmin',
+					[
+						'apiUrl' => rest_url('mesmeric-commerce/v1'),
+						'nonce' => wp_create_nonce('wp_rest'),
+						'version' => MC_VERSION
+					]
+				);
+			}
+		}
 	}
 
 	/**

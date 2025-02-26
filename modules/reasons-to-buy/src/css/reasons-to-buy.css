@@ -1,0 +1,48 @@
+@layer components {
+    .mesmeric-reasons-list {
+        @apply bg-base-100 rounded-box p-4 border border-base-300;
+    }
+
+    .reason-group {
+        @apply divide-y divide-base-200;
+    }
+
+    .reason-group h3 {
+        @apply text-base-content font-semibold;
+    }
+
+    .reason-group ul {
+        @apply list-none p-0 m-0;
+    }
+
+    .reason-group li {
+        @apply flex items-start py-2;
+    }
+
+    .reason-group li svg {
+        @apply text-primary w-5 h-5 flex-shrink-0 mt-0.5;
+    }
+
+    .reason-group li span {
+        @apply text-base-content/80;
+    }
+
+    /* Dark mode adjustments */
+    :root[data-theme="dark"] .mesmeric-reasons-list {
+        @apply bg-base-200 border-base-300;
+    }
+
+    /* Responsive adjustments */
+    @screen sm {
+        .mesmeric-reasons-list {
+            @apply p-6;
+        }
+    }
+
+    /* Print styles */
+    @media print {
+        .mesmeric-reasons-list {
+            @apply border-none shadow-none p-0;
+        }
+    }
+}

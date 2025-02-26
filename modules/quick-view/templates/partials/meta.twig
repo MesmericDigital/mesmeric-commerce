@@ -1,0 +1,73 @@
+{#
+ # Quick View Meta Information Partial Template
+ #
+ # @var product WC_Product Product object
+ #
+ # @since 1.0.0
+ #}
+
+<div class="product-meta">
+    {# SKU #}
+    {% if product.get_sku() %}
+        <div class="meta-item sku">
+            <span class="label">{{ 'SKU'|translate }}:</span>
+            <span class="value">{{ product.get_sku() }}</span>
+        </div>
+    {% endif %}
+
+    {# Categories #}
+    {% set categories = product.get_category_ids() %}
+    {% if categories %}
+        <div class="meta-item categories">
+            <span class="label">{{ categories|length > 1 ? 'Categories'|translate : 'Category'|translate }}:</span>
+            <span class="value">
+                {% for category_id in categories %}
+                    {% set category = get_term(category_id, 'product_cat') %}
+                    <a href="{{ get_term_link(category_id, 'product_cat') }}"
+                       rel="tag"
+                       target="_blank">
+                        {{ category.name }}
+                    </a>
+                    {% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </span>
+        </div>
+    {% endif %}
+
+    {# Tags #}
+    {% set tags = product.get_tag_ids() %}
+    {% if tags %}
+        <div class="meta-item tags">
+            <span class="label">{{ tags|length > 1 ? 'Tags'|translate : 'Tag'|translate }}:</span>
+            <span class="value">
+                {% for tag_id in tags %}
+                    {% set tag = get_term(tag_id, 'product_tag') %}
+                    <a href="{{ get_term_link(tag_id, 'product_tag') }}"
+                       rel="tag"
+                       target="_blank">
+                        {{ tag.name }}
+                    </a>
+                    {% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </span>
+        </div>
+    {% endif %}
+
+    {# Stock Status #}
+    <div class="meta-item stock">
+        <span class="label">{{ 'Status'|translate }}:</span>
+        <span class="value {{ product.is_in_stock() ? 'in-stock' : 'out-of-stock' }}">
+            {{ product.get_stock_status()|translate }}
+        </span>
+    </div>
+
+    {# Stock Quantity #}
+    {% if product.managing_stock() and product.get_stock_quantity() %}
+        <div class="meta-item stock-quantity">
+            <span class="label">{{ 'Stock'|translate }}:</span>
+            <span class="value">
+                {{ product.get_stock_quantity() }} {{ 'in stock'|translate }}
+            </span>
+        </div>
+    {% endif %}
+</div>

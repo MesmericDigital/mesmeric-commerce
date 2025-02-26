@@ -1,47 +1,53 @@
 {
-    "name": "beanbagplanet/mesmeric-commerce",
-    "description": "A modern, feature-rich enhancement suite for WooCommerce with HTMX, Alpine.js, and Vue.js integration",
+    "name": "mesmericdigital/mesmeric-commerce",
+    "description": "Mesmeric Commerce Plugin",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
-    "authors": [
-        {
-            "name": "Bean Bag Planet",
-            "email": "dev@beanbagplanet.co.uk"
-        }
-    ],
     "autoload": {
         "psr-4": {
+            "MesmericCommerce\\": "src/",
             "MesmericCommerce\\Includes\\": "includes/",
             "MesmericCommerce\\Admin\\": "admin/",
-            "MesmericCommerce\\Frontend\\": "public/",
-            "MesmericCommerce\\WooCommerce\\": "woocommerce/",
-            "MesmericCommerce\\Modules\\": "modules/"
+            "MesmericCommerce\\Frontend\\": "public/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "MesmericCommerce\\Tests\\": "tests/"
+    "authors": [
+        {
+            "name": "Mesmeric Digital",
+            "email": "hello@mesmeric.co.uk"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true
         }
     },
     "require": {
         "php": ">=8.3",
-        "filp/whoops": "^2.17",
         "deliciousbrains/wp-background-processing": "^1.4",
         "timber/timber": "^2.0",
         "monolog/monolog": "^3.8",
+        "composer/installers": "^2.3",
         "kucrut/vite-for-wp": "^0.10.0",
-        "twig/twig": "^3.20"
+        "twig/twig": "^3.20",
+        "filp/whoops": "^2.17"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.8",
+        "php-stubs/wordpress-stubs": "^6.4",
+        "php-stubs/woocommerce-stubs": "^8.0",
+        "php-stubs/acf-pro-stubs": "^6.0",
+        "phpstan/phpstan": "^1.10",
+        "szepeviktor/phpstan-wordpress": "^1.3",
+        "phpstan/extension-installer": "^1.3",
         "wp-coding-standards/wpcs": "^3.0",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "phpcompatibility/phpcompatibility-wp": "^2.1",
         "friendsofphp/php-cs-fixer": "^3.49",
-        "phpstan/phpstan": "^1.10",
-        "php-stubs/woocommerce-stubs": "^6.1",
-        "php-stubs/wordpress-stubs": "^6.1",
-        "szepeviktor/phpstan-wordpress": "^1.3",
         "phpunit/phpunit": "^9.6",
         "10up/wp_mock": "^1.0"
     },
@@ -64,11 +70,5 @@
             "@analyze",
             "@test"
         ]
-    },
-    "config": {
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "composer/installers": true
-        }
     }
 }

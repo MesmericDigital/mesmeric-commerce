@@ -8,7 +8,7 @@ use MesmericCommerce\WooCommerce\Includes\MC_WC_Performance;
 use MesmericCommerce\WooCommerce\Services\MC_Cart_Service;
 use MesmericCommerce\WooCommerce\Services\MC_Product_Service;
 use MesmericCommerce\WooCommerce\Services\MC_Order_Service;
-use MesmericCommerce\WooCommerce\Shipping\MC_ShippingHandler;
+use MesmericCommerce\WooCommerce\Services\MC_ShippingHandler;
 
 /**
  * WooCommerce Integration Class
@@ -88,6 +88,7 @@ class MC_WooCommerce {
         $this->cart_service->init();
         $this->product_service->init();
         $this->order_service->init();
+        $this->shipping_handler->init();
 
         // Template overrides
         add_filter('woocommerce_locate_template', [$this, 'locate_template'], 10, 3);

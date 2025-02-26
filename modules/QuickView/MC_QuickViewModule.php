@@ -37,7 +37,7 @@ class MC_QuickViewModule extends MC_AbstractModule {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'wp_footer', array( $this, 'render_modal_container' ) );
 
-		// AJAX handlers
+		// AJAX handlers with rate limiting
 		add_action( 'wp_ajax_mc_load_quick_view', array( $this, 'ajax_load_quick_view' ) );
 		add_action( 'wp_ajax_nopriv_mc_load_quick_view', array( $this, 'ajax_load_quick_view' ) );
 		add_action( 'wp_ajax_mc_add_to_cart', array( $this, 'ajax_add_to_cart' ) );
@@ -45,8 +45,17 @@ class MC_QuickViewModule extends MC_AbstractModule {
 		add_action( 'wp_ajax_mc_save_for_later', array( $this, 'ajax_save_for_later' ) );
 		add_action( 'wp_ajax_nopriv_mc_save_for_later', array( $this, 'ajax_save_for_later' ) );
 
+		// Cache invalidation hooks
+		add_action( 'woocommerce_update_product', array( $this, 'clear_product_cache' ) );
+		add_action( 'woocommerce_delete_product', array( $this, 'clear_product_cache' ) );
+		add_action( 'woocommerce_trash_product', array( $this, 'clear_product_cache' ) );
+		add_action( 'woocommerce_update_product_variation', array( $this, 'clear_product_cache' ) );
+
 		// Product classes
 		add_filter( 'woocommerce_post_class', array( $this, 'add_product_classes' ), 10, 2 );
+
+		// Cleanup transients
+		add_action( 'wp_scheduled_delete', array( $this, 'cleanup_expired_transients' ) );
 	}
 
 	/**
@@ -141,6 +150,34 @@ class MC_QuickViewModule extends MC_AbstractModule {
 	}
 
 	/**
+	 * Rate limit check for AJAX requests
+	 *
+	 * @return bool|WP_Error
+	 */
+	private function check_rate_limit() {
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$rate_key = "mc_qv_rate_{$ip}";
+		$rate_limit = 30; // requests
+		$rate_window = 60; // seconds
+
+		$current = get_transient($rate_key);
+		if (false === $current) {
+			set_transient($rate_key, 1, $rate_window);
+			return true;
+		}
+
+		if ($current >= $rate_limit) {
+			return new \WP_Error(
+				'rate_limit_exceeded',
+				__('Rate limit exceeded. Please try again later.', 'mesmeric-commerce')
+			);
+		}
+
+		set_transient($rate_key, $current + 1, $rate_window);
+		return true;
+	}
+
+	/**
 	 * AJAX handler for loading quick view content
 	 *
 	 * @since 1.0.0
@@ -148,6 +185,12 @@ class MC_QuickViewModule extends MC_AbstractModule {
 	 */
 	public function ajax_load_quick_view() {
 		check_ajax_referer( 'mc-quick-view', 'nonce' );
+
+		// Check rate limit
+		$rate_check = $this->check_rate_limit();
+		if (is_wp_error($rate_check)) {
+			wp_send_json_error($rate_check->get_error_message());
+		}
 
 		$product_id = absint( $_POST['product_id'] );
 		if ( ! $product_id ) {
@@ -166,11 +209,16 @@ class MC_QuickViewModule extends MC_AbstractModule {
 
 			if ( false === $html ) {
 				ob_start();
-				include plugin_dir_path( __FILE__ ) . 'views/content-quick-view.php';
-				$html = ob_get_clean();
+				try {
+					include plugin_dir_path( __FILE__ ) . 'views/content-quick-view.php';
+					$html = ob_get_clean();
 
-				if ( $this->get_setting( 'enable_cache' ) ) {
-					set_transient( $cache_key, $html, $this->get_setting( 'cache_expiration' ) );
+					if ( $this->get_setting( 'enable_cache' ) ) {
+						set_transient( $cache_key, $html, $this->get_setting( 'cache_expiration' ) );
+					}
+				} catch (\Throwable $e) {
+					ob_end_clean();
+					throw $e;
 				}
 			}
 
@@ -179,8 +227,11 @@ class MC_QuickViewModule extends MC_AbstractModule {
 					'html' => $html,
 				)
 			);
-		} catch (\Exception $e) {
-			$this->get_logger()->error('Quick view load error: ' . $e->getMessage());
+		} catch (\Throwable $e) {
+			$this->get_logger()->error('Quick view load error: ' . $e->getMessage(), array(
+				'product_id' => $product_id,
+				'error' => $e
+			));
 			wp_send_json_error( $e->getMessage() );
 		}
 	}
@@ -306,13 +357,52 @@ class MC_QuickViewModule extends MC_AbstractModule {
 	}
 
 	/**
-	 * Clear product cache
+	 * Clear product cache when updated
 	 *
-	 * @since 1.0.0
-	 * @param int $product_id Product ID.
-	 * @return void
+	 * @param int $product_id
 	 */
-	public function clear_cache( $product_id ) {
-		delete_transient( 'mc_quick_view_' . $product_id );
+	public function clear_product_cache($product_id) {
+		$cache_key = 'mc_quick_view_' . $product_id;
+		delete_transient($cache_key);
+
+		// Also clear parent product cache if this is a variation
+		$product = wc_get_product($product_id);
+		if ($product && $product->is_type('variation')) {
+			$parent_id = $product->get_parent_id();
+			if ($parent_id) {
+				delete_transient('mc_quick_view_' . $parent_id);
+			}
+		}
+	}
+
+	/**
+	 * Cleanup expired transients
+	 */
+	public function cleanup_expired_transients() {
+		global $wpdb;
+
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options}
+				WHERE option_name LIKE %s
+				AND option_value < %d",
+				$wpdb->esc_like('_transient_timeout_mc_quick_view_') . '%',
+				time()
+			)
+		);
+
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options}
+				WHERE option_name LIKE %s
+				AND option_name NOT IN (
+					SELECT CONCAT('_transient_', SUBSTRING(option_name, 20))
+					FROM {$wpdb->options}
+					WHERE option_name LIKE %s
+				)",
+				$wpdb->esc_like('_transient_mc_quick_view_') . '%',
+				$wpdb->esc_like('_transient_timeout_mc_quick_view_') . '%'
+			)
+		);
 	}
 }

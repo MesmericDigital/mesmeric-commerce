@@ -439,26 +439,38 @@ class MC_FAQModule extends MC_AbstractModule {
      */
     public function handle_load_faqs(): void {
         try {
-            check_ajax_referer('mc-faq', 'nonce');
-
-            $product_id = filter_input(INPUT_POST, 'product_id', FILTER_VALIDATE_INT);
-            if (!$product_id) {
-                throw new \InvalidArgumentException('Invalid product ID');
+            // Verify nonce
+            if (!check_ajax_referer('mc-faq-nonce', 'nonce', false)) {
+                wp_send_json_error('Invalid security token');
+                return;
             }
 
-            $faqs = $this->get_product_faqs($product_id);
+            // Sanitize input
+            $page = absint($_POST['page'] ?? 1);
+            $category = sanitize_text_field($_POST['category'] ?? '');
+            $product_id = absint($_POST['product_id'] ?? 0);
 
-            wp_send_json_success(['faqs' => $faqs]);
+            // Get FAQs
+            $faqs = $this->get_faqs($page, $category, $product_id);
+
+            wp_send_json_success([
+                'faqs' => array_map(function($faq) {
+                    return [
+                        'question' => wp_kses_post($faq['question']),
+                        'answer' => wp_kses_post($faq['answer']),
+                        'category' => esc_html($faq['category'])
+                    ];
+                }, $faqs)
+            ]);
         } catch (\Throwable $e) {
             $this->logger->error(
                 sprintf('Error loading FAQs: %s', $e->getMessage()),
                 [
                     'error_code' => self::ERROR_RENDER,
-                    'product_id' => $product_id ?? null,
                     'exception' => $e
                 ]
             );
-            wp_send_json_error(['message' => $e->getMessage()]);
+            wp_send_json_error('Error loading FAQs');
         }
     }
 
@@ -470,32 +482,66 @@ class MC_FAQModule extends MC_AbstractModule {
      */
     public function handle_save_faq(): void {
         try {
-            check_ajax_referer('mc-faq-admin', 'nonce');
-
-            if (!current_user_can('manage_woocommerce')) {
-                throw new \Exception('Permission denied');
+            // Verify nonce
+            if (!check_ajax_referer('mc-faq-nonce', 'nonce', false)) {
+                wp_send_json_error('Invalid security token');
+                return;
             }
 
-            // Validate and sanitize input
-            $faq_data = $this->validate_faq_data($_POST);
+            // Check capabilities
+            if (!current_user_can('edit_posts')) {
+                wp_send_json_error('Insufficient permissions');
+                return;
+            }
+
+            // Sanitize and validate input
+            $data = $this->validate_faq_data([
+                'question' => sanitize_text_field($_POST['question'] ?? ''),
+                'answer' => wp_kses_post($_POST['answer'] ?? ''),
+                'category' => sanitize_text_field($_POST['category'] ?? ''),
+                'product_id' => absint($_POST['product_id'] ?? 0)
+            ]);
+
+            if (is_wp_error($data)) {
+                wp_send_json_error($data->get_error_message());
+                return;
+            }
 
             // Save FAQ
-            $faq_id = wp_insert_post($faq_data);
+            $faq_id = wp_insert_post([
+                'post_type' => 'mc_faq',
+                'post_title' => $data['question'],
+                'post_content' => $data['answer'],
+                'post_status' => 'publish'
+            ]);
+
             if (is_wp_error($faq_id)) {
                 throw new \Exception($faq_id->get_error_message());
             }
 
-            wp_send_json_success(['faq_id' => $faq_id]);
+            // Set category
+            if (!empty($data['category'])) {
+                wp_set_object_terms($faq_id, $data['category'], 'mc_faq_category');
+            }
+
+            // Set product relationship
+            if ($data['product_id'] > 0) {
+                update_post_meta($faq_id, '_product_id', $data['product_id']);
+            }
+
+            wp_send_json_success([
+                'id' => $faq_id,
+                'message' => __('FAQ saved successfully', 'mesmeric-commerce')
+            ]);
         } catch (\Throwable $e) {
             $this->logger->error(
                 sprintf('Error saving FAQ: %s', $e->getMessage()),
                 [
                     'error_code' => self::ERROR_RENDER,
-                    'data' => $_POST,
                     'exception' => $e
                 ]
             );
-            wp_send_json_error(['message' => $e->getMessage()]);
+            wp_send_json_error('Error saving FAQ');
         }
     }
 

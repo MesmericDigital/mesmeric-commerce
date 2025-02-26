@@ -1,0 +1,49 @@
+{#
+ # Quick View Button Template
+ #
+ # @var product_id int Product ID
+ # @var button_type string Button type (text, icon, icon-text)
+ # @var button_text string Button text
+ # @var button_icon string Button icon name
+ # @var button_position string Button position (before, after, overlay)
+ #
+ # @since 1.0.0
+ #}
+
+<button type="button"
+        class="quick-view-button btn {{ button_type }} {{ button_position }}"
+        x-data="quickViewButton"
+        x-on:click="openQuickView({{ product_id }})"
+        aria-label="{{ button_text|e('html_attr') }}"
+        data-product-id="{{ product_id }}"
+        data-position="{{ button_position }}"
+        data-testid="quick-view-button">
+
+    {# Icon Only #}
+    {% if button_type == 'icon' %}
+        <span class="icon-wrapper" aria-hidden="true">
+            {% include 'icons/' ~ button_icon ~ '.twig' %}
+        </span>
+    {% endif %}
+
+    {# Icon + Text #}
+    {% if button_type == 'icon-text' %}
+        <span class="icon-wrapper" aria-hidden="true">
+            {% include 'icons/' ~ button_icon ~ '.twig' %}
+        </span>
+        <span class="text">{{ button_text }}</span>
+    {% endif %}
+
+    {# Text Only #}
+    {% if button_type == 'text' %}
+        <span class="text">{{ button_text }}</span>
+    {% endif %}
+
+    {# Loading Indicator #}
+    <span class="loading-indicator" x-show="loading" x-cloak>
+        <svg class="animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+    </span>
+</button>

@@ -1,0 +1,36 @@
+{#
+ # Template for stock scarcity indicator.
+ #
+ # @var settings array Module settings
+ # @var stock int Current stock quantity
+ # @var percentage float Stock percentage
+ # @var isSimple bool Whether this is a simple product
+ #}
+
+<div class="mesmeric-stock-scarcity"
+     x-data="stockScarcity"
+     x-show="isVisible"
+     x-transition:enter="transition ease-out duration-200"
+     x-transition:enter-start="opacity-0 transform -translate-y-2"
+     x-transition:enter-end="opacity-100 transform translate-y-0">
+
+    <div class="mesmeric-stock-scarcity-message">
+        {% set message = '' %}
+        {% if isSimple %}
+            {% set message = settings.low_inventory_text_simple|default('Hurry, low stock.')|translate %}
+        {% elseif stock > 1 %}
+            {% set message = settings.low_inventory_text_plural|default('Hurry! Only {stock} units left in stock!')|translate %}
+        {% else %}
+            {% set message = settings.low_inventory_text|default('Hurry! Only {stock} unit left in stock!')|translate %}
+        {% endif %}
+
+        {{ message|replace({'{stock}': stock})|e }}
+    </div>
+
+    <div class="mesmeric-stock-scarcity-content">
+        <div class="mesmeric-stock-scarcity-progress-bar"
+             style="width: {{ percentage }}%"
+             x-init="initProgressBar({{ percentage }})">
+        </div>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+{#
+ # Quick View Gallery Partial Template
+ #
+ # @var product WC_Product Product object
+ #
+ # @since 1.0.0
+ #}
+
+<div class="product-gallery-wrapper"
+     x-data="quickViewGallery"
+     x-init="initGallery">
+    {# Main Image #}
+    <div class="main-image">
+        {% set main_image = product.get_image_id() ? product.get_image_id() : wc_placeholder_img_src() %}
+        <img src="{{ wp_get_attachment_image_url(main_image, 'full') }}"
+             alt="{{ product.get_name()|e('html_attr') }}"
+             class="main-image-src"
+             x-ref="mainImage"
+             data-zoom-target>
+    </div>
+
+    {# Gallery Thumbnails #}
+    {% if product.get_gallery_image_ids()|length > 0 %}
+        <div class="gallery-thumbnails">
+            {# Main Image Thumbnail #}
+            <div class="thumbnail active"
+                 x-on:click="switchImage($event)"
+                 data-image-url="{{ wp_get_attachment_image_url(main_image, 'full') }}">
+                {{ wp_get_attachment_image(main_image, 'thumbnail', false, {
+                    'class': 'thumbnail-image',
+                    'alt': product.get_name()
+                })|raw }}
+            </div>
+
+            {# Gallery Images #}
+            {% for image_id in product.get_gallery_image_ids() %}
+                <div class="thumbnail"
+                     x-on:click="switchImage($event)"
+                     data-image-url="{{ wp_get_attachment_image_url(image_id, 'full') }}">
+                    {{ wp_get_attachment_image(image_id, 'thumbnail', false, {
+                        'class': 'thumbnail-image',
+                        'alt': product.get_name()
+                    })|raw }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {# Zoom Controls #}
+    {% if zoom_effect %}
+        <div class="zoom-controls">
+            <button type="button"
+                    class="zoom-in"
+                    x-on:click="zoomIn"
+                    aria-label="{{ 'Zoom in'|translate }}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
+                </svg>
+            </button>
+            <button type="button"
+                    class="zoom-out"
+                    x-on:click="zoomOut"
+                    aria-label="{{ 'Zoom out'|translate }}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"/>
+                </svg>
+            </button>
+            <button type="button"
+                    class="zoom-reset"
+                    x-on:click="resetZoom"
+                    aria-label="{{ 'Reset zoom'|translate }}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+            </button>
+        </div>
+    {% endif %}
+</div>

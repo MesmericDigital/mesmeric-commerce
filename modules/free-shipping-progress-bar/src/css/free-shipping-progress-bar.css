@@ -1,0 +1,145 @@
+@layer components {
+    .mesmeric-fspb-card {
+        @apply relative p-4 mb-6 rounded-lg;
+        background-color: var(--mesmeric-fspb-card-bg, theme('colors.white'));
+        border-radius: var(--mesmeric-fspb-card-radius, 8px);
+        border-width: var(--mesmeric-fspb-card-border-width, 0);
+        border-style: solid;
+        border-color: var(--mesmeric-fspb-card-border-color, theme('colors.gray.200'));
+        padding: var(--mesmeric-fspb-padding-y, 16px) var(--mesmeric-fspb-padding-x, 24px);
+
+        /* Theme: Solar Night */
+        &.mesmeric-fspb-theme-solar_night {
+            --mesmeric-fspb-card-bg: #000000;
+            --mesmeric-fspb-text: #ffffff;
+            --mesmeric-fspb-variable-text: #ffffff;
+            --mesmeric-fspb-bar-bg: #5c5c5c;
+            --mesmeric-fspb-bar-fg: #faf16d;
+        }
+
+        /* Theme: Lively Breeze */
+        &.mesmeric-fspb-theme-lively_breeze {
+            --mesmeric-fspb-card-bg: #ffffff;
+            --mesmeric-fspb-text: #9b5de5;
+            --mesmeric-fspb-variable-text: #9b5de5;
+            --mesmeric-fspb-bar-bg: #e9d6ff;
+            --mesmeric-fspb-bar-fg: #f15bb5;
+            --mesmeric-fspb-card-border-width: 2px;
+            --mesmeric-fspb-card-border-color: #f15bb5;
+        }
+
+        /* Theme: Midnight Tide */
+        &.mesmeric-fspb-theme-midnight_tide {
+            --mesmeric-fspb-card-bg: #222831;
+            --mesmeric-fspb-text: #c0deed;
+            --mesmeric-fspb-variable-text: #c0deed;
+            --mesmeric-fspb-bar-bg: #f8f8f8;
+            --mesmeric-fspb-bar-fg: #13cad2;
+        }
+
+        /* Theme: Fresh Frost */
+        &.mesmeric-fspb-theme-fresh_frost {
+            --mesmeric-fspb-card-bg: #b0ead7;
+            --mesmeric-fspb-text: #006d71;
+            --mesmeric-fspb-variable-text: #006d71;
+            --mesmeric-fspb-bar-bg: #f8ffff;
+            --mesmeric-fspb-bar-fg: #009094;
+        }
+
+        /* Theme: Sky Harmony */
+        &.mesmeric-fspb-theme-sky_harmony {
+            --mesmeric-fspb-card-bg: #e3f2fd;
+            --mesmeric-fspb-text: #0277bd;
+            --mesmeric-fspb-variable-text: #0277bd;
+            --mesmeric-fspb-bar-bg: #ffffff;
+            --mesmeric-fspb-bar-fg: #03a9f4;
+        }
+    }
+
+    .mesmeric-fspb-message {
+        @apply text-center mb-4;
+        color: var(--mesmeric-fspb-text, theme('colors.gray.800'));
+        font-size: var(--mesmeric-fspb-font-size, 18px);
+    }
+
+    .mesmeric-fspb-progress-wrapper {
+        @apply relative mx-auto;
+        width: var(--mesmeric-fspb-bar-width, 90%);
+    }
+
+    .mesmeric-fspb-progress {
+        @apply w-full h-2 rounded-full overflow-hidden;
+        background-color: var(--mesmeric-fspb-bar-bg, theme('colors.gray.200'));
+        border-radius: var(--mesmeric-fspb-bar-radius, 4px);
+    }
+
+    .mesmeric-fspb-progress-bar {
+        @apply h-full transition-all duration-1000 ease-out;
+        background-color: var(--mesmeric-fspb-bar-fg, theme('colors.primary'));
+        width: 0;
+    }
+
+    .mesmeric-fspb-close {
+        @apply absolute top-2 right-2 p-1 rounded-full transition-colors duration-200;
+        color: var(--mesmeric-fspb-text, theme('colors.gray.800'));
+
+        &:hover {
+            @apply bg-opacity-10;
+            background-color: currentColor;
+        }
+
+        svg {
+            @apply w-4 h-4;
+        }
+    }
+
+    /* Dark mode adjustments */
+    [data-theme="dark"] {
+        .mesmeric-fspb-card:not([class*="mesmeric-fspb-theme"]) {
+            --mesmeric-fspb-card-bg: theme('colors.gray.800');
+            --mesmeric-fspb-text: theme('colors.gray.100');
+            --mesmeric-fspb-variable-text: theme('colors.gray.100');
+            --mesmeric-fspb-bar-bg: theme('colors.gray.700');
+            --mesmeric-fspb-bar-fg: theme('colors.primary');
+            --mesmeric-fspb-card-border-color: theme('colors.gray.700');
+        }
+    }
+
+    /* Print styles */
+    @media print {
+        .mesmeric-fspb-card {
+            display: none !important;
+        }
+    }
+
+    /* Responsive styles */
+    @screen sm {
+        .mesmeric-fspb-card {
+            --mesmeric-fspb-padding-x: 32px;
+        }
+
+        .mesmeric-fspb-progress-wrapper {
+            --mesmeric-fspb-bar-width: 80%;
+        }
+    }
+
+    @screen lg {
+        .mesmeric-fspb-card {
+            --mesmeric-fspb-padding-x: 48px;
+        }
+
+        .mesmeric-fspb-progress-wrapper {
+            --mesmeric-fspb-bar-width: 70%;
+        }
+    }
+
+    /* Mini cart adjustments */
+    .widget_shopping_cart {
+        .mesmeric-fspb-card {
+            @apply mb-4;
+            --mesmeric-fspb-padding-x: 16px;
+            --mesmeric-fspb-padding-y: 12px;
+            --mesmeric-fspb-font-size: 14px;
+        }
+    }
+}

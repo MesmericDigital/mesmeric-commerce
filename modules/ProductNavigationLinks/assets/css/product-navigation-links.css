@@ -1,0 +1,64 @@
+/**
+ * Product Navigation Links CSS
+ *
+ * @package    Mesmeric_Commerce
+ * @subpackage Mesmeric_Commerce/modules/ProductNavigationLinks
+ */
+
+.mc-product-navigation {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.mc-product-navigation a {
+    max-width: 50%;
+    color: #212121;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.mc-product-navigation a:hover {
+    color: #757575;
+}
+
+.mc-product-navigation a.mc-next-product:only-child {
+    min-width: 100%;
+}
+
+.mc-product-navigation a.mc-next-product {
+    text-align: right;
+}
+
+/* Navigation text styles */
+.mc-product-navigation.titles span {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mc-product-navigation.navigational span {
+    font-weight: 500;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .mc-product-navigation {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .mc-product-navigation a,
+    .mc-product-navigation a.mc-next-product:only-child {
+        max-width: 100%;
+        text-align: left;
+    }
+
+    .mc-product-navigation a.mc-next-product {
+        text-align: left;
+    }
+}

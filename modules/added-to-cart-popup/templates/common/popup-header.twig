@@ -1,0 +1,30 @@
+{#
+ # Template for added to cart popup header.
+ #
+ # @var args array template args
+ #
+ # @since 1.0.0
+ #}
+
+{% set settings = args.settings %}
+
+<div class="popup-header flex justify-between items-center p-4 border-b">
+    <h3 class="popup-header-title text-lg font-semibold">
+        {{ settings.popup_message|translate|e }}
+    </h3>
+    <div class="popup-close">
+        <button type="button" 
+                class="close-button" 
+                @click="close"
+                title="{{ 'Close'|translate|e('html_attr') }}">
+            <svg class="w-3 h-3" viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10.333 1.43359L1.73047 10.0361M1.73047 1.43359L10.333 10.0361"
+                      stroke="{{ settings.close_btn_color|default('#000000')|e('html_attr') }}"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"/>
+            </svg>
+            <span class="sr-only">{{ 'Close'|translate|e }}</span>
+        </button>
+    </div>
+</div>

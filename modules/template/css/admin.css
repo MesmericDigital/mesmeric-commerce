@@ -1,0 +1,32 @@
+/**
+ * Template Module - Admin Styles
+ *
+ * @package    Mesmeric_Commerce
+ * @subpackage Mesmeric_Commerce/modules/template/css
+ */
+
+.mc-template-admin {
+    margin: 15px 0;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    border-radius: 4px;
+}
+
+.mc-template-admin__header {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.mc-template-admin__content {
+    padding: 10px 0;
+}
+
+.mc-template-admin__footer {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    text-align: right;
+}

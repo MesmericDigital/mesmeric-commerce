@@ -1,0 +1,66 @@
+{#
+ # Pre-order information template
+ #
+ # @var product WC_Product The product object
+ # @var settings array Module settings
+ # @var shipping_date int The shipping date timestamp
+ # @var discount array|null Optional discount information
+ #}
+
+<div class="pre-order-info"
+     x-data="preOrderInfo"
+     x-init="init({{ shipping_date }})"
+     x-cloak>
+    
+    {# Pre-order badge #}
+    <div class="pre-order-badge">
+        <span class="badge badge-primary">{{ 'Pre-order'|translate }}</span>
+    </div>
+
+    {# Shipping date information #}
+    <div class="pre-order-shipping-date">
+        <p class="text-sm">
+            {{ settings.additional_text|replace('{date}', shipping_date|date(constant('PreOrdersModule::DATE_TIME_FORMAT'))) }}
+        </p>
+        
+        {# Countdown timer #}
+        <div class="countdown-timer" x-show="showCountdown">
+            <p class="text-xs text-muted">
+                {{ 'Shipping in:'|translate }}
+                <span x-text="formatTimeRemaining"></span>
+            </p>
+        </div>
+    </div>
+
+    {# Discount information if available #}
+    {% if discount %}
+        <div class="pre-order-discount">
+            <p class="text-sm text-success">
+                {% if discount.type == 'percentage' %}
+                    {{ 'Save %s% on your pre-order!'|format(discount.amount)|translate }}
+                {% else %}
+                    {{ 'Save %s on your pre-order!'|format(wc_price(discount.amount))|translate }}
+                {% endif %}
+            </p>
+        </div>
+    {% endif %}
+
+    {# Additional terms and conditions #}
+    <div class="pre-order-terms mt-4">
+        <details class="collapse bg-base-200">
+            <summary class="collapse-title text-sm font-medium">
+                {{ 'Pre-order Terms & Conditions'|translate }}
+            </summary>
+            <div class="collapse-content text-xs">
+                <ul class="list-disc list-inside space-y-1">
+                    <li>{{ 'Your card will be charged immediately'|translate }}</li>
+                    <li>{{ 'Estimated shipping date may change'|translate }}</li>
+                    <li>{{ 'You can cancel your pre-order anytime before shipping'|translate }}</li>
+                    {% if discount %}
+                        <li>{{ 'Pre-order discount is applied at checkout'|translate }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </details>
+    </div>
+</div>

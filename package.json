@@ -35,11 +35,12 @@
         "vite": "^6.1.1",
         "vite-plugin-eslint2": "5.0.3",
         "vite-plugin-live-reload": "^3.0.4",
-        "vue-loader": "^17.4.2"
+        "vue-loader": "^17.4.2",
+        "cursor-tools": "latest"
     },
     "dependencies": {
         "alpinejs": "^3.14.8",
-        "htmx.org": "^1.9.12",
+        "htmx.org": "^2.12.1",
         "install": "^0.13.0",
         "npm": "^11.1.0",
         "vite-plugin-eslint": "^1.8.1",

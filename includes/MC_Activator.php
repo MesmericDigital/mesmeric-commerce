@@ -27,12 +27,19 @@ class MC_Activator {
 		self::set_default_options();
 		self::create_pages();
 		self::schedule_cron_jobs();
+		self::ensure_log_directory();
 		flush_rewrite_rules();
 
 		// Enable Breakdance Admin Menu module by default
 		if (false === get_option('mc_enable_breakdance_admin_menu')) {
 			add_option('mc_enable_breakdance_admin_menu', 'yes');
 		}
+
+		// Create a nonce for secure activation actions
+		$activation_nonce = wp_create_nonce('mesmeric_commerce_activation');
+
+		// Trigger activation action with plugin basename and nonce
+		do_action('mesmeric_commerce_activated', MC_PLUGIN_BASENAME, $activation_nonce);
 	}
 
 	/**
@@ -105,6 +112,92 @@ class MC_Activator {
 		foreach ($tables as $sql) {
 			dbDelta($sql);
 		}
+
+		// Create inventory_alerts table
+		$table_name = $wpdb->prefix . 'mc_inventory_alerts';
+		$sql = "CREATE TABLE $table_name (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			product_id bigint(20) unsigned NOT NULL,
+			threshold int(11) NOT NULL DEFAULT 5,
+			enabled tinyint(1) NOT NULL DEFAULT 1,
+			last_notification datetime DEFAULT NULL,
+			created_at datetime NOT NULL,
+			updated_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			UNIQUE KEY product_id (product_id)
+		) $charset_collate;";
+
+		dbDelta($sql);
+
+		// Create notification_logs table
+		$table_name = $wpdb->prefix . 'mc_notification_logs';
+		$sql = "CREATE TABLE $table_name (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			type varchar(50) NOT NULL,
+			message text NOT NULL,
+			product_id bigint(20) unsigned DEFAULT NULL,
+			user_id bigint(20) unsigned DEFAULT NULL,
+			details longtext DEFAULT NULL,
+			created_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY type (type),
+			KEY product_id (product_id),
+			KEY user_id (user_id),
+			KEY created_at (created_at)
+		) $charset_collate;";
+
+		dbDelta($sql);
+
+		// Migrate existing notification logs from options to the new table
+		self::migrate_notification_logs();
+	}
+
+	/**
+	 * Migrate existing notification logs from options to the new table
+	 */
+	private static function migrate_notification_logs(): void
+	{
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'mc_notification_logs';
+
+		// Check if we have any logs in the options table
+		$old_logs = get_option('mc_inventory_notification_logs', []);
+		if (empty($old_logs)) {
+			return;
+		}
+
+		// Migrate each log to the new table
+		foreach ($old_logs as $log) {
+			if (!is_array($log)) {
+				continue;
+			}
+
+			// Prepare data for insertion
+			$data = [
+				'type' => isset($log['type']) ? sanitize_text_field($log['type']) : 'unknown',
+				'message' => isset($log['message']) ? sanitize_text_field($log['message']) : '',
+				'created_at' => isset($log['timestamp']) ? date('Y-m-d H:i:s', $log['timestamp']) : current_time('mysql', true)
+			];
+
+			// Add optional fields if they exist
+			if (isset($log['product_id'])) {
+				$data['product_id'] = absint($log['product_id']);
+			}
+
+			if (isset($log['user_id'])) {
+				$data['user_id'] = absint($log['user_id']);
+			}
+
+			if (isset($log['details']) && is_array($log['details'])) {
+				$data['details'] = wp_json_encode($log['details']);
+			}
+
+			// Insert into the new table
+			$wpdb->insert($table_name, $data);
+		}
+
+		// Delete the old option
+		delete_option('mc_inventory_notification_logs');
 	}
 
 	/**
@@ -176,6 +269,39 @@ class MC_Activator {
 			if (  ! wp_next_scheduled($hook)) {
 				wp_schedule_event(time(), $recurrence, $hook);
 			}
+		}
+	}
+
+	/**
+	 * Ensure the log directory exists and is protected
+	 */
+	private static function ensure_log_directory(): void
+	{
+		$logs_dir = MC_PLUGIN_DIR . 'logs';
+		if (!file_exists($logs_dir)) {
+			wp_mkdir_p($logs_dir);
+
+			// Create .htaccess file to protect logs
+			file_put_contents(
+				$logs_dir . '/.htaccess',
+				"Order Deny,Allow\nDeny from all"
+			);
+
+			// Create web.config file for IIS servers
+			file_put_contents(
+				$logs_dir . '/web.config',
+				'<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+<system.webServer>
+<authorization>
+<deny users="*" />
+</authorization>
+</system.webServer>
+</configuration>'
+			);
+
+			// Create index.php to prevent directory listing
+			file_put_contents($logs_dir . '/index.php', '<?php // Silence is golden');
 		}
 	}
 }

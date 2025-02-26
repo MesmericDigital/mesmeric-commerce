@@ -1,0 +1,130 @@
+{#
+ # Quick View Content Template
+ #
+ # @var product WC_Product Product object
+ # @var description_placement string Product description placement (top, bottom)
+ # @var description_style string Description style (full, short)
+ # @var show_quantity boolean Whether to show quantity selector
+ # @var show_buy_now boolean Whether to show buy now button
+ # @var show_suggested boolean Whether to show suggested products
+ # @var suggested_module string Suggested products module to use
+ #
+ # @since 1.0.0
+ #}
+
+<div id="product-{{ product.get_id() }}" {{ wc_product_class('', product) }}>
+    <div class="product-content">
+        {# Product Gallery #}
+        <div class="product-gallery">
+            {% include 'partials/gallery.twig' with {
+                'product': product
+            } %}
+        </div>
+
+        {# Product Summary #}
+        <div class="product-summary">
+            {# Title #}
+            <h2 id="quick-view-title" class="product-title">
+                {{ product.get_name() }}
+            </h2>
+
+            {# Rating #}
+            {% if product.get_average_rating() > 0 %}
+                <div class="product-rating">
+                    {{ wc_get_rating_html(product.get_average_rating())|raw }}
+                    {% if product.get_review_count() > 0 %}
+                        <a href="{{ product.get_permalink() }}#reviews" 
+                           class="review-link"
+                           target="_blank"
+                           rel="noopener">
+                            ({{ product.get_review_count() }} {{ 'reviews'|translate }})
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            {# Price #}
+            <div class="product-price">
+                {{ product.get_price_html()|raw }}
+            </div>
+
+            {# Description - Top #}
+            {% if description_placement == 'top' %}
+                {% include 'partials/description.twig' with {
+                    'product': product,
+                    'style': description_style
+                } %}
+            {% endif %}
+
+            {# Suggested Products - Before Add to Cart #}
+            {% if show_suggested and suggested_module and suggested_products_placement == 'before_add_to_cart' %}
+                {% include 'partials/suggested-products.twig' with {
+                    'product': product,
+                    'module': suggested_module
+                } %}
+            {% endif %}
+
+            {# Add to Cart Form #}
+            <div class="product-add-to-cart {{ show_quantity ? '' : 'hide-quantity' }}"
+                 x-data="quickViewAddToCart"
+                 x-on:submit.prevent="addToCart">
+                {% include 'partials/add-to-cart-form.twig' with {
+                    'product': product,
+                    'show_quantity': show_quantity,
+                    'show_buy_now': show_buy_now
+                } %}
+            </div>
+
+            {# Suggested Products - After Add to Cart #}
+            {% if show_suggested and suggested_module and suggested_products_placement == 'after_add_to_cart' %}
+                {% include 'partials/suggested-products.twig' with {
+                    'product': product,
+                    'module': suggested_module
+                } %}
+            {% endif %}
+
+            {# Description - Bottom #}
+            {% if description_placement == 'bottom' %}
+                {% include 'partials/description.twig' with {
+                    'product': product,
+                    'style': description_style
+                } %}
+            {% endif %}
+
+            {# Suggested Products - After Description #}
+            {% if show_suggested and suggested_module and suggested_products_placement == 'after_description' %}
+                {% include 'partials/suggested-products.twig' with {
+                    'product': product,
+                    'module': suggested_module
+                } %}
+            {% endif %}
+
+            {# Meta #}
+            <div class="product-meta">
+                {% include 'partials/meta.twig' with {
+                    'product': product
+                } %}
+            </div>
+
+            {# View Full Details Link #}
+            <div class="product-link">
+                <a href="{{ product.get_permalink() }}"
+                   class="btn btn-link"
+                   target="_blank"
+                   rel="noopener">
+                    {{ 'View full details'|translate }}
+                    <svg xmlns="http://www.w3.org/2000/svg" 
+                         class="icon" 
+                         fill="none" 
+                         viewBox="0 0 24 24" 
+                         stroke="currentColor">
+                        <path stroke-linecap="round" 
+                              stroke-linejoin="round" 
+                              stroke-width="2" 
+                              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

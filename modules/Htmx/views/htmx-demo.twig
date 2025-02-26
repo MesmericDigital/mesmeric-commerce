@@ -1,0 +1,300 @@
+<div class="mc-htmx-demo">
+    <h2>{{ __('HTMX Demo', 'mesmeric-commerce') }}</h2>
+
+    <div class="mc-htmx-section">
+        <h3>{{ __('Basic Click Example', 'mesmeric-commerce') }}</h3>
+        <p>{{ __('Click the button below to load content without a page refresh:', 'mesmeric-commerce') }}</p>
+
+        <button class="button"
+                hx-get="{{ rest_url('mesmeric-commerce/v1/htmx/demo/click') }}"
+                hx-target="#click-result"
+                hx-trigger="click"
+                hx-swap="innerHTML">
+            {{ __('Click Me', 'mesmeric-commerce') }}
+        </button>
+
+        <div id="click-result" class="mc-htmx-result">
+            <p>{{ __('Result will appear here...', 'mesmeric-commerce') }}</p>
+        </div>
+    </div>
+
+    <div class="mc-htmx-section">
+        <h3>{{ __('Form Submission Example', 'mesmeric-commerce') }}</h3>
+        <p>{{ __('Submit the form below to see HTMX in action:', 'mesmeric-commerce') }}</p>
+
+        <form hx-post="{{ rest_url('mesmeric-commerce/v1/htmx/demo/form') }}"
+              hx-target="#form-result"
+              hx-swap="outerHTML"
+              hx-indicator="#form-indicator">
+
+            <div class="form-row">
+                <label for="name">{{ __('Name:', 'mesmeric-commerce') }}</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-row">
+                <label for="email">{{ __('Email:', 'mesmeric-commerce') }}</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-row">
+                <button type="submit" class="button button-primary">
+                    {{ __('Submit', 'mesmeric-commerce') }}
+                </button>
+
+                <div id="form-indicator" class="htmx-indicator">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </form>
+
+        <div id="form-result" class="mc-htmx-result">
+            <p>{{ __('Form result will appear here...', 'mesmeric-commerce') }}</p>
+        </div>
+    </div>
+
+    <div class="mc-htmx-section">
+        <h3>{{ __('Search as You Type', 'mesmeric-commerce') }}</h3>
+        <p>{{ __('Type in the search box to see results update in real-time:', 'mesmeric-commerce') }}</p>
+
+        <input type="search"
+               name="search"
+               placeholder="{{ __('Search products...', 'mesmeric-commerce') }}"
+               hx-post="{{ rest_url('mesmeric-commerce/v1/htmx/demo/search') }}"
+               hx-trigger="keyup changed delay:500ms, search"
+               hx-target="#search-results"
+               hx-indicator="#search-indicator">
+
+        <div id="search-indicator" class="htmx-indicator">
+            <div class="spinner"></div>
+        </div>
+
+        <div id="search-results" class="mc-htmx-result">
+            <p>{{ __('Search results will appear here...', 'mesmeric-commerce') }}</p>
+        </div>
+    </div>
+
+    <div class="mc-htmx-section">
+        <h3>{{ __('Infinite Scroll', 'mesmeric-commerce') }}</h3>
+        <p>{{ __('Scroll down to load more items automatically:', 'mesmeric-commerce') }}</p>
+
+        <div class="mc-infinite-scroll"
+             hx-get="{{ rest_url('mesmeric-commerce/v1/htmx/demo/items') }}"
+             hx-trigger="revealed"
+             hx-swap="beforeend"
+             hx-vals='{"page": 1}'>
+
+            <div class="mc-item">
+                <h4>{{ __('Item 1', 'mesmeric-commerce') }}</h4>
+                <p>{{ __('This is the first item in the list.', 'mesmeric-commerce') }}</p>
+            </div>
+
+            <div class="mc-item">
+                <h4>{{ __('Item 2', 'mesmeric-commerce') }}</h4>
+                <p>{{ __('This is the second item in the list.', 'mesmeric-commerce') }}</p>
+            </div>
+
+            <div class="mc-item">
+                <h4>{{ __('Item 3', 'mesmeric-commerce') }}</h4>
+                <p>{{ __('This is the third item in the list.', 'mesmeric-commerce') }}</p>
+            </div>
+
+            <div class="mc-scroll-sentinel"></div>
+        </div>
+    </div>
+
+    <div class="mc-htmx-section">
+        <h3>{{ __('Tabs Example', 'mesmeric-commerce') }}</h3>
+        <p>{{ __('Click on the tabs to switch content without page refresh:', 'mesmeric-commerce') }}</p>
+
+        <div class="mc-tabs">
+            <div class="mc-tab-buttons">
+                <button class="mc-tab-button active"
+                        hx-get="{{ rest_url('mesmeric-commerce/v1/htmx/demo/tab/1') }}"
+                        hx-target="#tab-content"
+                        hx-trigger="click"
+                        hx-swap="innerHTML">
+                    {{ __('Tab 1', 'mesmeric-commerce') }}
+                </button>
+
+                <button class="mc-tab-button"
+                        hx-get="{{ rest_url('mesmeric-commerce/v1/htmx/demo/tab/2') }}"
+                        hx-target="#tab-content"
+                        hx-trigger="click"
+                        hx-swap="innerHTML">
+                    {{ __('Tab 2', 'mesmeric-commerce') }}
+                </button>
+
+                <button class="mc-tab-button"
+                        hx-get="{{ rest_url('mesmeric-commerce/v1/htmx/demo/tab/3') }}"
+                        hx-target="#tab-content"
+                        hx-trigger="click"
+                        hx-swap="innerHTML">
+                    {{ __('Tab 3', 'mesmeric-commerce') }}
+                </button>
+            </div>
+
+            <div id="tab-content" class="mc-tab-content">
+                <h4>{{ __('Tab 1 Content', 'mesmeric-commerce') }}</h4>
+                <p>{{ __('This is the content for Tab 1.', 'mesmeric-commerce') }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .mc-htmx-demo {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    }
+
+    .mc-htmx-section {
+        margin-bottom: 40px;
+        padding: 20px;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .mc-htmx-section h3 {
+        margin-top: 0;
+        color: #23282d;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .mc-htmx-result {
+        margin-top: 15px;
+        padding: 15px;
+        background: #f9f9f9;
+        border: 1px solid #e5e5e5;
+        border-radius: 3px;
+        min-height: 60px;
+    }
+
+    .form-row {
+        margin-bottom: 15px;
+    }
+
+    .form-row label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    .form-row input[type="text"],
+    .form-row input[type="email"],
+    .form-row input[type="search"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .htmx-indicator {
+        display: none;
+        margin-left: 10px;
+    }
+
+    .htmx-request .htmx-indicator {
+        display: inline-block;
+    }
+
+    .spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-left-color: #0073aa;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        vertical-align: middle;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .mc-infinite-scroll {
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid #eee;
+        border-radius: 4px;
+    }
+
+    .mc-item {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .mc-item:last-child {
+        border-bottom: none;
+    }
+
+    .mc-item h4 {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+
+    .mc-tabs {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .mc-tab-buttons {
+        display: flex;
+        background: #f5f5f5;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .mc-tab-button {
+        flex: 1;
+        padding: 10px;
+        background: none;
+        border: none;
+        border-right: 1px solid #ddd;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.2s;
+    }
+
+    .mc-tab-button:last-child {
+        border-right: none;
+    }
+
+    .mc-tab-button.active,
+    .mc-tab-button:hover {
+        background: #fff;
+    }
+
+    .mc-tab-content {
+        padding: 20px;
+        background: #fff;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.mc-tab-button');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+
+                // Add active class to clicked button
+                this.classList.add('active');
+            });
+        });
+
+        // HTMX events
+        document.body.addEventListener('htmx:afterSwap', function(event) {
+            // You can add custom JavaScript to run after HTMX swaps content
+            console.log('Content swapped:', event.detail.target);
+        });
+    });
+</script>

@@ -1,0 +1,82 @@
+@layer components {
+    .mesmeric-buy-now-wrapper {
+        @apply mt-4;
+
+        /* Archive page spacing */
+        .products & {
+            @apply mt-2;
+        }
+    }
+
+    .mesmeric-buy-now-button {
+        @apply inline-flex items-center justify-center transition-all duration-200 ease-in-out;
+        min-width: 120px;
+
+        /* Default button styles using DaisyUI */
+        &:not(.mesmeric-buy-now-button--custom) {
+            @apply btn-primary;
+        }
+
+        /* Custom button styles */
+        &.mesmeric-buy-now-button--custom {
+            font-size: var(--mesmeric-buy-now-font-size, 16px);
+            padding: var(--mesmeric-buy-now-padding-y, 12px) var(--mesmeric-buy-now-padding-x, 24px);
+            border-radius: var(--mesmeric-buy-now-border-radius, 4px);
+            color: var(--mesmeric-buy-now-text-color, #ffffff);
+            background-color: var(--mesmeric-buy-now-bg-color, #212121);
+            border: 1px solid var(--mesmeric-buy-now-border-color, #212121);
+
+            &:hover:not(:disabled) {
+                color: var(--mesmeric-buy-now-text-hover-color, #ffffff);
+                background-color: var(--mesmeric-buy-now-bg-hover-color, #414141);
+                border-color: var(--mesmeric-buy-now-border-hover-color, #414141);
+            }
+
+            &:disabled {
+                @apply cursor-not-allowed opacity-50;
+            }
+        }
+
+        /* Loading state */
+        &:disabled {
+            @apply cursor-not-allowed;
+        }
+    }
+
+    /* Error message */
+    .mesmeric-buy-now-error {
+        @apply mt-3 text-sm text-error;
+    }
+
+    /* Dark mode adjustments */
+    [data-theme="dark"] {
+        .mesmeric-buy-now-button--custom {
+            --mesmeric-buy-now-text-color: #ffffff;
+            --mesmeric-buy-now-text-hover-color: #ffffff;
+            --mesmeric-buy-now-bg-color: #2a2a2a;
+            --mesmeric-buy-now-bg-hover-color: #3a3a3a;
+            --mesmeric-buy-now-border-color: #2a2a2a;
+            --mesmeric-buy-now-border-hover-color: #3a3a3a;
+        }
+    }
+
+    /* Print styles */
+    @media print {
+        .mesmeric-buy-now-wrapper {
+            display: none !important;
+        }
+    }
+
+    /* Responsive styles */
+    @screen sm {
+        .mesmeric-buy-now-button {
+            min-width: 140px;
+        }
+    }
+
+    @screen lg {
+        .mesmeric-buy-now-button {
+            min-width: 160px;
+        }
+    }
+}

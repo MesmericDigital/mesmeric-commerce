@@ -1,0 +1,155 @@
+@layer components {
+    .cookie-banner {
+        @apply fixed left-0 right-0 bottom-0 w-full z-[var(--mesmeric-cookie-banner-z-index,9999)];
+    }
+
+    .cookie-banner-inner {
+        @apply relative p-4 flex items-center justify-center shadow-lg;
+        background-color: var(--mesmeric-cookie-banner-bg, theme('colors.black'));
+        color: var(--mesmeric-cookie-banner-text, theme('colors.white'));
+    }
+
+    .cookie-banner-close {
+        @apply absolute top-2 right-2 p-1.5 rounded-full transition-opacity duration-200 cursor-pointer;
+        color: var(--mesmeric-cookie-banner-text, theme('colors.white'));
+        opacity: 0.6;
+
+        &:hover {
+            @apply opacity-100;
+        }
+
+        svg {
+            @apply w-4 h-4;
+        }
+    }
+
+    .cookie-banner-content {
+        @apply flex flex-wrap items-center justify-center gap-4 text-sm;
+    }
+
+    .cookie-banner-text {
+        @apply text-center;
+    }
+
+    .cookie-banner-link {
+        @apply ml-1 underline transition-colors duration-200;
+        color: var(--mesmeric-cookie-banner-link, theme('colors.gray.300'));
+
+        &:hover {
+            @apply opacity-80;
+        }
+    }
+
+    .cookie-banner-button {
+        @apply px-6 py-2 font-semibold rounded-full transition-transform duration-200 cursor-pointer select-none;
+        background-color: var(--mesmeric-cookie-banner-btn-bg, theme('colors.white'));
+        color: var(--mesmeric-cookie-banner-btn-text, theme('colors.black'));
+
+        &:hover {
+            @apply transform scale-105;
+        }
+
+        &:active {
+            @apply transform scale-95;
+        }
+    }
+
+    /* Theme: Floating */
+    .cookie-banner.theme-floating {
+        @apply bottom-8;
+
+        .cookie-banner-inner {
+            @apply mx-auto rounded-[var(--mesmeric-cookie-banner-radius,10px)] shadow-xl;
+            width: var(--mesmeric-cookie-banner-max-width, 750px);
+            max-width: calc(100% - 2rem);
+        }
+    }
+
+    /* Theme: Fixed Bottom */
+    .cookie-banner.theme-fixed-bottom {
+        .cookie-banner-inner {
+            @apply shadow-[0_-2px_10px_rgba(0,0,0,0.1)];
+        }
+    }
+
+    /* Theme: Minimal */
+    .cookie-banner.theme-minimal {
+        @apply bottom-4;
+
+        .cookie-banner-inner {
+            @apply mx-auto p-3 rounded-lg shadow;
+            width: var(--mesmeric-cookie-banner-max-width, 750px);
+            max-width: calc(100% - 2rem);
+        }
+
+        .cookie-banner-content {
+            @apply text-xs;
+        }
+
+        .cookie-banner-button {
+            @apply px-4 py-1.5 text-sm;
+        }
+    }
+
+    /* Theme: Centered */
+    .cookie-banner.theme-centered {
+        @apply flex items-center justify-center;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+
+        .cookie-banner-inner {
+            @apply m-4 rounded-[var(--mesmeric-cookie-banner-radius,10px)] shadow-2xl;
+            width: var(--mesmeric-cookie-banner-max-width, 750px);
+            max-width: calc(100% - 2rem);
+        }
+
+        .cookie-banner-content {
+            @apply flex-col;
+        }
+
+        .cookie-banner-button {
+            @apply w-full justify-center;
+        }
+    }
+
+    /* Color Scheme: Dark */
+    .cookie-banner[data-theme="dark"] {
+        --mesmeric-cookie-banner-bg: theme('colors.gray.800');
+        --mesmeric-cookie-banner-text: theme('colors.gray.100');
+        --mesmeric-cookie-banner-link: theme('colors.gray.300');
+        --mesmeric-cookie-banner-btn-bg: theme('colors.gray.100');
+        --mesmeric-cookie-banner-btn-text: theme('colors.gray.900');
+    }
+
+    /* Print styles */
+    @media print {
+        .cookie-banner {
+            display: none !important;
+        }
+    }
+
+    /* Responsive styles */
+    @screen sm {
+        .cookie-banner-content {
+            @apply text-base gap-6;
+        }
+    }
+
+    @screen lg {
+        .cookie-banner.theme-floating,
+        .cookie-banner.theme-minimal {
+            @apply bottom-12;
+        }
+
+        .cookie-banner-inner {
+            @apply p-6;
+        }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        .cookie-banner * {
+            @apply transition-none transform-none animate-none;
+        }
+    }
+}

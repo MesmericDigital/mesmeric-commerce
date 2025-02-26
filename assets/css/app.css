@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply rounded-btn;
+  }
+}
+
+@layer utilities {
+  .content-auto {
+    content-visibility: auto;
+  }
+}

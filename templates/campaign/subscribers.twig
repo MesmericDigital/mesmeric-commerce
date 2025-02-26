@@ -1,0 +1,192 @@
+{% extends "base.twig" %}
+
+{% block content %}
+<div class="p-6" x-data="{ showNewList: false }">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-2xl font-bold mb-2">{{ __('Subscribers', 'mesmeric-commerce') }}</h1>
+            <p class="text-gray-600">{{ __('Manage your email subscribers and lists', 'mesmeric-commerce') }}</p>
+        </div>
+        <button 
+            class="btn btn-primary"
+            @click="showNewList = true"
+            hx-get="/wp-admin/admin-ajax.php"
+            hx-vals='{"action": "mc_get_list_form", "nonce": "{{ wp_create_nonce('mc_subscriber_nonce') }}"}'
+            hx-target="#listModal"
+        >
+            {{ __('New List', 'mesmeric-commerce') }}
+        </button>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Total Subscribers -->
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h3 class="card-title text-lg">{{ __('Total Subscribers', 'mesmeric-commerce') }}</h3>
+                <p class="text-2xl font-bold">{{ stats.total_subscribers }}</p>
+            </div>
+        </div>
+
+        <!-- Active Subscribers -->
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h3 class="card-title text-lg">{{ __('Active Subscribers', 'mesmeric-commerce') }}</h3>
+                <p class="text-2xl font-bold">{{ stats.active_subscribers }}</p>
+            </div>
+        </div>
+
+        <!-- Total Lists -->
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h3 class="card-title text-lg">{{ __('Total Lists', 'mesmeric-commerce') }}</h3>
+                <p class="text-2xl font-bold">{{ stats.total_lists }}</p>
+            </div>
+        </div>
+
+        <!-- Latest Signup -->
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h3 class="card-title text-lg">{{ __('Latest Signup', 'mesmeric-commerce') }}</h3>
+                <p class="text-2xl font-bold">{{ stats.latest_signup ? stats.latest_signup|date('M j, Y') : '-' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lists and Subscribers -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Lists -->
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h3 class="card-title text-lg mb-4">{{ __('Subscriber Lists', 'mesmeric-commerce') }}</h3>
+                <div class="space-y-4">
+                    {% for list in lists %}
+                    <div class="flex justify-between items-center p-4 bg-base-200 rounded-lg">
+                        <div>
+                            <h4 class="font-medium">{{ list.name }}</h4>
+                            <p class="text-sm text-gray-500">{{ list.description }}</p>
+                        </div>
+                        <button 
+                            class="btn btn-sm btn-ghost"
+                            hx-get="/wp-admin/admin-ajax.php"
+                            hx-vals='{"action": "mc_get_list_subscribers", "list_id": "{{ list.id }}", "nonce": "{{ wp_create_nonce('mc_subscriber_nonce') }}"}'
+                            hx-target="#subscribersTable"
+                        >
+                            {{ __('View', 'mesmeric-commerce') }}
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Subscribers Table -->
+        <div class="lg:col-span-2">
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="card-title text-lg">{{ __('Subscribers', 'mesmeric-commerce') }}</h3>
+                        <div class="join">
+                            <input 
+                                type="text" 
+                                placeholder="{{ __('Search subscribers...', 'mesmeric-commerce') }}" 
+                                class="input input-bordered join-item"
+                                hx-trigger="keyup changed delay:500ms"
+                                hx-get="/wp-admin/admin-ajax.php"
+                                hx-vals='{"action": "mc_search_subscribers", "nonce": "{{ wp_create_nonce('mc_subscriber_nonce') }}"}'
+                                hx-target="#subscribersTable"
+                            >
+                            <button class="btn join-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="subscribersTable" class="overflow-x-auto">
+                        <table class="table table-zebra w-full">
+                            <thead>
+                                <tr>
+                                    <th>{{ __('Email', 'mesmeric-commerce') }}</th>
+                                    <th>{{ __('Name', 'mesmeric-commerce') }}</th>
+                                    <th>{{ __('List', 'mesmeric-commerce') }}</th>
+                                    <th>{{ __('Status', 'mesmeric-commerce') }}</th>
+                                    <th>{{ __('Joined', 'mesmeric-commerce') }}</th>
+                                    <th>{{ __('Actions', 'mesmeric-commerce') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subscriber in subscribers %}
+                                <tr>
+                                    <td>{{ subscriber.email }}</td>
+                                    <td>{{ subscriber.first_name }} {{ subscriber.last_name }}</td>
+                                    <td>{{ subscriber.list_name }}</td>
+                                    <td>
+                                        <span class="badge badge-{{ subscriber.status == 'subscribed' ? 'success' : 'warning' }}">
+                                            {{ subscriber.status|title }}
+                                        </span>
+                                    </td>
+                                    <td>{{ subscriber.created_at|date('M j, Y') }}</td>
+                                    <td>
+                                        <div class="flex gap-2">
+                                            <button 
+                                                class="btn btn-sm btn-ghost"
+                                                hx-post="/wp-admin/admin-ajax.php"
+                                                hx-vals='{"action": "mc_toggle_subscriber_status", "subscriber_id": "{{ subscriber.id }}", "nonce": "{{ wp_create_nonce('mc_subscriber_nonce') }}"}'
+                                                hx-target="closest tr"
+                                            >
+                                                {{ subscriber.status == 'subscribed' ? __('Unsubscribe', 'mesmeric-commerce') : __('Resubscribe', 'mesmeric-commerce') }}
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New List Modal -->
+    <div 
+        id="listModal" 
+        x-show="showNewList" 
+        class="modal modal-open"
+        @click.away="showNewList = false"
+    >
+        <div class="modal-box">
+            <h3 class="font-bold text-lg mb-4">{{ __('New Subscriber List', 'mesmeric-commerce') }}</h3>
+            <form 
+                hx-post="/wp-admin/admin-ajax.php"
+                hx-vals='{"action": "mc_save_list", "nonce": "{{ wp_create_nonce('mc_subscriber_nonce') }}"}'
+                class="space-y-4"
+            >
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">{{ __('List Name', 'mesmeric-commerce') }}</span>
+                    </label>
+                    <input type="text" name="name" class="input input-bordered" required>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">{{ __('Description', 'mesmeric-commerce') }}</span>
+                    </label>
+                    <textarea name="description" class="textarea textarea-bordered"></textarea>
+                </div>
+
+                <div class="modal-action">
+                    <button type="submit" class="btn btn-primary">{{ __('Create List', 'mesmeric-commerce') }}</button>
+                    <button type="button" class="btn btn-ghost" @click="showNewList = false">
+                        {{ __('Cancel', 'mesmeric-commerce') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

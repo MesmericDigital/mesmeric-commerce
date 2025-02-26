@@ -1,0 +1,200 @@
+{% extends "base.twig" %}
+
+{% block content %}
+<div class="p-6" x-data="{ showNewCampaign: false }">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-2xl font-bold mb-2">{{ __('Email Campaigns', 'mesmeric-commerce') }}</h1>
+            <p class="text-gray-600">{{ __('Create and manage your email marketing campaigns', 'mesmeric-commerce') }}</p>
+        </div>
+        <button 
+            class="btn btn-primary"
+            @click="showNewCampaign = true"
+            hx-get="/wp-admin/admin-ajax.php"
+            hx-vals='{"action": "mc_get_campaign_form", "nonce": "{{ wp_create_nonce('mc_campaign_nonce') }}"}'
+            hx-target="#campaignModal"
+        >
+            {{ __('New Campaign', 'mesmeric-commerce') }}
+        </button>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Total Campaigns -->
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h3 class="card-title text-lg">{{ __('Total Campaigns', 'mesmeric-commerce') }}</h3>
+                <p class="text-2xl font-bold">{{ stats.total_campaigns }}</p>
+            </div>
+        </div>
+
+        <!-- Total Emails Sent -->
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h3 class="card-title text-lg">{{ __('Emails Sent', 'mesmeric-commerce') }}</h3>
+                <p class="text-2xl font-bold">{{ stats.total_emails_sent }}</p>
+            </div>
+        </div>
+
+        <!-- Average Open Rate -->
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h3 class="card-title text-lg">{{ __('Open Rate', 'mesmeric-commerce') }}</h3>
+                <p class="text-2xl font-bold">{{ stats.open_rate|number_format(1) }}%</p>
+            </div>
+        </div>
+
+        <!-- Average Click Rate -->
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h3 class="card-title text-lg">{{ __('Click Rate', 'mesmeric-commerce') }}</h3>
+                <p class="text-2xl font-bold">{{ stats.click_rate|number_format(1) }}%</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Campaigns Table -->
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+            <div class="overflow-x-auto">
+                <table class="table table-zebra w-full">
+                    <thead>
+                        <tr>
+                            <th>{{ __('Campaign', 'mesmeric-commerce') }}</th>
+                            <th>{{ __('Status', 'mesmeric-commerce') }}</th>
+                            <th>{{ __('List', 'mesmeric-commerce') }}</th>
+                            <th>{{ __('Sent', 'mesmeric-commerce') }}</th>
+                            <th>{{ __('Opens', 'mesmeric-commerce') }}</th>
+                            <th>{{ __('Clicks', 'mesmeric-commerce') }}</th>
+                            <th>{{ __('Created', 'mesmeric-commerce') }}</th>
+                            <th>{{ __('Actions', 'mesmeric-commerce') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for campaign in campaigns %}
+                        <tr>
+                            <td>
+                                <div class="font-medium">{{ campaign.name }}</div>
+                                <div class="text-sm text-gray-500">{{ campaign.subject }}</div>
+                            </td>
+                            <td>
+                                <span class="badge badge-{{ campaign.status == 'sent' ? 'success' : 'info' }}">
+                                    {{ campaign.status|title }}
+                                </span>
+                            </td>
+                            <td>{{ campaign.list_name }}</td>
+                            <td>{{ campaign.stats.total_sent }}</td>
+                            <td>{{ campaign.stats.total_opened }} ({{ campaign.stats.open_rate|number_format(1) }}%)</td>
+                            <td>{{ campaign.stats.total_clicked }} ({{ campaign.stats.click_rate|number_format(1) }}%)</td>
+                            <td>{{ campaign.created_at|date('M j, Y') }}</td>
+                            <td>
+                                <div class="flex gap-2">
+                                    {% if campaign.status == 'draft' %}
+                                    <button 
+                                        class="btn btn-sm btn-primary"
+                                        hx-post="/wp-admin/admin-ajax.php"
+                                        hx-vals='{"action": "mc_send_campaign", "campaign_id": "{{ campaign.id }}", "nonce": "{{ wp_create_nonce('mc_campaign_nonce') }}"}'
+                                        hx-confirm="{{ __('Are you sure you want to send this campaign?', 'mesmeric-commerce') }}"
+                                    >
+                                        {{ __('Send', 'mesmeric-commerce') }}
+                                    </button>
+                                    <button 
+                                        class="btn btn-sm btn-ghost"
+                                        hx-get="/wp-admin/admin-ajax.php"
+                                        hx-vals='{"action": "mc_get_campaign_form", "campaign_id": "{{ campaign.id }}", "nonce": "{{ wp_create_nonce('mc_campaign_nonce') }}"}'
+                                        hx-target="#campaignModal"
+                                    >
+                                        {{ __('Edit', 'mesmeric-commerce') }}
+                                    </button>
+                                    {% else %}
+                                    <button 
+                                        class="btn btn-sm btn-ghost"
+                                        hx-get="/wp-admin/admin-ajax.php"
+                                        hx-vals='{"action": "mc_get_campaign_stats", "campaign_id": "{{ campaign.id }}", "nonce": "{{ wp_create_nonce('mc_campaign_nonce') }}"}'
+                                        hx-target="#statsModal"
+                                    >
+                                        {{ __('Stats', 'mesmeric-commerce') }}
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Campaign Modal -->
+    <div 
+        id="campaignModal" 
+        x-show="showNewCampaign" 
+        class="modal modal-open"
+        @click.away="showNewCampaign = false"
+    >
+        <div class="modal-box max-w-3xl">
+            <h3 class="font-bold text-lg mb-4">{{ __('New Campaign', 'mesmeric-commerce') }}</h3>
+            <form 
+                hx-post="/wp-admin/admin-ajax.php"
+                hx-vals='{"action": "mc_save_campaign", "nonce": "{{ wp_create_nonce('mc_campaign_nonce') }}"}'
+                class="space-y-4"
+            >
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">{{ __('Campaign Name', 'mesmeric-commerce') }}</span>
+                    </label>
+                    <input type="text" name="name" class="input input-bordered" required>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">{{ __('Subject Line', 'mesmeric-commerce') }}</span>
+                    </label>
+                    <input type="text" name="subject" class="input input-bordered" required>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">{{ __('Template', 'mesmeric-commerce') }}</span>
+                    </label>
+                    <select name="template_id" class="select select-bordered" required>
+                        {% for template in templates %}
+                        <option value="{{ template.id }}">{{ template.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">{{ __('Subscriber List', 'mesmeric-commerce') }}</span>
+                    </label>
+                    <select name="list_id" class="select select-bordered" required>
+                        {% for list in lists %}
+                        <option value="{{ list.id }}">{{ list.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">{{ __('Content', 'mesmeric-commerce') }}</span>
+                    </label>
+                    <textarea name="content" class="textarea textarea-bordered h-32" required></textarea>
+                </div>
+
+                <div class="modal-action">
+                    <button type="submit" class="btn btn-primary">{{ __('Save Campaign', 'mesmeric-commerce') }}</button>
+                    <button type="button" class="btn btn-ghost" @click="showNewCampaign = false">
+                        {{ __('Cancel', 'mesmeric-commerce') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Stats Modal -->
+    <div id="statsModal"></div>
+</div>
+{% endblock %}

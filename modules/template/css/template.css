@@ -1,0 +1,22 @@
+/**
+ * Template Module - Frontend Styles
+ *
+ * @package    Mesmeric_Commerce
+ * @subpackage Mesmeric_Commerce/modules/template/css
+ */
+
+.mc-template {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.mc-template__content {
+    padding: 10px;
+}
+
+.mc-template__custom-content {
+    margin-bottom: 10px;
+}

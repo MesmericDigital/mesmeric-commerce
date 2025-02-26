@@ -1,0 +1,35 @@
+{#
+ # Template for added to cart popup action buttons.
+ #
+ # @var args array template args
+ #
+ # @since 1.0.0
+ #}
+
+{% set settings = args.settings %}
+
+{% if settings.show_view_cart_button or settings.show_checkout_button or settings.show_view_continue_shopping_button %}
+    <div class="popup-actions flex flex-col md:flex-row gap-2">
+        {% if settings.show_view_cart_button %}
+            <a href="{{ wc_get_cart_url()|e('html_attr') }}" 
+               class="btn btn-primary view-cart">
+                {{ settings.view_cart_button_label|translate|e }}
+            </a>
+        {% endif %}
+
+        {% if settings.show_view_continue_shopping_button %}
+            <a href="#" 
+               class="btn btn-secondary continue-shopping"
+               @click.prevent="close">
+                {{ settings.view_continue_shopping_button_label|translate|e }}
+            </a>
+        {% endif %}
+
+        {% if settings.show_checkout_button %}
+            <a href="{{ wc_get_checkout_url()|e('html_attr') }}" 
+               class="btn btn-accent checkout">
+                {{ 'Checkout'|translate|e }}
+            </a>
+        {% endif %}
+    </div>
+{% endif %}

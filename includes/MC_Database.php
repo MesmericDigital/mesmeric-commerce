@@ -28,44 +28,86 @@ class MC_Database {
 	/**
 	 * Safely get product sales data
 	 *
-	 * @param int    $product_id Product ID
-	 * @param string $start_date Start date in Y-m-d H:i:s format
-	 * @return array Array of daily sales data
+	 * @param int $product_id Product ID
+	 * @param string $start_date Start date in Y-m-d format
+	 * @return array Sales data
 	 */
 	public static function get_product_sales_data( int $product_id, string $start_date ): array {
-		$db = self::get_db();
-
-		$query = $db->prepare(
-			"SELECT
-                DATE(o.post_date) as sale_date,
-                SUM(oim.meta_value) as quantity
-            FROM {$db->prefix}wc_order_product_lookup opl
-            JOIN {$db->prefix}posts o ON o.ID = opl.order_id
-            JOIN {$db->prefix}woocommerce_order_items oi ON oi.order_id = o.ID
-            JOIN {$db->prefix}woocommerce_order_itemmeta oim ON oim.order_item_id = oi.order_item_id
-            WHERE opl.product_id = %d
-            AND o.post_status IN ('wc-completed', 'wc-processing')
-            AND o.post_date >= %s
-            AND oim.meta_key = '_qty'
-            GROUP BY DATE(o.post_date)
-            ORDER BY sale_date DESC",
-			$product_id,
-			$start_date
-		);
-
-		$results = $db->get_results( $query );
-		if ( ! is_array( $results ) ) {
+		// Validate inputs
+		$product_id = absint($product_id);
+		if ($product_id <= 0) {
 			return [];
 		}
 
+		// Validate date format
+		$date_obj = \DateTime::createFromFormat('Y-m-d', $start_date);
+		if (!$date_obj || $date_obj->format('Y-m-d') !== $start_date) {
+			return [];
+		}
+
+		// Use WooCommerce's data store API to get orders
+		$args = [
+			'status' => ['completed', 'processing'],
+			'date_created' => '>=' . strtotime($start_date),
+			'return' => 'ids',
+			'limit' => -1,
+		];
+
+		// Get order IDs
+		$order_ids = wc_get_orders($args);
+
+		if (empty($order_ids)) {
+			return [];
+		}
+
+		// Prepare results array
 		$sales_data = [];
-		foreach ( $results as $row ) {
-			if ( isset( $row->sale_date, $row->quantity ) ) {
-				$sales_data[ $row->sale_date ] = (int) $row->quantity;
+
+		// Process each order
+		foreach ($order_ids as $order_id) {
+			$order = wc_get_order($order_id);
+			if (!$order) {
+				continue;
+			}
+
+			// Check if this order contains the product we're looking for
+			$found = false;
+			$quantity = 0;
+
+			foreach ($order->get_items() as $item) {
+				if ($item->get_product_id() === $product_id) {
+					$found = true;
+					$quantity += $item->get_quantity();
+				}
+			}
+
+			if ($found) {
+				$sale_date = $order->get_date_created()->date('Y-m-d');
+
+				// Add to or update the sales data array
+				if (isset($sales_data[$sale_date])) {
+					$sales_data[$sale_date] += $quantity;
+				} else {
+					$sales_data[$sale_date] = $quantity;
+				}
 			}
 		}
 
-		return $sales_data;
+		// Format the results to match the expected output
+		$results = [];
+		foreach ($sales_data as $date => $qty) {
+			$results[] = (object) [
+				'sale_date' => $date,
+				'quantity' => $qty
+			];
+		}
+
+		// Sort by date descending
+		usort($results, function($a, $b) {
+			return strcmp($b->sale_date, $a->sale_date);
+		});
+
+		return $results;
 	}
 
 	/**
@@ -93,14 +135,30 @@ class MC_Database {
 	}
 
 	/**
-	 * Safely get notification logs
+	 * Get notification logs
 	 *
-	 * @param int $limit Maximum number of logs to retrieve
+	 * @param int $limit Maximum number of logs to return
 	 * @return array Array of notification logs
 	 */
 	public static function get_notification_logs( int $limit = 100 ): array {
-		$logs = get_option( 'mc_inventory_notification_logs', [] );
-		return array_slice( (array) $logs, 0, $limit );
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'mc_notification_logs';
+
+		// Check if table exists, if not create it
+		if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") !== $table_name) {
+			self::create_notification_logs_table();
+		}
+
+		// Get logs from the database
+		$logs = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM $table_name ORDER BY created_at DESC LIMIT %d",
+				$limit
+			),
+			ARRAY_A
+		);
+
+		return is_array($logs) ? $logs : [];
 	}
 
 	/**
@@ -110,10 +168,74 @@ class MC_Database {
 	 * @return bool True on success, false on failure
 	 */
 	public static function add_notification_log( array $log_data ): bool {
-		$logs = self::get_notification_logs();
-		array_unshift( $logs, wp_unslash( $log_data ) );
-		$logs = array_slice( $logs, 0, 100 ); // Keep only last 100 logs
-		return update_option( 'mc_inventory_notification_logs', $logs );
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'mc_notification_logs';
+
+		// Check if table exists, if not create it
+		if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") !== $table_name) {
+			self::create_notification_logs_table();
+		}
+
+		// Validate log data
+		$valid_keys = ['type', 'message', 'product_id', 'user_id', 'details'];
+		$sanitized_data = [];
+
+		foreach ($valid_keys as $key) {
+			if (isset($log_data[$key])) {
+				// Sanitize based on the type of data
+				if ($key === 'product_id' || $key === 'user_id') {
+					$sanitized_data[$key] = absint($log_data[$key]);
+				} elseif ($key === 'details' && is_array($log_data[$key])) {
+					$sanitized_data[$key] = wp_json_encode($log_data[$key]);
+				} else {
+					$sanitized_data[$key] = sanitize_text_field($log_data[$key]);
+				}
+			}
+		}
+
+		// Ensure required fields are present
+		if (!isset($sanitized_data['type']) || !isset($sanitized_data['message'])) {
+			return false;
+		}
+
+		// Add timestamp
+		$sanitized_data['created_at'] = current_time('mysql', true);
+
+		// Insert into database
+		$result = $wpdb->insert($table_name, $sanitized_data);
+
+		return $result !== false;
+	}
+
+	/**
+	 * Create notification logs table
+	 *
+	 * @return bool True on success, false on failure
+	 */
+	private static function create_notification_logs_table(): bool {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'mc_notification_logs';
+		$charset_collate = $wpdb->get_charset_collate();
+
+		$sql = "CREATE TABLE $table_name (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			type varchar(50) NOT NULL,
+			message text NOT NULL,
+			product_id bigint(20) unsigned DEFAULT NULL,
+			user_id bigint(20) unsigned DEFAULT NULL,
+			details longtext DEFAULT NULL,
+			created_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY type (type),
+			KEY product_id (product_id),
+			KEY user_id (user_id),
+			KEY created_at (created_at)
+		) $charset_collate;";
+
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		dbDelta($sql);
+
+		return $wpdb->get_var("SHOW TABLES LIKE '$table_name'") === $table_name;
 	}
 
 	/**

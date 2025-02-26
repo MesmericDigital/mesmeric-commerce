@@ -1,0 +1,51 @@
+@layer components {
+    .mesmeric-stock-scarcity {
+        @apply my-4;
+    }
+
+    .mesmeric-stock-scarcity-message {
+        @apply mb-2 text-base-content font-medium;
+        font-size: var(--mesmeric-font-size, 16px);
+        font-weight: var(--mesmeric-font-weight, normal);
+        color: var(--mesmeric-text-color, theme('colors.base-content'));
+    }
+
+    .mesmeric-stock-scarcity-content {
+        @apply h-2 rounded-full overflow-hidden;
+        background-color: var(--mesmeric-bg-color, theme('colors.base-300'));
+    }
+
+    .mesmeric-stock-scarcity-progress-bar {
+        @apply h-full rounded-full;
+        background: linear-gradient(
+            to right,
+            var(--mesmeric-gradient-start, theme('colors.warning')),
+            var(--mesmeric-gradient-end, theme('colors.error'))
+        );
+        width: 0;
+        transition: width 1s ease-out;
+    }
+
+    /* Dark mode adjustments */
+    :root[data-theme="dark"] .mesmeric-stock-scarcity-content {
+        @apply bg-base-200;
+    }
+
+    /* Print styles */
+    @media print {
+        .mesmeric-stock-scarcity {
+            @apply hidden;
+        }
+    }
+
+    /* Responsive adjustments */
+    @screen sm {
+        .mesmeric-stock-scarcity {
+            @apply my-6;
+        }
+
+        .mesmeric-stock-scarcity-content {
+            @apply h-3;
+        }
+    }
+}

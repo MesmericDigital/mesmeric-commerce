@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../mesmeric"
+		}
+	],
+    "settings": {
+        "php.stubs": [
+            "pcntl",
+            "wordpress",
+            "*"
+        ],
+        "php.problems.exclude": {
+            "../breakdance/**": true
+        },
+        "files.associations": {
+            "*.css": "tailwindcss"
+        },
+        "php.validate.enable": true
+    }
+}

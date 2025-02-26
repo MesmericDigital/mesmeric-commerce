@@ -1,0 +1,47 @@
+{#
+ # Quick View Quantity Selector Partial Template
+ #
+ # @var product WC_Product Product object
+ #
+ # @since 1.0.0
+ #}
+
+<div class="quantity-wrapper"
+     x-data="quickViewQuantity"
+     x-init="initQuantity">
+    <label for="quantity_{{ product.get_id() }}" class="screen-reader-text">
+        {{ 'Product quantity'|translate }}
+    </label>
+    <div class="quantity">
+        <button type="button"
+                class="minus"
+                x-on:click="decrease"
+                x-bind:disabled="quantity <= min"
+                aria-label="{{ 'Decrease quantity'|translate }}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+            </svg>
+        </button>
+        <input type="number"
+               id="quantity_{{ product.get_id() }}"
+               class="input-text qty text"
+               name="quantity"
+               x-model.number="quantity"
+               x-on:change="validateQuantity"
+               x-bind:min="min"
+               x-bind:max="max"
+               x-bind:step="step"
+               aria-label="{{ 'Product quantity'|translate }}"
+               size="4"
+               inputmode="numeric">
+        <button type="button"
+                class="plus"
+                x-on:click="increase"
+                x-bind:disabled="quantity >= max"
+                aria-label="{{ 'Increase quantity'|translate }}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+            </svg>
+        </button>
+    </div>
+</div>

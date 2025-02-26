@@ -1,0 +1,73 @@
+{#
+ # Template for added product information in cart popup.
+ #
+ # @var args array template args
+ #
+ # @since 1.0.0
+ #}
+
+{% set settings = args.settings %}
+{% set product_info = settings.show_product_info|default(['thumbnail', 'title_and_price', 'description']) %}
+{% set cart_details = settings.show_cart_details|default(['cart_total', 'shipping_cost', 'tax_amount']) %}
+
+<div class="added-product flex flex-col md:flex-row gap-4">
+    {% if 'thumbnail' in product_info %}
+        <div class="popup-product-image w-24 h-24 md:w-32 md:h-32 flex-shrink-0">
+            <a href="{{ product_url|e('html_attr') }}" 
+               target="_blank" 
+               title="{{ product_name|e('html_attr') }}"
+               class="block">
+                {{ product_image_large|raw }}
+            </a>
+        </div>
+    {% endif %}
+
+    <div class="popup-product-content flex-grow">
+        {% if 'title_and_price' in product_info %}
+            <div class="popup-product-name text-lg font-medium mb-2">
+                <a href="{{ product_url|e('html_attr') }}" 
+                   target="_blank"
+                   class="hover:text-primary">
+                    {{ product_name|e }}
+                </a>
+            </div>
+        {% endif %}
+
+        {% if 'description' in product_info %}
+            <p class="popup-product-description text-sm text-gray-600 mb-2">
+                {{ product_description|e }}
+            </p>
+        {% endif %}
+
+        {% if 'title_and_price' in product_info %}
+            <div class="popup-product-price text-lg font-semibold mb-4">
+                {{ product_price|raw }}
+            </div>
+        {% endif %}
+
+        {% if cart_details|length > 0 and ('cart_total' in cart_details or 'shipping_cost' in cart_details or 'tax_amount' in cart_details) %}
+            <div class="popup-cart-info divide-y">
+                {% if 'shipping_cost' in cart_details %}
+                    <div class="info-item flex justify-between py-2">
+                        <span class="info-label text-sm">{{ 'Shipping Cost'|translate|e }}</span>
+                        <span class="info-value font-medium">{{ cart_shipping_cost|raw }}</span>
+                    </div>
+                {% endif %}
+
+                {% if 'tax_amount' in cart_details %}
+                    <div class="info-item flex justify-between py-2">
+                        <span class="info-label text-sm">{{ 'Tax amount'|translate|e }}</span>
+                        <span class="info-value font-medium">{{ cart_tax_amount|raw }}</span>
+                    </div>
+                {% endif %}
+
+                {% if 'cart_total' in cart_details %}
+                    <div class="info-item flex justify-between py-2">
+                        <span class="info-label text-sm">{{ 'Cart Total'|translate|e }}</span>
+                        <span class="info-value font-medium">{{ cart_subtotal|raw }}</span>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>

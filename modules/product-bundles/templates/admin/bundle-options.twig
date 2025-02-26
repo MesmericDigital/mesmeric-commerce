@@ -1,0 +1,147 @@
+<div class="woocommerce_options_panel" x-data="bundleManager">
+    <div class="options_group">
+        <div class="form-field">
+            <!-- Product Search -->
+            <div class="mb-4">
+                <input 
+                    type="text" 
+                    class="input input-bordered w-full"
+                    placeholder="{{ labels.search_products }}"
+                    @input.debounce="searchProducts($event.target.value)"
+                    x-ref="productSearch"
+                >
+                
+                <!-- Search Results Dropdown -->
+                <div 
+                    class="dropdown-content bg-base-200 rounded-box w-full mt-1" 
+                    x-show="searchResults.length > 0"
+                    @click.away="searchResults = []"
+                >
+                    <template x-for="product in searchResults" :key="product.id">
+                        <div 
+                            class="p-2 hover:bg-base-300 cursor-pointer"
+                            @click="addProduct(product)"
+                            x-text="product.name"
+                        ></div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Bundle Products List -->
+            <div class="overflow-x-auto">
+                <table class="table w-full">
+                    <thead>
+                        <tr>
+                            <th>{{ __('Product', 'mesmeric-commerce') }}</th>
+                            <th>{{ labels.quantity }}</th>
+                            <th>{{ labels.discount }}</th>
+                            <th>{{ labels.optional }}</th>
+                            <th>{{ labels.visibility }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="(product, index) in bundledProducts" :key="product.id">
+                            <tr>
+                                <td x-text="product.name"></td>
+                                <td>
+                                    <input 
+                                        type="number" 
+                                        class="input input-bordered input-sm w-20"
+                                        :name="`_bundled_product_${product.id}_qty`"
+                                        x-model="product.qty"
+                                        min="1"
+                                    >
+                                </td>
+                                <td>
+                                    <input 
+                                        type="number" 
+                                        class="input input-bordered input-sm w-20"
+                                        :name="`_bundled_product_${product.id}_discount`"
+                                        x-model="product.discount"
+                                        min="0"
+                                        max="100"
+                                    >
+                                </td>
+                                <td>
+                                    <input 
+                                        type="checkbox" 
+                                        class="toggle toggle-primary"
+                                        :name="`_bundled_product_${product.id}_optional`"
+                                        x-model="product.optional"
+                                    >
+                                </td>
+                                <td>
+                                    <select 
+                                        class="select select-bordered select-sm"
+                                        :name="`_bundled_product_${product.id}_visibility`"
+                                        x-model="product.visibility"
+                                    >
+                                        <option value="visible">{{ __('Visible', 'mesmeric-commerce') }}</option>
+                                        <option value="hidden">{{ __('Hidden', 'mesmeric-commerce') }}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <button 
+                                        type="button"
+                                        class="btn btn-ghost btn-sm text-error"
+                                        @click="removeProduct(index)"
+                                    >
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('bundleManager', () => ({
+        bundledProducts: @json($bundle_data),
+        searchResults: [],
+        
+        async searchProducts(query) {
+            if (!query) {
+                this.searchResults = [];
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${mesmericBundles.ajaxUrl}?action=search_products&query=${query}&nonce=${mesmericBundles.nonce}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    this.searchResults = data.products;
+                }
+            } catch (error) {
+                console.error('Error searching products:', error);
+            }
+        },
+        
+        addProduct(product) {
+            if (!this.bundledProducts.find(p => p.id === product.id)) {
+                this.bundledProducts.push({
+                    id: product.id,
+                    name: product.name,
+                    qty: 1,
+                    discount: 0,
+                    optional: false,
+                    visibility: 'visible'
+                });
+            }
+            
+            this.searchResults = [];
+            this.$refs.productSearch.value = '';
+        },
+        
+        removeProduct(index) {
+            this.bundledProducts.splice(index, 1);
+        }
+    }));
+});
+</script>

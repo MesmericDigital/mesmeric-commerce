@@ -1,0 +1,22 @@
+{# Login Popup Modal Template #}
+<div class="mc-login-popup-modal mc-login-popup-modal--{{ settings.modal_width }}" id="mc-login-popup-modal">
+    <div class="mc-login-popup-modal__overlay" id="mc-login-popup-modal-overlay"></div>
+    <div class="mc-login-popup-modal__container">
+        <button type="button" class="mc-login-popup-modal__close" id="mc-login-popup-modal-close">
+            <span class="mc-login-popup-modal__close-icon">×</span>
+            <span class="screen-reader-text">{{ __('Close', 'mesmeric-commerce') }}</span>
+        </button>
+
+        <div class="mc-login-popup-modal__content">
+            {% include 'login-form.twig' %}
+
+            {% if settings.show_registration %}
+                {% include 'register-form.twig' %}
+            {% endif %}
+
+            {% if settings.show_password_reset %}
+                {% include 'reset-password-form.twig' %}
+            {% endif %}
+        </div>
+    </div>
+</div>

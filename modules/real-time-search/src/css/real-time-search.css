@@ -1,0 +1,54 @@
+@layer components {
+    .mesmeric-real-time-search {
+        @apply relative w-full max-w-xl mx-auto;
+
+        /* Results dropdown */
+        .menu {
+            @apply max-h-[70vh] overflow-y-auto;
+
+            /* Scrollbar styling */
+            &::-webkit-scrollbar {
+                @apply w-2;
+            }
+
+            &::-webkit-scrollbar-track {
+                @apply bg-base-200 rounded-r;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                @apply bg-base-300 rounded-full hover:bg-base-400 transition-colors;
+            }
+        }
+
+        /* Loading spinner */
+        .loading {
+            @apply text-primary;
+        }
+
+        /* Product image */
+        .menu img {
+            @apply bg-base-200 rounded-box;
+        }
+
+        /* Result item hover state */
+        .menu li > a:hover {
+            @apply bg-base-200;
+        }
+
+        /* Price alignment */
+        .menu li > a > div:last-child {
+            @apply ml-auto pl-4;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: theme('screens.sm')) {
+            .menu li > a {
+                @apply flex-col items-start gap-2;
+            }
+
+            .menu li > a > div:last-child {
+                @apply ml-0 pl-0 mt-2;
+            }
+        }
+    }
+}

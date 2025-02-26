@@ -1,0 +1,128 @@
+{% extends "base.twig" %}
+
+{% block content %}
+<div class="modal modal-open">
+    <div class="modal-box max-w-3xl">
+        <h3 class="font-bold text-lg mb-4">{{ __('Campaign Statistics', 'mesmeric-commerce') }}</h3>
+        
+        <!-- Campaign Info -->
+        <div class="mb-6">
+            <h4 class="font-medium text-lg">{{ campaign.name }}</h4>
+            <p class="text-gray-600">{{ campaign.subject }}</p>
+            <p class="text-sm text-gray-500 mt-1">
+                {{ __('Sent on', 'mesmeric-commerce') }} {{ campaign.sent_at|date('M j, Y') }}
+            </p>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <!-- Emails Sent -->
+            <div class="stat bg-base-200 rounded-lg p-4">
+                <div class="stat-title">{{ __('Emails Sent', 'mesmeric-commerce') }}</div>
+                <div class="stat-value">{{ stats.total_sent }}</div>
+            </div>
+
+            <!-- Opens -->
+            <div class="stat bg-base-200 rounded-lg p-4">
+                <div class="stat-title">{{ __('Opens', 'mesmeric-commerce') }}</div>
+                <div class="stat-value">{{ stats.total_opened }}</div>
+                <div class="stat-desc">{{ stats.open_rate|number_format(1) }}% {{ __('open rate', 'mesmeric-commerce') }}</div>
+            </div>
+
+            <!-- Clicks -->
+            <div class="stat bg-base-200 rounded-lg p-4">
+                <div class="stat-title">{{ __('Clicks', 'mesmeric-commerce') }}</div>
+                <div class="stat-value">{{ stats.total_clicked }}</div>
+                <div class="stat-desc">{{ stats.click_rate|number_format(1) }}% {{ __('click rate', 'mesmeric-commerce') }}</div>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="mb-6">
+            <h4 class="font-medium mb-4">{{ __('Activity Timeline', 'mesmeric-commerce') }}</h4>
+            <div class="space-y-4">
+                {% for activity in stats.timeline %}
+                <div class="flex items-start gap-4">
+                    <div class="flex-none">
+                        <div class="w-2 h-2 mt-2 rounded-full bg-primary"></div>
+                    </div>
+                    <div>
+                        <p class="font-medium">{{ activity.event|title }}</p>
+                        <p class="text-sm text-gray-500">
+                            {{ activity.timestamp|date('M j, Y g:i a') }}
+                        </p>
+                        {% if activity.details %}
+                        <p class="text-sm mt-1">{{ activity.details }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Link Performance -->
+        {% if stats.links|length > 0 %}
+        <div class="mb-6">
+            <h4 class="font-medium mb-4">{{ __('Link Performance', 'mesmeric-commerce') }}</h4>
+            <div class="overflow-x-auto">
+                <table class="table table-zebra w-full">
+                    <thead>
+                        <tr>
+                            <th>{{ __('URL', 'mesmeric-commerce') }}</th>
+                            <th>{{ __('Clicks', 'mesmeric-commerce') }}</th>
+                            <th>{{ __('Unique Clicks', 'mesmeric-commerce') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for link in stats.links %}
+                        <tr>
+                            <td class="max-w-xs truncate">
+                                <a href="{{ link.url }}" target="_blank" class="link link-primary">
+                                    {{ link.url }}
+                                </a>
+                            </td>
+                            <td>{{ link.clicks }}</td>
+                            <td>{{ link.unique_clicks }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Geographic Data -->
+        {% if stats.locations|length > 0 %}
+        <div>
+            <h4 class="font-medium mb-4">{{ __('Geographic Distribution', 'mesmeric-commerce') }}</h4>
+            <div class="overflow-x-auto">
+                <table class="table table-zebra w-full">
+                    <thead>
+                        <tr>
+                            <th>{{ __('Country', 'mesmeric-commerce') }}</th>
+                            <th>{{ __('Opens', 'mesmeric-commerce') }}</th>
+                            <th>{{ __('Clicks', 'mesmeric-commerce') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for location in stats.locations %}
+                        <tr>
+                            <td>{{ location.country }}</td>
+                            <td>{{ location.opens }}</td>
+                            <td>{{ location.clicks }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="modal-action">
+            <button class="btn" @click="$el.closest('.modal').remove()">
+                {{ __('Close', 'mesmeric-commerce') }}
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

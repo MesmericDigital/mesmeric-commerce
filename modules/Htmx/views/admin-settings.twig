@@ -1,0 +1,280 @@
+<div class="wrap mc-htmx-settings">
+    <h1>{{ __('HTMX Settings', 'mesmeric-commerce') }}</h1>
+
+    <div class="mc-admin-notice notice notice-info">
+        <p>
+            {{ __('HTMX is a lightweight JavaScript library that allows you to access modern browser features directly from HTML, rather than using JavaScript.', 'mesmeric-commerce') }}
+            <a href="https://htmx.org/docs/" target="_blank">{{ __('Learn more about HTMX', 'mesmeric-commerce') }}</a>
+        </p>
+    </div>
+
+    <form method="post" action="options.php" id="mc-htmx-settings-form">
+        {{ wp_nonce_field('mc_htmx_settings', 'mc_htmx_nonce')|raw }}
+        <input type="hidden" name="action" value="mc_update_htmx_settings">
+
+        <div class="mc-settings-section">
+            <h2>{{ __('General Settings', 'mesmeric-commerce') }}</h2>
+
+            <table class="form-table">
+                <tr>
+                    <th scope="row">
+                        <label for="mc_htmx_version">{{ __('HTMX Version', 'mesmeric-commerce') }}</label>
+                    </th>
+                    <td>
+                        <input type="text" id="mc_htmx_version" name="mc_htmx_settings[version]" value="{{ settings.version }}" class="regular-text">
+                        <p class="description">
+                            {{ __('Current version: 2.0.0. Check the', 'mesmeric-commerce') }}
+                            <a href="https://unpkg.com/browse/htmx.org/" target="_blank">{{ __('HTMX releases', 'mesmeric-commerce') }}</a>
+                            {{ __('for the latest version.', 'mesmeric-commerce') }}
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="mc_htmx_use_cdn">{{ __('Load from CDN', 'mesmeric-commerce') }}</label>
+                    </th>
+                    <td>
+                        <label>
+                            <input type="checkbox" id="mc_htmx_use_cdn" name="mc_htmx_settings[use_cdn]" value="1" {% if settings.use_cdn %}checked{% endif %}>
+                            {{ __('Load HTMX from CDN (recommended)', 'mesmeric-commerce') }}
+                        </label>
+                        <p class="description">
+                            {{ __('If unchecked, HTMX will be loaded from your server.', 'mesmeric-commerce') }}
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="mc_htmx_enable_frontend">{{ __('Enable on Frontend', 'mesmeric-commerce') }}</label>
+                    </th>
+                    <td>
+                        <label>
+                            <input type="checkbox" id="mc_htmx_enable_frontend" name="mc_htmx_settings[enable_frontend]" value="1" {% if settings.enable_frontend %}checked{% endif %}>
+                            {{ __('Load HTMX on frontend pages', 'mesmeric-commerce') }}
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="mc_htmx_enable_admin">{{ __('Enable in Admin', 'mesmeric-commerce') }}</label>
+                    </th>
+                    <td>
+                        <label>
+                            <input type="checkbox" id="mc_htmx_enable_admin" name="mc_htmx_settings[enable_admin]" value="1" {% if settings.enable_admin %}checked{% endif %}>
+                            {{ __('Load HTMX in WordPress admin', 'mesmeric-commerce') }}
+                        </label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="mc-settings-section">
+            <h2>{{ __('Extensions', 'mesmeric-commerce') }}</h2>
+
+            <p>{{ __('HTMX extensions provide additional functionality. Enable the ones you need.', 'mesmeric-commerce') }}</p>
+
+            <table class="form-table">
+                <tr>
+                    <th scope="row">
+                        <label for="mc_htmx_ext_json_enc">{{ __('JSON Encoding', 'mesmeric-commerce') }}</label>
+                    </th>
+                    <td>
+                        <label>
+                            <input type="checkbox" id="mc_htmx_ext_json_enc" name="mc_htmx_settings[extensions][json-enc]" value="1" {% if settings.extensions['json-enc'] %}checked{% endif %}>
+                            {{ __('Enable JSON Encoding extension', 'mesmeric-commerce') }}
+                        </label>
+                        <p class="description">
+                            {{ __('Allows you to submit JSON data in requests.', 'mesmeric-commerce') }}
+                            <a href="https://htmx.org/extensions/json-enc/" target="_blank">{{ __('Learn more', 'mesmeric-commerce') }}</a>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="mc_htmx_ext_loading_states">{{ __('Loading States', 'mesmeric-commerce') }}</label>
+                    </th>
+                    <td>
+                        <label>
+                            <input type="checkbox" id="mc_htmx_ext_loading_states" name="mc_htmx_settings[extensions][loading-states]" value="1" {% if settings.extensions['loading-states'] %}checked{% endif %}>
+                            {{ __('Enable Loading States extension', 'mesmeric-commerce') }}
+                        </label>
+                        <p class="description">
+                            {{ __('Adds loading states to HTMX requests.', 'mesmeric-commerce') }}
+                            <a href="https://htmx.org/extensions/loading-states/" target="_blank">{{ __('Learn more', 'mesmeric-commerce') }}</a>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="mc_htmx_ext_client_side_templates">{{ __('Client-Side Templates', 'mesmeric-commerce') }}</label>
+                    </th>
+                    <td>
+                        <label>
+                            <input type="checkbox" id="mc_htmx_ext_client_side_templates" name="mc_htmx_settings[extensions][client-side-templates]" value="1" {% if settings.extensions['client-side-templates'] %}checked{% endif %}>
+                            {{ __('Enable Client-Side Templates extension', 'mesmeric-commerce') }}
+                        </label>
+                        <p class="description">
+                            {{ __('Allows you to use client-side templates with HTMX.', 'mesmeric-commerce') }}
+                            <a href="https://htmx.org/extensions/client-side-templates/" target="_blank">{{ __('Learn more', 'mesmeric-commerce') }}</a>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="mc-settings-section">
+            <h2>{{ __('Usage Examples', 'mesmeric-commerce') }}</h2>
+
+            <div class="mc-code-example">
+                <h3>{{ __('Basic Example', 'mesmeric-commerce') }}</h3>
+                <pre><code>&lt;button hx-get="/api/example" hx-target="#result"&gt;
+    {{ __('Click Me', 'mesmeric-commerce') }}
+&lt;/button&gt;
+&lt;div id="result"&gt;&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="mc-code-example">
+                <h3>{{ __('Using the Shortcode', 'mesmeric-commerce') }}</h3>
+                <pre><code>[mc_htmx tag="button" get="/api/example" target="#result"]{{ __('Click Me', 'mesmeric-commerce') }}[/mc_htmx]
+&lt;div id="result"&gt;&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="mc-code-example">
+                <h3>{{ __('Form Submission', 'mesmeric-commerce') }}</h3>
+                <pre><code>&lt;form hx-post="/api/submit" hx-target="#result"&gt;
+    &lt;input type="text" name="name" placeholder="{{ __('Your Name', 'mesmeric-commerce') }}"&gt;
+    &lt;button type="submit"&gt;{{ __('Submit', 'mesmeric-commerce') }}&lt;/button&gt;
+&lt;/form&gt;
+&lt;div id="result"&gt;&lt;/div&gt;</code></pre>
+            </div>
+        </div>
+
+        <p class="submit">
+            <button type="submit" class="button button-primary">{{ __('Save Settings', 'mesmeric-commerce') }}</button>
+        </p>
+    </form>
+</div>
+
+<style>
+    .mc-htmx-settings .mc-settings-section {
+        background: #fff;
+        border: 1px solid #ccd0d4;
+        border-radius: 4px;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+    }
+
+    .mc-htmx-settings .mc-settings-section h2 {
+        margin-top: 0;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .mc-htmx-settings .mc-code-example {
+        background: #f9f9f9;
+        border: 1px solid #e5e5e5;
+        border-radius: 3px;
+        padding: 10px 15px;
+        margin-bottom: 15px;
+    }
+
+    .mc-htmx-settings .mc-code-example h3 {
+        margin-top: 0;
+        font-size: 14px;
+    }
+
+    .mc-htmx-settings .mc-code-example pre {
+        margin: 0;
+        padding: 10px;
+        background: #f1f1f1;
+        border-radius: 3px;
+        overflow-x: auto;
+    }
+
+    .mc-htmx-settings .mc-admin-notice {
+        margin: 20px 0;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('mc-htmx-settings-form');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const data = {};
+
+            for (const [key, value] of formData.entries()) {
+                // Handle nested settings
+                if (key.includes('[')) {
+                    const matches = key.match(/mc_htmx_settings\[([^\]]+)\](?:\[([^\]]+)\])?/);
+
+                    if (matches) {
+                        const mainKey = matches[1];
+                        const subKey = matches[2];
+
+                        if (subKey) {
+                            if (!data[mainKey]) {
+                                data[mainKey] = {};
+                            }
+
+                            data[mainKey][subKey] = value === '1';
+                        } else {
+                            data[mainKey] = value === '1' ? true : value;
+                        }
+                    }
+                } else {
+                    data[key] = value;
+                }
+            }
+
+            // Send AJAX request
+            fetch(ajaxurl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-WP-Nonce': document.getElementById('_wpnonce').value
+                },
+                body: new URLSearchParams({
+                    action: 'mc_update_htmx_settings',
+                    settings: JSON.stringify(data)
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    const notice = document.createElement('div');
+                    notice.className = 'notice notice-success is-dismissible';
+                    notice.innerHTML = `<p>${data.message || '{{ __('Settings saved successfully.', 'mesmeric-commerce') }}'}</p>`;
+
+                    document.querySelector('.wrap').insertBefore(notice, form);
+
+                    // Remove notice after 3 seconds
+                    setTimeout(() => {
+                        notice.remove();
+                    }, 3000);
+                } else {
+                    // Show error message
+                    const notice = document.createElement('div');
+                    notice.className = 'notice notice-error is-dismissible';
+                    notice.innerHTML = `<p>${data.message || '{{ __('Error saving settings.', 'mesmeric-commerce') }}'}</p>`;
+
+                    document.querySelector('.wrap').insertBefore(notice, form);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+
+                // Show error message
+                const notice = document.createElement('div');
+                notice.className = 'notice notice-error is-dismissible';
+                notice.innerHTML = `<p>{{ __('An error occurred while saving settings.', 'mesmeric-commerce') }}</p>`;
+
+                document.querySelector('.wrap').insertBefore(notice, form);
+            });
+        });
+    });
+</script>

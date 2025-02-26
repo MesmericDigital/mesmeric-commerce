@@ -1,0 +1,75 @@
+{#
+ # Cookie Banner template
+ #
+ # @var settings array Module settings
+ # @var bar_text string Main banner text
+ # @var privacy_policy_text string Privacy policy link text
+ # @var privacy_policy_url string Privacy policy URL
+ # @var button_text string Accept button text
+ #
+ # @since 1.0.0
+ #}
+
+<div class="cookie-banner theme-{{ settings.theme }}"
+     x-data="cookieBanner"
+     x-show="isVisible"
+     x-transition:enter="transition ease-out duration-{{ settings.animation_duration }}"
+     x-transition:enter-start="opacity-0 transform translate-y-4"
+     x-transition:enter-end="opacity-100 transform translate-y-0"
+     x-transition:leave="transition ease-in duration-{{ settings.animation_duration }}"
+     x-transition:leave-start="opacity-100 transform translate-y-0"
+     x-transition:leave-end="opacity-0 transform translate-y-4"
+     style="display: none;"
+     role="alertdialog"
+     aria-labelledby="cookie-banner-title"
+     aria-describedby="cookie-banner-description"
+     data-color-scheme="{{ settings.color_scheme }}"
+     data-delay="{{ settings.delay_before_show }}">
+
+    <div class="cookie-banner-inner">
+        {% if settings.show_close_button %}
+            <button type="button"
+                    class="cookie-banner-close"
+                    x-on:click="close"
+                    aria-label="{{ 'Close'|translate }}">
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                     viewBox="0 0 24 24" 
+                     fill="none" 
+                     stroke="currentColor" 
+                     stroke-width="2" 
+                     stroke-linecap="round" 
+                     stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        {% endif %}
+
+        <div class="cookie-banner-content">
+            <div class="cookie-banner-text" id="cookie-banner-description">
+                {{ bar_text }}
+                {% if privacy_policy_url %}
+                    <a href="{{ privacy_policy_url }}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="cookie-banner-link">
+                        {{ privacy_policy_text }}
+                    </a>
+                {% endif %}
+            </div>
+
+            <button type="button"
+                    class="cookie-banner-button"
+                    x-on:click="accept"
+                    aria-label="{{ button_text }}">
+                {{ button_text }}
+            </button>
+        </div>
+
+        {% if settings.custom_css %}
+            <style>
+                {{ settings.custom_css|raw }}
+            </style>
+        {% endif %}
+    </div>
+</div>

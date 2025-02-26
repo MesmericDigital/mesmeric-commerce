@@ -1,0 +1,106 @@
+@layer components {
+    .mesmeric-quick-social-links {
+        @apply fixed z-50;
+
+        /* Position variants */
+        &.pos-bottom {
+            @apply bottom-4 left-1/2 -translate-x-1/2;
+        }
+
+        &.pos-left {
+            @apply left-4 top-1/2 -translate-y-1/2;
+
+            .mesmeric-quick-social-links-inner {
+                @apply flex-col;
+            }
+        }
+
+        &.pos-right {
+            @apply right-4 top-1/2 -translate-y-1/2;
+
+            .mesmeric-quick-social-links-inner {
+                @apply flex-col;
+            }
+        }
+
+        /* Inner container */
+        .mesmeric-quick-social-links-inner {
+            @apply flex items-center gap-2 p-2 rounded-box shadow-lg transition-all duration-300;
+            background-color: var(--mesmeric-bg-color, theme('colors.base-100'));
+            border-radius: var(--mesmeric-border-radius, 15px);
+        }
+
+        /* Links */
+        .quick-social-link {
+            @apply p-2 rounded-full transition-transform hover:scale-110 focus:scale-110;
+            color: var(--mesmeric-icon-color, theme('colors.base-content'));
+
+            i {
+                @apply text-xl;
+            }
+
+            img {
+                @apply w-6 h-6 object-contain;
+            }
+        }
+
+        /* Mobile toggle button */
+        .quick-social-toggle {
+            @apply hidden md:hidden p-3 rounded-full shadow-lg transition-transform;
+            background-color: var(--mesmeric-bg-color, theme('colors.base-100'));
+
+            &.is-active {
+                @apply rotate-180;
+            }
+
+            i {
+                @apply text-xl;
+                color: var(--mesmeric-icon-color, theme('colors.base-content'));
+            }
+        }
+
+        /* Mobile styles */
+        @media (max-width: theme('screens.md')) {
+            &.pos-bottom {
+                @apply bottom-20;
+
+                .quick-social-toggle {
+                    @apply block absolute -top-12 left-1/2 -translate-x-1/2;
+                }
+            }
+
+            &.pos-left, &.pos-right {
+                @apply bottom-4 top-auto left-4 right-4 translate-y-0;
+
+                .quick-social-toggle {
+                    @apply block absolute -top-12 left-1/2 -translate-x-1/2;
+                }
+
+                .mesmeric-quick-social-links-inner {
+                    @apply flex-row justify-center;
+                }
+            }
+
+            .mesmeric-quick-social-links-inner {
+                @apply opacity-0 pointer-events-none scale-95;
+                
+                &[x-cloak] {
+                    @apply hidden;
+                }
+
+                .is-active + & {
+                    @apply opacity-100 pointer-events-auto scale-100;
+                }
+            }
+        }
+
+        /* Visibility variants */
+        &.visibility-desktop {
+            @apply hidden lg:block;
+        }
+
+        &.visibility-mobile {
+            @apply block lg:hidden;
+        }
+    }
+}

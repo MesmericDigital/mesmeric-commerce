@@ -1,0 +1,72 @@
+{#
+ # Buy Now button template
+ #
+ # @var settings array Module settings
+ # @var product WC_Product Product object
+ # @var context string Context (single or archive)
+ # @var button_text string Translated button text
+ #
+ # @since 1.0.0
+ #}
+
+{% set button_class = 'mesmeric-buy-now-button btn btn-primary' %}
+{% if settings.customize_button %}
+    {% set button_class = button_class ~ ' mesmeric-buy-now-button--custom' %}
+{% endif %}
+
+{% if context == 'archive' and not settings.show_on_archive %}
+    {% return %}
+{% endif %}
+
+{% if context == 'single' and not settings.show_on_single %}
+    {% return %}
+{% endif %}
+
+<div class="mesmeric-buy-now-wrapper"
+     x-data="buyNow"
+     data-product-id="{{ product.get_id() }}"
+     data-product-type="{{ product.get_type() }}">
+    
+    {# Regular product button #}
+    {% if product.get_type() == 'simple' %}
+        <button type="button"
+                class="{{ button_class }}"
+                x-on:click="buyNow($event)"
+                x-bind:disabled="loading"
+                x-bind:class="{ 'opacity-50 cursor-not-allowed': loading }"
+                data-quantity="1">
+            <span x-show="!loading">{{ button_text }}</span>
+            <span x-show="loading" x-text="loadingText"></span>
+        </button>
+    {% endif %}
+
+    {# Variable product button #}
+    {% if product.get_type() == 'variable' %}
+        <button type="button"
+                class="{{ button_class }}"
+                x-on:click="buyNowVariable($event)"
+                x-bind:disabled="loading || !isVariationSelected"
+                x-bind:class="{ 
+                    'opacity-50 cursor-not-allowed': loading,
+                    'opacity-75': !isVariationSelected && !loading
+                }"
+                data-quantity="1">
+            <span x-show="!loading && isVariationSelected">{{ button_text }}</span>
+            <span x-show="!loading && !isVariationSelected">{{ 'Select options'|translate }}</span>
+            <span x-show="loading" x-text="loadingText"></span>
+        </button>
+    {% endif %}
+
+    {# Error message #}
+    <div x-show="error"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform -translate-y-2"
+         x-transition:enter-end="opacity-100 transform translate-y-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 transform translate-y-0"
+         x-transition:leave-end="opacity-0 transform -translate-y-2"
+         class="alert alert-error mt-3"
+         role="alert">
+        <span x-text="errorMessage"></span>
+    </div>
+</div>

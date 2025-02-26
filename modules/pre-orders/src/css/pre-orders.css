@@ -1,0 +1,85 @@
+@layer components {
+    .pre-order-info {
+        @apply space-y-4 p-4 rounded-lg bg-base-100 shadow-sm;
+
+        /* Pre-order badge */
+        .pre-order-badge {
+            @apply mb-2;
+
+            .badge {
+                @apply text-xs font-medium;
+            }
+        }
+
+        /* Shipping date information */
+        .pre-order-shipping-date {
+            @apply space-y-2;
+
+            .countdown-timer {
+                @apply flex items-center gap-2;
+                
+                span {
+                    @apply font-mono font-medium;
+                }
+            }
+        }
+
+        /* Discount information */
+        .pre-order-discount {
+            @apply mt-2;
+
+            p {
+                @apply font-medium;
+            }
+        }
+
+        /* Terms and conditions */
+        .pre-order-terms {
+            .collapse {
+                @apply rounded-lg;
+            }
+
+            .collapse-title {
+                @apply min-h-12 py-2;
+            }
+
+            .collapse-content {
+                @apply px-4 pb-4;
+            }
+        }
+
+        /* Dark mode adjustments */
+        &[data-theme="dark"] {
+            @apply bg-base-200;
+
+            .collapse {
+                @apply bg-base-300;
+            }
+        }
+    }
+
+    /* Cart item modifications */
+    .cart-item-pre-order {
+        @apply relative;
+
+        &::before {
+            @apply absolute -top-2 -right-2 px-2 py-1 text-xs font-medium rounded-full;
+            content: attr(data-pre-order-label);
+            background-color: theme('colors.primary');
+            color: theme('colors.primary-content');
+        }
+    }
+
+    /* Order status modifications */
+    .order-pre-order {
+        @apply inline-flex items-center gap-2 px-3 py-1 text-sm font-medium rounded-full;
+        background-color: theme('colors.primary' / 0.1);
+        color: theme('colors.primary');
+
+        &::before {
+            @apply w-2 h-2 rounded-full;
+            content: "";
+            background-color: currentColor;
+        }
+    }
+}

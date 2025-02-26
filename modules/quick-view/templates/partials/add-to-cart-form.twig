@@ -1,0 +1,102 @@
+{#
+ # Quick View Add to Cart Form Partial Template
+ #
+ # @var product WC_Product Product object
+ # @var show_quantity boolean Whether to show quantity selector
+ # @var show_buy_now boolean Whether to show buy now button
+ #
+ # @since 1.0.0
+ #}
+
+<form class="cart"
+      x-data="quickViewAddToCart"
+      x-on:submit.prevent="addToCart">
+    {% if product.is_type('variable') %}
+        {# Variable Product #}
+        <div class="variations-wrapper">
+            <div class="variations">
+                {% for attribute_name, options in product.get_variation_attributes() %}
+                    <div class="variation">
+                        <label for="attribute_{{ attribute_name }}">
+                            {{ wc_attribute_label(attribute_name) }}
+                        </label>
+                        <select id="attribute_{{ attribute_name }}"
+                                name="attribute_{{ attribute_name }}"
+                                x-model="variations.{{ attribute_name }}"
+                                x-on:change="updateVariation">
+                            <option value="">{{ 'Choose an option'|translate }}</option>
+                            {% for option in options %}
+                                <option value="{{ option }}">{{ option }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="single_variation_wrap">
+                <div class="woocommerce-variation single_variation"></div>
+                <div class="woocommerce-variation-add-to-cart variations_button">
+                    {% if show_quantity and product.is_in_stock() %}
+                        {% include 'partials/quantity.twig' with {
+                            'product': product
+                        } %}
+                    {% endif %}
+
+                    <button type="submit"
+                            class="single_add_to_cart_button button alt"
+                            x-bind:disabled="!isValid || loading"
+                            x-text="loading ? '{{ 'Adding...'|translate }}' : '{{ 'Add to cart'|translate }}'">
+                        {{ 'Add to cart'|translate }}
+                    </button>
+
+                    {% if show_buy_now %}
+                        <button type="button"
+                                class="buy_now_button button alt"
+                                x-on:click="buyNow"
+                                x-bind:disabled="!isValid || loading"
+                                x-text="loading ? '{{ 'Processing...'|translate }}' : '{{ 'Buy now'|translate }}'">
+                            {{ 'Buy now'|translate }}
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        {# Simple Product #}
+        {% if show_quantity and product.is_in_stock() %}
+            {% include 'partials/quantity.twig' with {
+                'product': product
+            } %}
+        {% endif %}
+
+        <button type="submit"
+                class="single_add_to_cart_button button alt"
+                x-bind:disabled="loading"
+                x-text="loading ? '{{ 'Adding...'|translate }}' : '{{ 'Add to cart'|translate }}'">
+            {{ 'Add to cart'|translate }}
+        </button>
+
+        {% if show_buy_now %}
+            <button type="button"
+                    class="buy_now_button button alt"
+                    x-on:click="buyNow"
+                    x-bind:disabled="loading"
+                    x-text="loading ? '{{ 'Processing...'|translate }}' : '{{ 'Buy now'|translate }}'">
+                {{ 'Buy now'|translate }}
+            </button>
+        {% endif %}
+    {% endif %}
+
+    {# Status Messages #}
+    <div class="status-messages"
+         x-show="message"
+         x-text="message"
+         x-bind:class="status"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform translate-y-2"
+         x-transition:enter-end="opacity-100 transform translate-y-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 transform translate-y-0"
+         x-transition:leave-end="opacity-0 transform translate-y-2"
+         x-cloak></div>
+</form>

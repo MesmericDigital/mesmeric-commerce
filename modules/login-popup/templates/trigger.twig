@@ -1,0 +1,20 @@
+{# Login Popup Trigger Template #}
+{% if trigger_type == 'button' %}
+    <button type="button" class="mc-login-popup-trigger mc-login-popup-trigger--button" id="mc-login-popup-trigger">
+        {% if trigger_icon %}
+            <span class="mc-login-popup-trigger__icon mc-login-popup-trigger__icon--{{ trigger_icon }}">
+                {% include 'icons/' ~ trigger_icon ~ '.twig' %}
+            </span>
+        {% endif %}
+        <span class="mc-login-popup-trigger__text">{{ trigger_text }}</span>
+    </button>
+{% elseif trigger_type == 'link' %}
+    <a href="#" class="mc-login-popup-trigger mc-login-popup-trigger--link" id="mc-login-popup-trigger">
+        {% if trigger_icon %}
+            <span class="mc-login-popup-trigger__icon mc-login-popup-trigger__icon--{{ trigger_icon }}">
+                {% include 'icons/' ~ trigger_icon ~ '.twig' %}
+            </span>
+        {% endif %}
+        <span class="mc-login-popup-trigger__text">{{ trigger_text }}</span>
+    </a>
+{% endif %}

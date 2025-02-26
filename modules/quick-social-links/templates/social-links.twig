@@ -1,0 +1,43 @@
+{#
+ # Quick Social Links template
+ #
+ # @var settings array Module settings
+ # @var links array List of social links
+ # @var classes string Container classes
+ #}
+
+<div class="{{ classes }}"
+     x-data="quickSocialLinks"
+     x-init="init({{ settings|json_encode }})"
+     x-cloak>
+    
+    <div class="mesmeric-quick-social-links-inner">
+        {% for link in links %}
+            <a href="{{ link.url }}"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="quick-social-link"
+               data-type="{{ link.type }}"
+               aria-label="{{ link.icon|title }}">
+                
+                {% if link.type == 'social' %}
+                    <i class="icon-{{ link.icon }}" aria-hidden="true"></i>
+                {% else %}
+                    <img src="{{ link.icon }}" alt="{{ link.icon|title }}" loading="lazy">
+                {% endif %}
+            </a>
+        {% endfor %}
+    </div>
+
+    {# Mobile toggle button #}
+    <button type="button"
+            class="quick-social-toggle"
+            x-show="isMobile"
+            @click="toggleLinks"
+            :aria-expanded="isOpen"
+            :class="{ 'is-active': isOpen }"
+            aria-label="{{ 'Toggle social links'|translate }}">
+        <span class="sr-only">{{ 'Toggle social links'|translate }}</span>
+        <i class="icon-share" aria-hidden="true"></i>
+    </button>
+</div>
